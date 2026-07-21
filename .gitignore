@@ -1,3 +1,13 @@
+
+node_modules/
+dist/
+dist-ssr/
+stats.html
+*.local
+*.tsbuildinfo
+.env
+.env.local
+
 # Obsidian vault
 **/.obsidian/
 .claude/memory/dashboard.md
