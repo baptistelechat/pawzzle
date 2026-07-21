@@ -17,11 +17,11 @@
 
 Scope figé par le brief (4.0) : **grille carrée classique uniquement**, aucune forme exotique, aucune contrainte échecs.
 
-- [ ] Modèle de grille : `size × size`, chaque case a une région colorée (1 région = 1 couleur, autant de régions que de lignes)
-- [ ] 3 règles de validation : un animal par ligne, par colonne, par région, aucun contact (8 voisins) entre deux animaux
-- [ ] Générateur procédural : grille candidate → vérif solution unique (backtracking/CSP) → régénère si 0 ou plusieurs solutions
-- [ ] Solveur dans un **Web Worker** (le brief anticipe un coût calcul non négligeable — ne pas geler l'UI)
-- [ ] Indicateur de chargement léger si génération > quelques dizaines de ms
+- [x] Modèle de grille : `size × size`, chaque case a une région colorée (1 région = 1 couleur, autant de régions que de lignes)
+- [x] 3 règles de validation : un animal par ligne, par colonne, par région, aucun contact (8 voisins) entre deux animaux
+- [x] Générateur procédural : grille candidate → vérif solution unique (backtracking/CSP) → régénère si 0 ou plusieurs solutions
+- [x] Solveur dans un **Web Worker** (le brief anticipe un coût calcul non négligeable — ne pas geler l'UI)
+- [ ] Indicateur de chargement léger si génération > quelques dizaines de ms _(reporté Phase 2 — c'est un rendu UI, le worker expose déjà tout ce qu'il faut via `postMessage`/`onmessage`)_
 
 **Sortie** : `generateLevel(size)` renvoie une grille valide à solution unique, appelable en boucle sans freeze UI. Testable en dehors de toute UI (script/console).
 
