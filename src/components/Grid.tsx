@@ -170,12 +170,11 @@ export const Grid = ({
               }}
             >
               {pawn ? (
-                <PawPrint
-                  className={cn(
-                    "size-2/3",
-                    pawn.invalid ? "text-destructive" : "text-foreground",
-                  )}
-                />
+                pawn.invalid ? (
+                  <X className="size-2/3 text-destructive" />
+                ) : (
+                  <PawPrint className="size-2/3 text-foreground" />
+                )
               ) : (
                 isMarked(row, col) && (
                   <X className="size-1/2 text-foreground/60" />

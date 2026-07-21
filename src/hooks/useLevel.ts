@@ -1,14 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Level, Position } from "@/lib/engine/types";
-import { getViolations, isSolved } from "@/lib/engine/rules";
 
 const GRID_SIZE = 6;
 const MAX_ERRORS = 3; // ponytail: budget arbitraire, à ajuster après test interne (Phase 3)
 
 type Status = "loading" | "playing" | "won" | "lost";
 
-// Le statut se fige au moment de la pose : une case correcte reste verrouillée
-// même si un placement ultérieur ailleurs crée un conflit géométrique avec elle.
 export interface PlacedPawn extends Position {
   invalid: boolean;
 }
@@ -58,10 +55,7 @@ export const useLevel = () => {
       }
 
       setMarkers((prev) => prev.filter((m) => !samePosition(m, candidate)));
-      const positions = placed.map(({ row, col }) => ({ row, col }));
-      const invalid = getViolations(level.grid, [...positions, candidate]).some(
-        (v) => samePosition(v, candidate),
-      );
+      const invalid = !level.solution.some((s) => samePosition(s, candidate));
       const next = [...placed, { ...candidate, invalid }];
       setPlaced(next);
 
@@ -71,7 +65,9 @@ export const useLevel = () => {
           if (nextErrors >= MAX_ERRORS) setStatus("lost");
           return nextErrors;
         });
-      } else if (isSolved(level.grid, next)) {
+      } else if (
+        next.filter((p) => !p.invalid).length === level.solution.length
+      ) {
         setStatus("won");
       }
     },
