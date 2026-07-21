@@ -1,0 +1,643 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Logo Creator — Pawzzle</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: #07070e;
+        color: #e8e4d8;
+        font-family: "IBM Plex Sans", sans-serif;
+        padding: 2rem;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+      h1 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+      }
+      .subtitle {
+        font-size: 0.85rem;
+        color: #6b7280;
+        margin-bottom: 1.25rem;
+      }
+      .palette {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 2.5rem;
+        flex-wrap: wrap;
+        align-items: flex-start;
+      }
+      .swatch-col {
+        text-align: center;
+      }
+      .swatch {
+        width: 28px;
+        height: 28px;
+        border-radius: 6px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .swatch-label {
+        font-size: 0.65rem;
+        color: #6b7280;
+        text-align: center;
+        margin-top: 2px;
+        font-family: "IBM Plex Mono", monospace;
+      }
+      .group {
+        margin-bottom: 2.5rem;
+      }
+      .group-label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #6b7280;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        margin-bottom: 1rem;
+        border-left: 3px solid #ff8a65;
+        padding-left: 0.75rem;
+      }
+      .group-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 1rem;
+      }
+      .card {
+        background: #111827;
+        border-radius: 12px;
+        padding: 1.25rem;
+        border: 1px solid #1f2937;
+      }
+      .card-label {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 0.7rem;
+        color: #6b7280;
+        margin-bottom: 0.5rem;
+        letter-spacing: 0.08em;
+      }
+      .card-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 0.2rem;
+      }
+      .card-desc {
+        font-size: 0.75rem;
+        color: #9ca3af;
+        margin-bottom: 0.875rem;
+        line-height: 1.4;
+      }
+      .preview-main {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 0.75rem;
+      }
+      .footer-note {
+        margin-top: 2rem;
+        padding: 1rem 1.25rem;
+        background: #111827;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        color: #9ca3af;
+        border-left: 3px solid #ff8a65;
+        line-height: 1.6;
+      }
+      @media (max-width: 1100px) {
+        .group-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+      @media (max-width: 700px) {
+        .group-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Pawzzle — Logo Creator</h1>
+      <p class="subtitle">
+        15 propositions · A→E strict · F→J dégradé · K→O créatif & alternatives
+        · direction "Atelier Feutrine"
+      </p>
+      <div class="palette">
+        <div class="swatch-col">
+          <div class="swatch" style="background: #ff8a65"></div>
+          <div class="swatch-label">--primary<br />#ff8a65</div>
+        </div>
+        <div class="swatch-col">
+          <div class="swatch" style="background: #fff8f0"></div>
+          <div class="swatch-label">--background<br />#fff8f0</div>
+        </div>
+        <div class="swatch-col">
+          <div class="swatch" style="background: #4a3728"></div>
+          <div class="swatch-label">--foreground<br />#4a3728</div>
+        </div>
+        <div class="swatch-col">
+          <div class="swatch" style="background: #7fb894"></div>
+          <div class="swatch-label">--accent<br />#7fb894</div>
+        </div>
+        <div class="swatch-col">
+          <div class="swatch" style="background: #ffe8d6"></div>
+          <div class="swatch-label">--secondary<br />#ffe8d6</div>
+        </div>
+        <div class="swatch-col">
+          <div class="swatch" style="background: #b39d8a"></div>
+          <div class="swatch-label">--muted<br />#b39d8a</div>
+        </div>
+      </div>
+    </header>
+
+    <section class="group">
+      <h2 class="group-label">Strict — Fonds pleins</h2>
+      <div class="group-grid">
+        <div class="card">
+          <div class="card-label">A</div>
+          <div class="card-title">Primaire</div>
+          <div class="card-desc">La référence, le plus professionnel</div>
+          <div class="preview-main">
+            <svg width="96" height="96" viewBox="0 0 512 512">
+              <rect width="512" height="512" rx="108" fill="#ff8a65" />
+              <g
+                transform="translate(106,106) scale(12.5)"
+                stroke="#ffffff"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                fill="none"
+              >
+                <circle cx="11" cy="4" r="2" />
+                <circle cx="18" cy="8" r="2" />
+                <circle cx="20" cy="16" r="2" />
+                <path
+                  d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"
+                />
+              </g>
+            </svg>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">B</div>
+          <div class="card-title">Nuit</div>
+          <div class="card-desc">Mode dark absolu, parfait macOS</div>
+          <div class="preview-main">
+            <svg width="96" height="96" viewBox="0 0 512 512">
+              <rect width="512" height="512" rx="108" fill="#0d1117" />
+              <g
+                transform="translate(106,106) scale(12.5)"
+                stroke="#7fb894"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                fill="none"
+              >
+                <circle cx="11" cy="4" r="2" />
+                <circle cx="18" cy="8" r="2" />
+                <circle cx="20" cy="16" r="2" />
+                <path
+                  d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"
+                />
+              </g>
+            </svg>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">C</div>
+          <div class="card-title">Jour</div>
+          <div class="card-desc">Mode clair, lisible sur fond blanc</div>
+          <div class="preview-main">
+            <svg width="96" height="96" viewBox="0 0 512 512">
+              <rect width="512" height="512" rx="108" fill="#fff8f0" />
+              <g
+                transform="translate(106,106) scale(12.5)"
+                stroke="#ff8a65"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                fill="none"
+              >
+                <circle cx="11" cy="4" r="2" />
+                <circle cx="18" cy="8" r="2" />
+                <circle cx="20" cy="16" r="2" />
+                <path
+                  d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"
+                />
+              </g>
+            </svg>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">D</div>
+          <div class="card-title">Secondaire</div>
+          <div class="card-desc">Variante douce du primary (éclairci 20%)</div>
+          <div class="preview-main">
+            <svg width="96" height="96" viewBox="0 0 512 512">
+              <rect width="512" height="512" rx="108" fill="#ffa184" />
+              <g
+                transform="translate(106,106) scale(12.5)"
+                stroke="#ffffff"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                fill="none"
+              >
+                <circle cx="11" cy="4" r="2" />
+                <circle cx="18" cy="8" r="2" />
+                <circle cx="20" cy="16" r="2" />
+                <path
+                  d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"
+                />
+              </g>
+            </svg>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">E</div>
+          <div class="card-title">Accent</div>
+          <div class="card-desc">L'accent prend le devant, plus vivant</div>
+          <div class="preview-main">
+            <svg width="96" height="96" viewBox="0 0 512 512">
+              <rect width="512" height="512" rx="108" fill="#7fb894" />
+              <g
+                transform="translate(106,106) scale(12.5)"
+                stroke="#ffffff"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                fill="none"
+              >
+                <circle cx="11" cy="4" r="2" />
+                <circle cx="18" cy="8" r="2" />
+                <circle cx="20" cy="16" r="2" />
+                <path
+                  d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"
+                />
+              </g>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="group">
+      <h2 class="group-label">Dégradé</h2>
+      <div class="group-grid">
+        <div class="card">
+          <div class="card-label">F</div>
+          <div class="card-title">Diagonal</div>
+          <div class="card-desc">Dynamisme, direction</div>
+          <div class="preview-main">
+            <svg width="96" height="96" viewBox="0 0 512 512">
+              <defs>
+                <linearGradient id="gradF" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#ff8a65" />
+                  <stop offset="100%" stop-color="#7fb894" />
+                </linearGradient>
+              </defs>
+              <rect width="512" height="512" rx="108" fill="url(#gradF)" />
+              <g
+                transform="translate(106,106) scale(12.5)"
+                stroke="#ffffff"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                fill="none"
+              >
+                <circle cx="11" cy="4" r="2" />
+                <circle cx="18" cy="8" r="2" />
+                <circle cx="20" cy="16" r="2" />
+                <path
+                  d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"
+                />
+              </g>
+            </svg>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">G</div>
+          <div class="card-title">Radial Centre</div>
+          <div class="card-desc">Source lumineuse, profondeur</div>
+          <div class="preview-main">
+            <svg width="96" height="96" viewBox="0 0 512 512">
+              <defs>
+                <radialGradient id="gradG" cx="35%" cy="35%">
+                  <stop offset="0%" stop-color="#ffad93" />
+                  <stop offset="100%" stop-color="#bf684c" />
+                </radialGradient>
+              </defs>
+              <rect width="512" height="512" rx="108" fill="url(#gradG)" />
+              <g
+                transform="translate(106,106) scale(12.5)"
+                stroke="#ffffff"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                fill="none"
+              >
+                <circle cx="11" cy="4" r="2" />
+                <circle cx="18" cy="8" r="2" />
+                <circle cx="20" cy="16" r="2" />
+                <path
+                  d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"
+                />
+              </g>
+            </svg>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">H</div>
+          <div class="card-title">Vertical</div>
+          <div class="card-desc">Élévation, sobriété</div>
+          <div class="preview-main">
+            <svg width="96" height="96" viewBox="0 0 512 512">
+              <defs>
+                <linearGradient id="gradH" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#ff9c7c" />
+                  <stop offset="100%" stop-color="#ff8a65" />
+                </linearGradient>
+              </defs>
+              <rect width="512" height="512" rx="108" fill="url(#gradH)" />
+              <g
+                transform="translate(106,106) scale(12.5)"
+                stroke="#ffffff"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                fill="none"
+              >
+                <circle cx="11" cy="4" r="2" />
+                <circle cx="18" cy="8" r="2" />
+                <circle cx="20" cy="16" r="2" />
+                <path
+                  d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"
+                />
+              </g>
+            </svg>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">I</div>
+          <div class="card-title">Tricolore</div>
+          <div class="card-desc">Palette complète, richesse</div>
+          <div class="preview-main">
+            <svg width="96" height="96" viewBox="0 0 512 512">
+              <defs>
+                <linearGradient id="gradI" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#ff8a65" />
+                  <stop offset="50%" stop-color="#b39d8a" />
+                  <stop offset="100%" stop-color="#7fb894" />
+                </linearGradient>
+              </defs>
+              <rect width="512" height="512" rx="108" fill="url(#gradI)" />
+              <g
+                transform="translate(106,106) scale(12.5)"
+                stroke="#ffffff"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                fill="none"
+              >
+                <circle cx="11" cy="4" r="2" />
+                <circle cx="18" cy="8" r="2" />
+                <circle cx="20" cy="16" r="2" />
+                <path
+                  d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"
+                />
+              </g>
+            </svg>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">J</div>
+          <div class="card-title">Aurora</div>
+          <div class="card-desc">Effet aurora, mémorable</div>
+          <div class="preview-main">
+            <svg width="96" height="96" viewBox="0 0 512 512">
+              <defs>
+                <linearGradient id="gradJ" x1="100%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#7fb894" />
+                  <stop offset="100%" stop-color="#ff8a65" />
+                </linearGradient>
+                <radialGradient id="auroraOverlayJ" cx="50%" cy="50%">
+                  <stop offset="0%" stop-color="#ffffff" stop-opacity="0.28" />
+                  <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+                </radialGradient>
+              </defs>
+              <rect width="512" height="512" rx="108" fill="url(#gradJ)" />
+              <rect
+                width="512"
+                height="512"
+                rx="108"
+                fill="url(#auroraOverlayJ)"
+              />
+              <g
+                transform="translate(106,106) scale(12.5)"
+                stroke="#ffffff"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                fill="none"
+              >
+                <circle cx="11" cy="4" r="2" />
+                <circle cx="18" cy="8" r="2" />
+                <circle cx="20" cy="16" r="2" />
+                <path
+                  d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"
+                />
+              </g>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="group">
+      <h2 class="group-label">Créatif & Icônes alternatives</h2>
+      <div class="group-grid">
+        <div class="card">
+          <div class="card-label">K</div>
+          <div class="card-title">Thème App</div>
+          <div class="card-desc">Fond qui crie l'identité de l'app</div>
+          <div class="preview-main">
+            <svg width="96" height="96" viewBox="0 0 512 512">
+              <defs>
+                <pattern
+                  id="dotsK"
+                  width="20"
+                  height="20"
+                  patternUnits="userSpaceOnUse"
+                >
+                  <circle
+                    cx="10"
+                    cy="10"
+                    r="1.2"
+                    fill="#ffffff"
+                    opacity="0.28"
+                  />
+                </pattern>
+              </defs>
+              <rect width="512" height="512" rx="108" fill="#ff8a65" />
+              <rect width="512" height="512" rx="108" fill="url(#dotsK)" />
+              <g
+                transform="translate(106,106) scale(12.5)"
+                stroke="#ffffff"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                fill="none"
+              >
+                <circle cx="11" cy="4" r="2" />
+                <circle cx="18" cy="8" r="2" />
+                <circle cx="20" cy="16" r="2" />
+                <path
+                  d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"
+                />
+              </g>
+            </svg>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">L</div>
+          <div class="card-title">Duotone</div>
+          <div class="card-desc">L'icône prend vie, expressivité</div>
+          <div class="preview-main">
+            <svg width="96" height="96" viewBox="0 0 512 512">
+              <rect width="512" height="512" rx="108" fill="#ff8a65" />
+              <g
+                transform="translate(106,106) scale(12.5)"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                fill="none"
+              >
+                <circle cx="11" cy="4" r="2" stroke="#7fb894" />
+                <circle cx="18" cy="8" r="2" stroke="#7fb894" />
+                <circle cx="20" cy="16" r="2" stroke="#7fb894" />
+                <path
+                  d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"
+                  stroke="#ffffff"
+                />
+              </g>
+            </svg>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">M</div>
+          <div class="card-title">Footprints + Fond Primaire</div>
+          <div class="card-desc">
+            Icône alternative 1 — explorer la sémantique
+          </div>
+          <div class="preview-main">
+            <svg width="96" height="96" viewBox="0 0 512 512">
+              <rect width="512" height="512" rx="108" fill="#ff8a65" />
+              <g
+                transform="translate(106,106) scale(12.5)"
+                stroke="#ffffff"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                fill="none"
+              >
+                <path
+                  d="M4 16v-2.38C4 11.5 2.97 10.5 3 8c.03-2.72 1.49-6 4.5-6C9.37 2 10 3.8 10 5.5c0 3.11-2 5.66-2 8.68V16a2 2 0 1 1-4 0Z"
+                />
+                <path
+                  d="M20 20v-2.38c0-2.12 1.03-3.12 1-5.62-.03-2.72-1.49-6-4.5-6C14.63 6 14 7.8 14 9.5c0 3.11 2 5.66 2 8.68V20a2 2 0 1 0 4 0Z"
+                />
+                <path d="M16 17h4" />
+                <path d="M4 13h4" />
+              </g>
+            </svg>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">N</div>
+          <div class="card-title">Cat + Gradient</div>
+          <div class="card-desc">Icône alternative 2 — fond dynamique</div>
+          <div class="preview-main">
+            <svg width="96" height="96" viewBox="0 0 512 512">
+              <defs>
+                <linearGradient id="gradN" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#ff8a65" />
+                  <stop offset="100%" stop-color="#7fb894" />
+                </linearGradient>
+              </defs>
+              <rect width="512" height="512" rx="108" fill="url(#gradN)" />
+              <g
+                transform="translate(106,106) scale(12.5)"
+                stroke="#ffffff"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                fill="none"
+              >
+                <path
+                  d="M12 5c.67 0 1.35.09 2 .26 1.78-2 5.03-2.84 6.42-2.26 1.4.58-.42 7-.42 7 .57 1.07 1 2.24 1 3.44C21 17.9 16.97 21 12 21s-9-3-9-7.56c0-1.25.5-2.4 1-3.44 0 0-1.89-6.42-.5-7 1.39-.58 4.72.23 6.5 2.23A9.04 9.04 0 0 1 12 5Z"
+                />
+                <path d="M8 14v.5" />
+                <path d="M16 14v.5" />
+                <path d="M11.25 16.25h1.5L12 17l-.75-.75Z" />
+              </g>
+            </svg>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">O</div>
+          <div class="card-title">Maximum Créatif</div>
+          <div class="card-desc">Cutout — la patte découpe le fond clair</div>
+          <div class="preview-main">
+            <svg width="96" height="96" viewBox="0 0 512 512">
+              <defs>
+                <clipPath id="clipO">
+                  <g transform="translate(56,56) scale(16.7)">
+                    <circle cx="11" cy="4" r="2" />
+                    <circle cx="18" cy="8" r="2" />
+                    <circle cx="20" cy="16" r="2" />
+                    <path
+                      d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"
+                    />
+                  </g>
+                </clipPath>
+              </defs>
+              <rect width="512" height="512" rx="108" fill="#fff8f0" />
+              <rect
+                width="512"
+                height="512"
+                fill="#ff8a65"
+                clip-path="url(#clipO)"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer-note">
+      Réponds avec la lettre du logo (ex : "F") ou une combinaison (ex : "fond
+      de F + icône de M"). Tu peux aussi décrire un ajustement.
+    </div>
+  </body>
+</html>

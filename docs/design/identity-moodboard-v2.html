@@ -1,0 +1,780 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pawzzle — Moodboard identité (v2, hybrides)</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Fredoka:wght@500;600&family=Quicksand:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: #0c0c10;
+        color: #e8e4d8;
+        font-family: "IBM Plex Sans", sans-serif;
+        padding: 2.5rem 1.5rem;
+      }
+      .page-header {
+        max-width: 1100px;
+        margin: 0 auto 3rem;
+      }
+      .page-header h1 {
+        font-size: 1.6rem;
+        font-weight: 700;
+        margin-bottom: 0.4rem;
+      }
+      .page-header p {
+        color: #8a8698;
+        font-size: 0.9rem;
+        max-width: 680px;
+        line-height: 1.5;
+      }
+      .direction {
+        max-width: 1100px;
+        margin: 0 auto 3.5rem;
+        border-radius: 20px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .direction-intro {
+        padding: 1.5rem 2rem 1.25rem;
+        background: #131318;
+      }
+      .direction-intro h2 {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #f2efe6;
+      }
+      .direction-intro .tagline {
+        font-size: 0.85rem;
+        color: #8a8698;
+        margin-top: 0.2rem;
+        font-style: italic;
+      }
+      .palette {
+        display: flex;
+        gap: 0.9rem;
+        flex-wrap: wrap;
+        padding: 1rem 2rem 1.5rem;
+        background: #131318;
+      }
+      .swatch-item {
+        text-align: center;
+      }
+      .swatch {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        margin: 0 auto 0.3rem;
+      }
+      .swatch-label {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 0.6rem;
+        color: #8a8698;
+        white-space: nowrap;
+      }
+      .typography {
+        padding: 0 2rem 1.5rem;
+        background: #131318;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      .font-row {
+        font-size: 1rem;
+        color: #f2efe6;
+        display: flex;
+        align-items: baseline;
+        gap: 0.6rem;
+      }
+      .font-tag {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 0.6rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #8a8698;
+        background: rgba(255, 255, 255, 0.06);
+        padding: 0.15rem 0.4rem;
+        border-radius: 4px;
+        flex-shrink: 0;
+      }
+      .font-row.row-display {
+        font-family: var(--font-display);
+      }
+      .font-row.row-body {
+        font-family: var(--font-body);
+      }
+      .font-row.row-mono {
+        font-family: var(--font-mono);
+      }
+      .font-vars {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 0.72rem;
+        color: #c9c5d6;
+        background: #0c0c10;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        margin-top: 0.4rem;
+        line-height: 1.6;
+        white-space: pre;
+        overflow-x: auto;
+      }
+
+      /* ---------- Shared mockup component styles — consume var() only ---------- */
+      .mockup {
+        background: var(--background);
+        color: var(--foreground);
+        padding: 1.75rem;
+        font-family: var(--font-body, "IBM Plex Sans", sans-serif);
+      }
+      .app-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--border);
+      }
+      .app-name {
+        font-size: 1.2rem;
+        font-weight: 700;
+        font-family: var(--font-display);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--foreground);
+      }
+      .app-name .paw {
+        color: var(--accent);
+        width: 22px;
+        height: 22px;
+      }
+      .app-nav {
+        display: flex;
+        gap: 1.25rem;
+        font-size: 0.8rem;
+        color: var(--muted);
+      }
+      .app-nav span.active {
+        color: var(--primary);
+        font-weight: 600;
+      }
+      .cards-row {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr 1fr;
+        gap: 1rem;
+      }
+      .card {
+        background: var(--secondary);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 1.1rem;
+      }
+      .card-label {
+        font-size: 0.68rem;
+        font-family: var(--font-mono);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+        margin-bottom: 0.6rem;
+        font-weight: 600;
+      }
+      .badge {
+        display: inline-block;
+        font-size: 0.7rem;
+        font-weight: 600;
+        padding: 0.2rem 0.55rem;
+        border-radius: 999px;
+        background: var(--accent);
+        color: var(--primary-foreground);
+        margin-top: 0.5rem;
+      }
+      .mini-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 3px;
+        width: 108px;
+        margin-bottom: 0.75rem;
+      }
+      .mini-grid .cell {
+        aspect-ratio: 1;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .mini-grid .cell.r-primary {
+        background: color-mix(in srgb, var(--primary) 55%, transparent);
+      }
+      .mini-grid .cell.r-accent {
+        background: color-mix(in srgb, var(--accent) 45%, transparent);
+      }
+      .mini-grid .cell.r-secondary {
+        background: color-mix(in srgb, var(--secondary) 100%, var(--muted) 30%);
+      }
+      .mini-grid .cell.r-muted {
+        background: color-mix(in srgb, var(--muted) 35%, transparent);
+      }
+      .mini-grid .cell .paw-mini {
+        width: 62%;
+        height: 62%;
+        color: var(--primary-foreground);
+      }
+      .mini-grid .cell.pawn-cell {
+        background: var(--primary);
+      }
+      .streak-number {
+        font-size: 2rem;
+        font-weight: 700;
+        font-family: var(--font-display);
+        color: var(--primary);
+        line-height: 1;
+      }
+      .streak-caption {
+        font-size: 0.75rem;
+        color: var(--muted);
+        margin-top: 0.3rem;
+      }
+      .card-title {
+        font-size: 0.95rem;
+        font-weight: 600;
+        font-family: var(--font-display);
+        margin-bottom: 0.25rem;
+      }
+      .card-desc {
+        font-size: 0.78rem;
+        color: var(--muted);
+        line-height: 1.4;
+      }
+      .cta-btn {
+        margin-top: 0.75rem;
+        display: inline-block;
+        font-size: 0.78rem;
+        font-weight: 600;
+        padding: 0.5rem 0.9rem;
+        border-radius: 999px;
+        background: var(--primary);
+        color: var(--primary-foreground);
+      }
+
+      /* ---------- Direction A — Jouet en Bois ---------- */
+      .direction-jouet {
+        --primary: #e8734a;
+        --primary-foreground: #ffffff;
+        --secondary: #f0dcc0;
+        --background: #fbf3e6;
+        --foreground: #4a3826;
+        --accent: #7fb894;
+        --muted: #b8a488;
+        --border: #e8d4b0;
+        --font-display: "Fredoka", sans-serif;
+        --font-body: "IBM Plex Sans", sans-serif;
+        --font-mono: "IBM Plex Mono", monospace;
+      }
+      .direction-jouet .card {
+        border-radius: 24px;
+      }
+      .direction-jouet .mini-grid .cell {
+        border-radius: 10px;
+      }
+      .direction-jouet .cta-btn,
+      .direction-jouet .badge {
+        border-radius: 999px;
+      }
+
+      /* ---------- Direction B — Boîte à Jeux ---------- */
+      .direction-boite {
+        --primary: #7a4a2e;
+        --primary-foreground: #f5e8d0;
+        --secondary: #e0c9a0;
+        --background: #f5e8d0;
+        --foreground: #3a2814;
+        --accent: #d4924a;
+        --muted: #a68f6e;
+        --border: #d9c19a;
+        --font-display: "Fraunces", serif;
+        --font-body: "IBM Plex Sans", sans-serif;
+        --font-mono: "IBM Plex Mono", monospace;
+      }
+      .direction-boite .mockup {
+        background-image:
+          linear-gradient(
+            45deg,
+            color-mix(in srgb, var(--primary) 5%, transparent) 25%,
+            transparent 25%,
+            transparent 75%,
+            color-mix(in srgb, var(--primary) 5%, transparent) 75%
+          ),
+          linear-gradient(
+            45deg,
+            color-mix(in srgb, var(--primary) 5%, transparent) 25%,
+            transparent 25%,
+            transparent 75%,
+            color-mix(in srgb, var(--primary) 5%, transparent) 75%
+          );
+        background-size: 30px 30px;
+        background-position:
+          0 0,
+          15px 15px;
+      }
+      .direction-boite .card {
+        border-radius: 10px;
+      }
+      .direction-boite .mini-grid .cell {
+        border-radius: 3px;
+      }
+
+      /* ---------- Direction C — Atelier du Dimanche ---------- */
+      .direction-atelier {
+        --primary: #c97b5a;
+        --primary-foreground: #ffffff;
+        --secondary: #ede0c8;
+        --background: #faf5ea;
+        --foreground: #453325;
+        --accent: #8fae82;
+        --muted: #b0a189;
+        --border: #e3d5b8;
+        --font-display: "Quicksand", sans-serif;
+        --font-body: "IBM Plex Sans", sans-serif;
+        --font-mono: "IBM Plex Mono", monospace;
+      }
+      .direction-atelier .card {
+        border-radius: 20px;
+      }
+      .direction-atelier .mini-grid .cell {
+        border-radius: 8px;
+      }
+
+      @media (max-width: 720px) {
+        .cards-row {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-header">
+      <h1>Pawzzle — Moodboard identité (v2, hybrides)</h1>
+      <p>
+        3 nouvelles directions construites autour de "Atelier Feutrine" et
+        "Plateau de Jeu" : le bois chaleureux du plateau de jeu croisé avec la
+        rondeur pastel du feutrine. Ancrage réel : jouets en bois scandinaves
+        pour enfants (type Djeco/Janod), où le bois brut porte des couleurs
+        douces et des formes arrondies.
+      </p>
+    </div>
+
+    <!-- ============ A. Jouet en Bois ============ -->
+    <section class="direction direction-jouet">
+      <div class="direction-intro">
+        <h2>Jouet en Bois</h2>
+        <div class="tagline">
+          Bois clair et couleurs pastel, comme un jouet éducatif scandinave
+          sorti de sa boîte
+        </div>
+      </div>
+      <div class="palette">
+        <div class="swatch-item">
+          <div class="swatch" style="background: #e8734a"></div>
+          <span class="swatch-label">--primary — #e8734a</span>
+        </div>
+        <div class="swatch-item">
+          <div class="swatch" style="background: #fbf3e6"></div>
+          <span class="swatch-label">--background — #fbf3e6</span>
+        </div>
+        <div class="swatch-item">
+          <div class="swatch" style="background: #4a3826"></div>
+          <span class="swatch-label">--foreground — #4a3826</span>
+        </div>
+        <div class="swatch-item">
+          <div class="swatch" style="background: #7fb894"></div>
+          <span class="swatch-label">--accent — #7fb894</span>
+        </div>
+        <div class="swatch-item">
+          <div class="swatch" style="background: #f0dcc0"></div>
+          <span class="swatch-label">--secondary — #f0dcc0</span>
+        </div>
+        <div class="swatch-item">
+          <div class="swatch" style="background: #b8a488"></div>
+          <span class="swatch-label">--muted — #b8a488</span>
+        </div>
+      </div>
+      <div class="typography">
+        <div class="font-row row-display">
+          <span class="font-tag">Display</span>Fredoka — Pawzzle
+        </div>
+        <div class="font-row row-body">
+          <span class="font-tag">Body</span>IBM Plex Sans — Une grille 6×6 en
+          quatre couleurs douces.
+        </div>
+        <div class="font-row row-mono">
+          <span class="font-tag">Mono</span>IBM Plex Mono — NIVEAU 12
+        </div>
+        <pre class="font-vars">
+--font-display: 'Fredoka', sans-serif;
+--font-body: 'IBM Plex Sans', sans-serif;
+--font-mono: 'IBM Plex Mono', monospace;</pre
+        >
+      </div>
+      <div class="mockup">
+        <div class="app-header">
+          <div class="app-name">
+            <svg
+              class="paw"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="11" cy="4" r="2" />
+              <circle cx="18" cy="8" r="2" />
+              <circle cx="20" cy="16" r="2" />
+              <path
+                d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"
+              />
+            </svg>
+            Pawzzle
+          </div>
+          <div class="app-nav">
+            <span class="active">Niveaux</span><span>Règles</span
+            ><span>Profil</span>
+          </div>
+        </div>
+        <div class="cards-row">
+          <div class="card">
+            <div class="card-label">Niveau 12</div>
+            <div class="mini-grid">
+              <div class="cell r-primary"></div>
+              <div class="cell r-accent"></div>
+              <div class="cell r-accent"></div>
+              <div class="cell r-secondary"></div>
+              <div class="cell r-primary pawn-cell">
+                <svg
+                  class="paw-mini"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="11" cy="4" r="2" />
+                  <circle cx="18" cy="8" r="2" />
+                  <circle cx="20" cy="16" r="2" />
+                  <path
+                    d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"
+                  />
+                </svg>
+              </div>
+              <div class="cell r-accent"></div>
+              <div class="cell r-secondary"></div>
+              <div class="cell r-muted"></div>
+              <div class="cell r-secondary"></div>
+              <div class="cell r-secondary"></div>
+              <div class="cell r-muted"></div>
+              <div class="cell r-muted"></div>
+              <div class="cell r-muted"></div>
+              <div class="cell r-muted"></div>
+              <div class="cell r-primary"></div>
+              <div class="cell r-primary"></div>
+            </div>
+            <span class="badge">Facile</span>
+          </div>
+          <div class="card">
+            <div class="card-label">Série</div>
+            <div class="streak-number">7</div>
+            <div class="streak-caption">jours consécutifs 🐾</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Défi du jour</div>
+            <div class="card-desc">
+              Une grille 6×6 en quatre couleurs douces, à assembler sans faire
+              toucher deux pions.
+            </div>
+            <span class="cta-btn">Jouer</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ B. Boîte à Jeux ============ -->
+    <section class="direction direction-boite">
+      <div class="direction-intro">
+        <h2>Boîte à Jeux</h2>
+        <div class="tagline">
+          Bois foncé et laiton patiné, comme une boîte de jeu de société vintage
+          ressortie du placard
+        </div>
+      </div>
+      <div class="palette">
+        <div class="swatch-item">
+          <div class="swatch" style="background: #7a4a2e"></div>
+          <span class="swatch-label">--primary — #7a4a2e</span>
+        </div>
+        <div class="swatch-item">
+          <div class="swatch" style="background: #f5e8d0"></div>
+          <span class="swatch-label">--background — #f5e8d0</span>
+        </div>
+        <div class="swatch-item">
+          <div class="swatch" style="background: #3a2814"></div>
+          <span class="swatch-label">--foreground — #3a2814</span>
+        </div>
+        <div class="swatch-item">
+          <div class="swatch" style="background: #d4924a"></div>
+          <span class="swatch-label">--accent — #d4924a</span>
+        </div>
+        <div class="swatch-item">
+          <div class="swatch" style="background: #e0c9a0"></div>
+          <span class="swatch-label">--secondary — #e0c9a0</span>
+        </div>
+        <div class="swatch-item">
+          <div class="swatch" style="background: #a68f6e"></div>
+          <span class="swatch-label">--muted — #a68f6e</span>
+        </div>
+      </div>
+      <div class="typography">
+        <div class="font-row row-display">
+          <span class="font-tag">Display</span>Fraunces — Pawzzle
+        </div>
+        <div class="font-row row-body">
+          <span class="font-tag">Body</span>IBM Plex Sans — Grille 6×6, quatre
+          régions.
+        </div>
+        <div class="font-row row-mono">
+          <span class="font-tag">Mono</span>IBM Plex Mono — NIVEAU 12
+        </div>
+        <pre class="font-vars">
+--font-display: 'Fraunces', serif;
+--font-body: 'IBM Plex Sans', sans-serif;
+--font-mono: 'IBM Plex Mono', monospace;</pre
+        >
+      </div>
+      <div class="mockup">
+        <div class="app-header">
+          <div class="app-name">
+            <svg
+              class="paw"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="11" cy="4" r="2" />
+              <circle cx="18" cy="8" r="2" />
+              <circle cx="20" cy="16" r="2" />
+              <path
+                d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"
+              />
+            </svg>
+            Pawzzle
+          </div>
+          <div class="app-nav">
+            <span class="active">Niveaux</span><span>Règles</span
+            ><span>Profil</span>
+          </div>
+        </div>
+        <div class="cards-row">
+          <div class="card">
+            <div class="card-label">Niveau 12</div>
+            <div class="mini-grid">
+              <div class="cell r-primary"></div>
+              <div class="cell r-accent"></div>
+              <div class="cell r-accent"></div>
+              <div class="cell r-secondary"></div>
+              <div class="cell r-primary pawn-cell">
+                <svg
+                  class="paw-mini"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="11" cy="4" r="2" />
+                  <circle cx="18" cy="8" r="2" />
+                  <circle cx="20" cy="16" r="2" />
+                  <path
+                    d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"
+                  />
+                </svg>
+              </div>
+              <div class="cell r-accent"></div>
+              <div class="cell r-secondary"></div>
+              <div class="cell r-muted"></div>
+              <div class="cell r-secondary"></div>
+              <div class="cell r-secondary"></div>
+              <div class="cell r-muted"></div>
+              <div class="cell r-muted"></div>
+              <div class="cell r-muted"></div>
+              <div class="cell r-muted"></div>
+              <div class="cell r-primary"></div>
+              <div class="cell r-primary"></div>
+            </div>
+            <span class="badge">Moyen</span>
+          </div>
+          <div class="card">
+            <div class="card-label">Série</div>
+            <div class="streak-number">7</div>
+            <div class="streak-caption">jours consécutifs</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Défi du jour</div>
+            <div class="card-desc">
+              Grille 6×6, quatre régions à occuper d'un seul pion, jamais côte à
+              côte.
+            </div>
+            <span class="cta-btn">Jouer</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ C. Atelier du Dimanche ============ -->
+    <section class="direction direction-atelier">
+      <div class="direction-intro">
+        <h2>Atelier du Dimanche</h2>
+        <div class="tagline">
+          Terre cuite et bouleau clair, comme des pièces en feutrine posées sur
+          une table d'atelier
+        </div>
+      </div>
+      <div class="palette">
+        <div class="swatch-item">
+          <div class="swatch" style="background: #c97b5a"></div>
+          <span class="swatch-label">--primary — #c97b5a</span>
+        </div>
+        <div class="swatch-item">
+          <div class="swatch" style="background: #faf5ea"></div>
+          <span class="swatch-label">--background — #faf5ea</span>
+        </div>
+        <div class="swatch-item">
+          <div class="swatch" style="background: #453325"></div>
+          <span class="swatch-label">--foreground — #453325</span>
+        </div>
+        <div class="swatch-item">
+          <div class="swatch" style="background: #8fae82"></div>
+          <span class="swatch-label">--accent — #8fae82</span>
+        </div>
+        <div class="swatch-item">
+          <div class="swatch" style="background: #ede0c8"></div>
+          <span class="swatch-label">--secondary — #ede0c8</span>
+        </div>
+        <div class="swatch-item">
+          <div class="swatch" style="background: #b0a189"></div>
+          <span class="swatch-label">--muted — #b0a189</span>
+        </div>
+      </div>
+      <div class="typography">
+        <div class="font-row row-display">
+          <span class="font-tag">Display</span>Quicksand — Pawzzle
+        </div>
+        <div class="font-row row-body">
+          <span class="font-tag">Body</span>IBM Plex Sans — Un pion par région,
+          sans voisin.
+        </div>
+        <div class="font-row row-mono">
+          <span class="font-tag">Mono</span>IBM Plex Mono — NIVEAU 12
+        </div>
+        <pre class="font-vars">
+--font-display: 'Quicksand', sans-serif;
+--font-body: 'IBM Plex Sans', sans-serif;
+--font-mono: 'IBM Plex Mono', monospace;</pre
+        >
+      </div>
+      <div class="mockup">
+        <div class="app-header">
+          <div class="app-name">
+            <svg
+              class="paw"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="11" cy="4" r="2" />
+              <circle cx="18" cy="8" r="2" />
+              <circle cx="20" cy="16" r="2" />
+              <path
+                d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"
+              />
+            </svg>
+            Pawzzle
+          </div>
+          <div class="app-nav">
+            <span class="active">Niveaux</span><span>Règles</span
+            ><span>Profil</span>
+          </div>
+        </div>
+        <div class="cards-row">
+          <div class="card">
+            <div class="card-label">Niveau 12</div>
+            <div class="mini-grid">
+              <div class="cell r-primary"></div>
+              <div class="cell r-accent"></div>
+              <div class="cell r-accent"></div>
+              <div class="cell r-secondary"></div>
+              <div class="cell r-primary pawn-cell">
+                <svg
+                  class="paw-mini"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="11" cy="4" r="2" />
+                  <circle cx="18" cy="8" r="2" />
+                  <circle cx="20" cy="16" r="2" />
+                  <path
+                    d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"
+                  />
+                </svg>
+              </div>
+              <div class="cell r-accent"></div>
+              <div class="cell r-secondary"></div>
+              <div class="cell r-muted"></div>
+              <div class="cell r-secondary"></div>
+              <div class="cell r-secondary"></div>
+              <div class="cell r-muted"></div>
+              <div class="cell r-muted"></div>
+              <div class="cell r-muted"></div>
+              <div class="cell r-muted"></div>
+              <div class="cell r-primary"></div>
+              <div class="cell r-primary"></div>
+            </div>
+            <span class="badge">Moyen</span>
+          </div>
+          <div class="card">
+            <div class="card-label">Série</div>
+            <div class="streak-number">7</div>
+            <div class="streak-caption">jours consécutifs 🐾</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Défi du jour</div>
+            <div class="card-desc">
+              Grille 6×6, quatre familles de couleurs à démêler, un pion par
+              région, sans voisin.
+            </div>
+            <span class="cta-btn">Jouer</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

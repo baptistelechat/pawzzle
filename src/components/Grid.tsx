@@ -3,17 +3,7 @@ import { PawPrint, X } from "lucide-react";
 import type { Grid as GridType, Position } from "@/lib/engine/types";
 import type { PlacedPawn } from "@/hooks/useLevel";
 import { cn } from "@/lib/utils";
-
-// ponytail: palette fixe, taille max testée = 7 régions (generator.test.ts)
-const REGION_COLORS = [
-  "oklch(0.85 0.1 30)",
-  "oklch(0.85 0.1 90)",
-  "oklch(0.85 0.1 150)",
-  "oklch(0.85 0.1 210)",
-  "oklch(0.85 0.1 270)",
-  "oklch(0.85 0.1 330)",
-  "oklch(0.85 0.1 10)",
-];
+import { REGION_COLORS } from "@/lib/regionColors";
 
 const DOUBLE_TAP_MS = 300;
 
