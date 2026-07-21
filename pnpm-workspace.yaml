@@ -1,2 +1,6 @@
 onlyBuiltDependencies:
   - sharp
+
+minimumReleaseAgeExclude:
+  - lightningcss*
+  - "@tailwindcss/oxide*"

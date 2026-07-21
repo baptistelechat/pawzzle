@@ -1,8 +1,19 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import type { Vibration } from "web-haptics";
 import type { Level, Position } from "@/lib/engine/types";
+import { haptics } from "@/lib/haptics";
 
 const GRID_SIZE = 6;
 const MAX_ERRORS = 3; // ponytail: budget arbitraire, à ajuster après test interne (Phase 3)
+
+// Le preset "success" intégré (30ms+40ms) est perçu comme trop faible — pattern
+// custom plus long et plus intense, réutilisé pour toute pose correcte (pas
+// seulement la victoire finale) pour que chaque bon coup se sente "réussi".
+const SUCCESS_HAPTIC: Vibration[] = [
+  { duration: 45, intensity: 0.7 },
+  { delay: 60, duration: 45, intensity: 0.9 },
+  { delay: 60, duration: 140, intensity: 1 },
+];
 
 type Status = "loading" | "playing" | "won" | "lost";
 
@@ -35,8 +46,17 @@ export const useLevel = () => {
       new URL("@/lib/engine/generateLevel.worker.ts", import.meta.url),
       { type: "module" },
     );
-    worker.onmessage = (event: MessageEvent<Level>) => {
-      setLevel(event.data);
+    worker.onmessage = (
+      event: MessageEvent<{ ok: true; level: Level } | { ok: false }>,
+    ) => {
+      if (!event.data.ok) {
+        // Grille sans solution unique trouvée (garde-fou anti-boucle infinie
+        // du générateur) : on retente avec un nouveau seed au lieu de laisser
+        // le spinner bloqué indéfiniment.
+        worker.postMessage({ size: GRID_SIZE });
+        return;
+      }
+      setLevel(event.data.level);
       setStatus("playing");
     };
     workerRef.current = worker;
@@ -48,16 +68,22 @@ export const useLevel = () => {
     (candidate: Position) => {
       if (!level || status !== "playing") return;
       const existing = placed.find((p) => samePosition(p, candidate));
-      if (existing) {
-        if (!existing.invalid) return; // réponse correcte : ne se retire pas
-        setPlaced((prev) => prev.filter((p) => !samePosition(p, candidate)));
-        return;
-      }
+      if (existing) return; // case déjà tentée (correcte ou fautive) : figée, non retirable
 
       setMarkers((prev) => prev.filter((m) => !samePosition(m, candidate)));
       const invalid = !level.solution.some((s) => samePosition(s, candidate));
       const next = [...placed, { ...candidate, invalid }];
       setPlaced(next);
+
+      const willWin =
+        !invalid &&
+        next.filter((p) => !p.invalid).length === level.solution.length;
+      const willLose = invalid && errors + 1 >= MAX_ERRORS;
+
+      haptics.cancel();
+      haptics.trigger(
+        invalid ? (willLose ? "error" : "warning") : SUCCESS_HAPTIC,
+      );
 
       if (invalid) {
         setErrors((prev) => {
@@ -65,13 +91,11 @@ export const useLevel = () => {
           if (nextErrors >= MAX_ERRORS) setStatus("lost");
           return nextErrors;
         });
-      } else if (
-        next.filter((p) => !p.invalid).length === level.solution.length
-      ) {
+      } else if (willWin) {
         setStatus("won");
       }
     },
-    [level, placed, status],
+    [level, placed, status, errors],
   );
 
   const toggleMarker = useCallback(

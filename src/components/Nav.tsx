@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { Menu, User, X } from "lucide-react";
+import { AnimatePresence, m, useReducedMotion } from "motion/react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { haptics } from "@/lib/haptics";
+import { EASE_DRAWER } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
@@ -11,6 +14,7 @@ const NAV_LINKS = [
 
 export const Nav = () => {
   const [open, setOpen] = useState(false);
+  const reduceMotion = useReducedMotion();
 
   return (
     <nav className="border-b border-border bg-background">
@@ -48,7 +52,11 @@ export const Nav = () => {
             aria-expanded={open}
             aria-controls="mobile-nav"
             aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
-            onClick={() => setOpen((prev) => !prev)}
+            onClick={() => {
+              haptics.cancel();
+              haptics.trigger("selection");
+              setOpen((prev) => !prev);
+            }}
             className="text-foreground md:hidden"
           >
             {open ? <X className="size-5" /> : <Menu className="size-5" />}
@@ -56,27 +64,40 @@ export const Nav = () => {
         </div>
       </div>
 
-      {open && (
-        <div
-          id="mobile-nav"
-          className="flex flex-col gap-3 border-t border-border px-4 py-3 text-sm md:hidden"
-        >
-          {NAV_LINKS.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              onClick={() => setOpen(false)}
-              className={cn(
-                link.active
-                  ? "font-medium text-primary"
-                  : "text-muted-foreground",
-              )}
-            >
-              {link.label}
-            </a>
-          ))}
-        </div>
-      )}
+      <AnimatePresence initial={false}>
+        {open && (
+          <m.div
+            key="mobile-nav"
+            id="mobile-nav"
+            className="overflow-hidden border-t border-border px-4 text-sm md:hidden"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={
+              reduceMotion
+                ? { duration: 0.15 }
+                : { duration: 0.22, ease: EASE_DRAWER }
+            }
+          >
+            <div className="flex flex-col gap-3 py-3">
+              {NAV_LINKS.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setOpen(false)}
+                  className={cn(
+                    link.active
+                      ? "font-medium text-primary"
+                      : "text-muted-foreground",
+                  )}
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
+          </m.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 };

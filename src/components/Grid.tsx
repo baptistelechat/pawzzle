@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useRef } from "react";
 import { PawPrint, X } from "lucide-react";
+import { m, useReducedMotion } from "motion/react";
 import type { Grid as GridType, Position } from "@/lib/engine/types";
 import type { PlacedPawn } from "@/hooks/useLevel";
+import { EASE_OUT } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 import { REGION_COLORS } from "@/lib/regionColors";
 
@@ -30,6 +32,7 @@ export const Grid = ({
     placed.find((p) => p.row === row && p.col === col);
   const isMarked = (row: number, col: number) =>
     markers.some((p) => p.row === row && p.col === col);
+  const reduceMotion = useReducedMotion();
 
   // Ref miroir : le pointermove global lit toujours l'état de marqueurs le plus
   // récent, sans dépendre de `markers` dans les deps de l'effet (fige la closure).
@@ -160,11 +163,24 @@ export const Grid = ({
               }}
             >
               {pawn ? (
-                pawn.invalid ? (
-                  <X className="size-2/3 text-destructive" />
-                ) : (
-                  <PawPrint className="size-2/3 text-foreground" />
-                )
+                <m.span
+                  key={`${pawn.invalid ? "x" : "paw"}-${row}-${col}`}
+                  className={cn(
+                    "flex items-center justify-center",
+                    pawn.invalid ? "size-1/2" : "size-2/3",
+                  )}
+                  initial={
+                    reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.85 }
+                  }
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.14, ease: EASE_OUT }}
+                >
+                  {pawn.invalid ? (
+                    <X className="size-full text-destructive" />
+                  ) : (
+                    <PawPrint className="size-full text-foreground" />
+                  )}
+                </m.span>
               ) : (
                 isMarked(row, col) && (
                   <X className="size-1/2 text-foreground/60" />
