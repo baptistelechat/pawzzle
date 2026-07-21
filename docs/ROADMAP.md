@@ -27,11 +27,11 @@ Scope figé par le brief (4.0) : **grille carrée classique uniquement**, aucune
 
 ## Phase 2 — UI de jeu minimale
 
-- [ ] Grille cliquable : 1 clic = pose un animal, re-clic = retire
-- [ ] Feedback visuel erreur (contact adjacent, doublon ligne/colonne/région)
-- [ ] Budget d'erreur : compteur d'erreurs autorisées avant échec du niveau (pas un système d'indice — décision actée, brief section 9)
-- [ ] Détection victoire (3 règles respectées partout) → écran de fin simple
-- [ ] Bouton "nouveau niveau" (appelle le générateur de la Phase 1)
+- [x] Grille cliquable : 1 clic = pose un animal, re-clic = retire
+- [x] Feedback visuel erreur (contact adjacent, doublon ligne/colonne/région)
+- [x] Budget d'erreur : compteur d'erreurs autorisées avant échec du niveau (pas un système d'indice — décision actée, brief section 9)
+- [x] Détection victoire (3 règles respectées partout) → écran de fin simple
+- [x] Bouton "nouveau niveau" (appelle le générateur de la Phase 1)
 
 **Sortie** : on peut jouer un niveau du début à la fin dans le navigateur, en local, sans compte ni sauvegarde.
 
