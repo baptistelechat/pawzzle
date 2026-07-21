@@ -2,16 +2,16 @@
 
 > Basé sur [BRIEF_puzzle_game.md](./BRIEF_puzzle_game.md), section 8 (plan de validation). Ordre strict : moteur de jeu → test interne → PWA/sauvegarde → LP/SEO. Pas de landing page, pas de Supabase, pas de PWA installable tant que la Phase 1 n'est pas validée fun.
 
-## Phase 0 — Setup projet
+## Phase 0 — Setup projet ✅
 
-- [ ] `pnpm create vite` (React + TS) — dossier vide requis (⚠️ GLRN-120 : bloque en CWD non vide, créer les fichiers à la main sinon)
-- [ ] Tailwind v4 via `@tailwindcss/vite` (pas de config JS — GLRN-004)
-- [ ] `.npmrc` racine si erreur `workspace-root-check` (GLRN-194)
-- [ ] shadcn/ui init — vérifier `tsconfig.json` racine a bien `paths` (GLRN-178), vérifier les imports générés en `src\` et pas `@\` (GLRN-121)
-- [ ] ESLint 9 flat config minimal (GLRN-179)
-- [ ] `vite-env.d.ts` si besoin d'imports CSS en `.ts` (GLRN-122)
+- [x] `pnpm create vite` (React + TS) — dossier vide requis (⚠️ GLRN-120 : bloque en CWD non vide, fichiers créés à la main)
+- [x] Tailwind v4 via `@tailwindcss/vite` (pas de config JS — GLRN-004)
+- [x] `.npmrc` racine si erreur `workspace-root-check` (GLRN-194) — non nécessaire, pas de `pnpm-workspace.yaml`
+- [x] shadcn/ui init (Base UI + preset Nova) — `tsconfig.json` racine a bien `paths` (GLRN-178), imports générés en `src\` et pas `@\` (GLRN-121)
+- [x] ESLint 9 flat config minimal (GLRN-179)
+- [x] `vite-env.d.ts` (GLRN-122)
 
-**Sortie** : `pnpm dev` tourne, un composant shadcn s'affiche.
+**Sortie** : `pnpm dev` tourne, `pnpm lint` et `pnpm build` passent, un composant shadcn (`Button`) s'affiche — vérifié visuellement via agent-browser.
 
 ## Phase 1 — Moteur de règles + génération (le vrai cœur du MVP)
 
