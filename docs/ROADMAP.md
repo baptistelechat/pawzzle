@@ -21,7 +21,7 @@ Scope figé par le brief (4.0) : **grille carrée classique uniquement**, aucune
 - [x] 3 règles de validation : un animal par ligne, par colonne, par région, aucun contact (8 voisins) entre deux animaux
 - [x] Générateur procédural : grille candidate → vérif solution unique (backtracking/CSP) → régénère si 0 ou plusieurs solutions
 - [x] Solveur dans un **Web Worker** (le brief anticipe un coût calcul non négligeable — ne pas geler l'UI)
-- [ ] Indicateur de chargement léger si génération > quelques dizaines de ms _(reporté Phase 2 — c'est un rendu UI, le worker expose déjà tout ce qu'il faut via `postMessage`/`onmessage`)_
+- [x] Indicateur de chargement léger si génération > quelques dizaines de ms _(fait en Phase 2 — spinner `Loader2` dans `App.tsx` tant que `status === "loading"`)_
 
 **Sortie** : `generateLevel(size)` renvoie une grille valide à solution unique, appelable en boucle sans freeze UI. Testable en dehors de toute UI (script/console).
 
@@ -37,18 +37,48 @@ Scope figé par le brief (4.0) : **grille carrée classique uniquement**, aucune
 
 ## Phase 3 — Test interne (gate avant d'aller plus loin)
 
-- [ ] Faire tester à l'entourage (brief section 8, point 2)
-- [ ] Valider : plus engageant que Queens standard ? Sessions de 2-5 min tenables (insight utilisateur, section 5) ?
-- [ ] Go/no-go avant Phase 4
+- [x] Faire tester à l'entourage (brief section 8, point 2)
+- [x] Valider : plus engageant que Queens standard ? Sessions de 2-5 min tenables (insight utilisateur, section 5) ? _(ressenti proche de Queens pour l'instant — attendu, le gameplay différenciant n'est pas encore développé)_
+- [x] Go/no-go avant Phase 4 → **Go**
 
-**Ne pas commencer la Phase 4 sans ce go.**
+**Phase 4 débloquée.**
 
-## Phase 4 — Hors scope MVP (pour mémoire, ne pas anticiper)
+## Phase 4 — Post-MVP (ordre imposé par le brief, section 8)
 
-- Formes de grille non carrées + contraintes échecs (brief 4.1)
-- PWA installable, Supabase (auth, progression, sauvegarde)
-- Landing page + SEO (brief section 3)
+### Phase 4.0 — Game feel : animation, son, haptique
+
+- [ ] Micro-animations : pose de pion, erreur (shake/flash), victoire de niveau
+- [ ] Sound design : feedback sonore pose/erreur/victoire + toggle mute (persistant, `localStorage`)
+- [ ] Retour haptique mobile : vibration courte sur pose/erreur (`web-haptics`, déjà utilisé sur d'autres projets — 4 presets, no-op silencieux hors mobile, cf. mémoire globale)
+
+**Sortie** : les 3 règles de base (Phase 1-2) ont un feedback sensoriel complet. Fait avant 4.1 pour que le prochain test interne juge le gameplay différenciant sur une base déjà "finie" en sensations, pas sur un prototype nu.
+
+### Phase 4.1 — Mécaniques différenciantes (brief 4.1)
+
+- [ ] Formes de grille non carrées (hexagone, cercle, triangle... en pixel art) — casse la lecture visuelle sans changer la logique de base
+- [ ] Contraintes inspirées des échecs (diagonale/L/ligne interdite) — nomenclature par mouvement décrit, jamais par nom de pièce
+- [ ] Niveau-tutoriel dédié pour introduire chaque nouvelle contrainte (pas de surlignage permanent en jeu — piège d'onboarding identifié en 4.1 du brief)
+- [ ] Combinaison forme + contrainte pour niveaux inédits
+
+**Sortie** : au moins une forme non carrée + une contrainte échecs jouables. Retest interne pour confirmer le gain d'engagement vs Queens (le test Phase 3 était encore trop proche du clone strict).
+
+### Phase 4.2 — PWA installable + Supabase (brief 8, point 3)
+
+- [ ] Manifest + service worker (installable, fonctionne hors-ligne pour un niveau en cours)
+- [ ] Auth Supabase (compte utilisateur)
+- [ ] Sauvegarde de progression (niveaux complétés, stats) en base Supabase
+- [ ] Vigilance plan Free : pause après 7j d'inactivité, cap dur Vercel sans overage (brief section 2)
+
+**Sortie** : le jeu s'installe en PWA, la progression persiste entre sessions/appareils via un compte.
+
+### Phase 4.3 — Landing page + SEO (brief section 3)
+
+- [ ] Trancher l'outil : `vite-plugin-seo-prerender` / React Router v7 pré-rendu / Astro séparé
+- [ ] Pages vitrine : accueil, règles, à propos
+- [ ] Stratégie SEO de base (meta tags, sitemap, OG image)
+
+**Sortie** : LP indexable séparée de l'app, avec les pages clés.
 
 ---
 
-**Prochaine étape immédiate** : Phase 0 dès validation de cette roadmap.
+**Prochaine étape immédiate** : Phase 4.0 (game feel) après merge.

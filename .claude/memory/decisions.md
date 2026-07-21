@@ -16,3 +16,4 @@ register: decisions
 | [BDR-008](decisions/BDR-008.md) | 2026-07-21 | Validation de pose : comparaison directe à la solution                      | #validation #csp #dead-end #solution-check #queens #game-design                    | actif  |
 | [BDR-009](decisions/BDR-009.md) | 2026-07-21 | Identité visuelle retenue : direction "Atelier Feutrine"                    | #brand-identity #design-system #atelier-feutrine #fredoka #ibm-plex #logo #pawzzle | actif  |
 | [BDR-010](decisions/BDR-010.md) | 2026-07-21 | Structure Nav + zone de jeu : topbar fixe, contenu centré, bouton dynamique | #layout #nav #hamburger #responsive #avatar #ui #poc #pawzzle                      | actif  |
+| [BDR-011](decisions/BDR-011.md) | 2026-07-21 | Go Phase 3 → déblocage Phase 4                                              | #roadmap #phase3 #gate #go-no-go #phase4 #mvp                                      | actif  |
