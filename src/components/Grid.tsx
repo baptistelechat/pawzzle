@@ -144,7 +144,7 @@ export const Grid = ({
         rowRegions.map((region, col) => {
           const pawn = getPawn(row, col);
           return (
-            <button
+            <m.button
               key={`${row}-${col}`}
               type="button"
               data-row={row}
@@ -154,8 +154,18 @@ export const Grid = ({
                 if (help) dragStart.current = { row, col };
               }}
               onClick={() => handleClick(row, col)}
+              initial={
+                reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.85 }
+              }
+              animate={{ opacity: 1, scale: 1 }}
+              exit={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.85 }}
+              transition={{
+                duration: 0.22,
+                ease: EASE_OUT,
+                delay: reduceMotion ? 0 : (row + col) * 0.02,
+              }}
               className={cn(
-                "flex aspect-square items-center justify-center rounded-md border-2 transition-colors",
+                "flex aspect-square items-center justify-center rounded-[28%] border-2 transition-colors [corner-shape:squircle]",
                 pawn?.invalid ? "border-destructive" : "border-transparent",
               )}
               style={{
@@ -186,7 +196,7 @@ export const Grid = ({
                   <X className="size-1/2 text-foreground/60" />
                 )
               )}
-            </button>
+            </m.button>
           );
         }),
       )}

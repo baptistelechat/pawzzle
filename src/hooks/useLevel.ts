@@ -27,6 +27,10 @@ const samePosition = (a: Position, b: Position) =>
 export const useLevel = () => {
   const workerRef = useRef<Worker | null>(null);
   const [level, setLevel] = useState<Level | null>(null);
+  // Incrémenté à chaque nouvelle grille reçue : sert de clé de remount pour
+  // Grid, seul déclencheur fiable de son animation de sortie/entrée (le
+  // statut "loading" est trop éphémère pour être peint par React/le worker).
+  const [levelId, setLevelId] = useState(0);
   const [placed, setPlaced] = useState<PlacedPawn[]>([]);
   const [markers, setMarkers] = useState<Position[]>([]);
   const [errors, setErrors] = useState(0);
@@ -58,6 +62,7 @@ export const useLevel = () => {
       }
       setLevel(event.data.level);
       setStatus("playing");
+      setLevelId((id) => id + 1);
     };
     workerRef.current = worker;
     worker.postMessage({ size: GRID_SIZE });
@@ -128,6 +133,7 @@ export const useLevel = () => {
 
   return {
     level,
+    levelId,
     placed,
     markers,
     errors,

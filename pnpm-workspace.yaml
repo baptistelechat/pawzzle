@@ -1,5 +1,6 @@
 onlyBuiltDependencies:
   - sharp
+  - ffmpeg-static
 
 minimumReleaseAgeExclude:
   - lightningcss*

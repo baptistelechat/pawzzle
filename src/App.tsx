@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 function App() {
   const {
     level,
+    levelId,
     placed,
     markers,
     errors,
@@ -32,7 +33,7 @@ function App() {
       <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col items-center justify-center gap-4 p-4">
         <h1 className="text-5xl font-bold">Pawzzle</h1>
 
-        <AnimatePresence mode="popLayout" initial={false}>
+        <AnimatePresence mode="wait" initial={false}>
           {status === "loading" || !level ? (
             <m.div
               key="loading"
@@ -109,15 +110,18 @@ function App() {
                 </label>
               </div>
               <div className="w-full max-w-md">
-                <Grid
-                  grid={level.grid}
-                  placed={placed}
-                  markers={markers}
-                  help={help}
-                  onTogglePaw={togglePaw}
-                  onToggleMarker={toggleMarker}
-                  onSetMarker={setMarker}
-                />
+                <AnimatePresence mode="wait">
+                  <Grid
+                    key={levelId}
+                    grid={level.grid}
+                    placed={placed}
+                    markers={markers}
+                    help={help}
+                    onTogglePaw={togglePaw}
+                    onToggleMarker={toggleMarker}
+                    onSetMarker={setMarker}
+                  />
+                </AnimatePresence>
               </div>
               <div className="w-full max-w-md">
                 <Button
