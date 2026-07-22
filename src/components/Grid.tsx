@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { PawPrint, X } from "lucide-react";
 import { m, useReducedMotion } from "motion/react";
 import type { Grid as GridType, Position } from "@/lib/engine/types";
@@ -7,7 +7,16 @@ import { EASE_OUT } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 import { REGION_COLORS } from "@/lib/regionColors";
 
-const DOUBLE_TAP_MS = 300;
+// ponytail: le comptage tap/double-tap était fragile à la vitesse d'appui
+// (un double-tap trop lent posait puis retirait un marqueur). Geste par nature
+// au lieu de geste par timing : tap = marqueur, appui long = animal, glisser =
+// pose en chaîne de marqueurs (inchangé). 450ms = seuil usuel mobile.
+const LONG_PRESS_MS = 450;
+
+// Exportées pour que App.tsx puisse caler le son `new_game` sur la fin réelle
+// de l'animation d'apparition (dernière case = delay max + durée).
+export const CELL_TRANSITION_MS = 220;
+export const CELL_STAGGER_MS = 20;
 
 interface GridProps {
   grid: GridType;
@@ -48,11 +57,23 @@ export const Grid = ({
   const dragShouldMark = useRef(true);
   const visited = useRef(new Set<string>());
 
-  useEffect(() => {
-    if (!help) return;
+  // Cellule sous le doigt/curseur depuis le pointerdown, suivie même quand
+  // `help` est désactivé (l'appui long pour poser l'animal ne dépend pas de l'aide).
+  const pressStart = useRef<Position | null>(null);
+  const longPressTimeout = useRef<number | null>(null);
+  const longPressFired = useRef(false);
 
+  const clearLongPress = () => {
+    if (longPressTimeout.current !== null) {
+      clearTimeout(longPressTimeout.current);
+      longPressTimeout.current = null;
+    }
+  };
+  useEffect(() => clearLongPress, []);
+
+  useEffect(() => {
     const handleMove = (event: PointerEvent) => {
-      if (!dragStart.current) return;
+      if (!help || !dragStart.current) return;
       const cell = (event.target as HTMLElement | null)?.ownerDocument
         ?.elementFromPoint(event.clientX, event.clientY)
         ?.closest<HTMLElement>("[data-row]");
@@ -64,6 +85,7 @@ export const Grid = ({
         if (row === dragStart.current.row && col === dragStart.current.col)
           return;
         dragActive.current = true;
+        clearLongPress(); // un vrai glissement n'est pas un appui long
         dragShouldMark.current = !markersRef.current.some(
           (m) =>
             m.row === dragStart.current?.row &&
@@ -82,6 +104,17 @@ export const Grid = ({
     };
 
     const handleUp = () => {
+      clearLongPress();
+      if (
+        help &&
+        !longPressFired.current &&
+        !dragActive.current &&
+        pressStart.current
+      ) {
+        onToggleMarker(pressStart.current);
+      }
+      longPressFired.current = false;
+      pressStart.current = null;
       dragStart.current = null;
       dragActive.current = false;
       visited.current = new Set();
@@ -93,47 +126,7 @@ export const Grid = ({
       window.removeEventListener("pointermove", handleMove);
       window.removeEventListener("pointerup", handleUp);
     };
-  }, [help, onSetMarker]);
-
-  // Détection manuelle du double-tap : le `dblclick` natif n'est pas fiable au
-  // tactile. Le marqueur du 1er tap est retardé (au lieu d'appliqué immédiatement)
-  // pour ne pas flasher à l'écran juste avant d'être remplacé par l'animal.
-  const lastTap = useRef<{
-    row: number;
-    col: number;
-    time: number;
-    timeoutId: number;
-  } | null>(null);
-
-  useEffect(() => {
-    return () => {
-      if (lastTap.current) clearTimeout(lastTap.current.timeoutId);
-    };
-  }, []);
-
-  const handleClick = useCallback(
-    (row: number, col: number) => {
-      const now = performance.now();
-      const last = lastTap.current;
-      if (
-        last &&
-        last.row === row &&
-        last.col === col &&
-        now - last.time < DOUBLE_TAP_MS
-      ) {
-        clearTimeout(last.timeoutId);
-        lastTap.current = null;
-        onTogglePaw({ row, col });
-        return;
-      }
-
-      const timeoutId = window.setTimeout(() => {
-        if (help) onToggleMarker({ row, col });
-      }, DOUBLE_TAP_MS);
-      lastTap.current = { row, col, time: now, timeoutId };
-    },
-    [help, onTogglePaw, onToggleMarker],
-  );
+  }, [help, onSetMarker, onToggleMarker]);
 
   return (
     <div
@@ -151,18 +144,25 @@ export const Grid = ({
               data-col={col}
               aria-label={`Case ligne ${row + 1}, colonne ${col + 1}`}
               onPointerDown={() => {
+                pressStart.current = { row, col };
                 if (help) dragStart.current = { row, col };
+                longPressFired.current = false;
+                longPressTimeout.current = window.setTimeout(() => {
+                  longPressFired.current = true;
+                  onTogglePaw({ row, col });
+                }, LONG_PRESS_MS);
               }}
-              onClick={() => handleClick(row, col)}
               initial={
                 reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.85 }
               }
               animate={{ opacity: 1, scale: 1 }}
               exit={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.85 }}
               transition={{
-                duration: 0.22,
+                duration: CELL_TRANSITION_MS / 1000,
                 ease: EASE_OUT,
-                delay: reduceMotion ? 0 : (row + col) * 0.02,
+                delay: reduceMotion
+                  ? 0
+                  : ((row + col) * CELL_STAGGER_MS) / 1000,
               }}
               className={cn(
                 "flex aspect-square items-center justify-center rounded-[28%] border-2 transition-colors [corner-shape:squircle]",

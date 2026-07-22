@@ -21,24 +21,28 @@ Liste des sons à trouver pour Pawzzle. Esthétique cible : "Atelier Feutrine" (
 
 ### 🎮 Interactions de jeu
 
-- [ ] `marker_add` — Tap → pose la croix d'aide. Pop doux et court, texture feutre/tissu, très discret.
-- [ ] `marker_remove` — Tap → retire la croix d'aide. Même famille que `marker_add`, inversé.
-- [ ] `paw_correct` — Double-tap → pose correcte de l'animal. Son signature, satisfaisant et chaleureux, chime court positif (xylophone/bois type marimba).
-- [ ] `paw_incorrect` — Double-tap → pose en conflit (case verrouillée rouge). Négatif mais doux, non punitif — "boop" grave discret, pas de buzzer agressif.
-- [ ] `drag_paint_tick` — Glisser sur une case pendant le tracé de marqueurs. Micro-tick très léger, pensé pour se répéter sans fatiguer.
+- [x] `marker_add` — Tap → pose la croix d'aide. Pop doux et court, texture feutre/tissu, très discret. [docs/sound-design/kenney_interface-sounds/Audio/drop_002.ogg]
+- [x] `marker_remove` — Tap → retire la croix d'aide. Même famille que `marker_add`, inversé. [docs/sound-design/kenney_interface-sounds/Audio/drop_003.ogg]
+- [x] `paw_correct` — Double-tap → pose correcte de l'animal. Son signature, satisfaisant et chaleureux, chime court positif (xylophone/bois type marimba). [docs/sound-design/kenney_interface-sounds/Audio/drop_004.ogg]
+- [x] `paw_incorrect` — Double-tap → pose en conflit (case verrouillée rouge). Négatif mais doux, non punitif — "boop" grave discret, pas de buzzer agressif. [docs/sound-design/kenney_interface-sounds/Audio/bong_001.ogg]
+- [x] `drag_paint_tick` — Glisser sur une case pendant le tracé de marqueurs. Micro-tick très léger, pensé pour se répéter sans fatiguer. [docs/sound-design/kenney_interface-sounds/Audio/drop_002.ogg]
 
 ### 🏆 Fin de partie
 
-- [ ] `victory` — Grille complétée avec succès. Petite fanfare chaleureuse (1-2s), cohérente avec `paw_correct` mais plus riche.
-- [ ] `game_over` — Budget d'erreur épuisé. Descendant, doux, ton "on retente" plutôt qu'"échec cuisant".
-- [ ] `new_game` — Lancement d'une nouvelle grille. Petit whoosh/froissement léger (papier ou tissu).
+- [x] `victory` — Grille complétée avec succès. Petite fanfare chaleureuse (1-2s), cohérente avec `paw_correct` mais plus riche. [docs/sound-design/kenney_interface-sounds/Audio/confirmation_004.ogg]
+- [x] `game_over` — Budget d'erreur épuisé. Descendant, doux, ton "on retente" plutôt qu'"échec cuisant". [docs/sound-design/kenney_interface-sounds/Audio/question_001.ogg]
+- [x] `new_game` — Lancement d'une nouvelle grille. Petit whoosh/froissement léger (papier ou tissu). [docs/sound-design/kenney_interface-sounds/Audio/confirmation_001.ogg]
 
 ### 🧭 UI générale
 
-- [ ] `ui_click` — Clic générique (boutons, nav). Neutre et discret, texture bois/carton plutôt que plastique.
-- [ ] `ui_toggle` — Toggle "Aide" ON/OFF. Clic mécanique léger, sensation de bascule physique.
-- [ ] `menu_open` — Ouverture du menu hamburger ou d'un drawer. Whoosh doux.
-- [ ] `menu_close` — Fermeture du menu hamburger ou d'un drawer. Même famille que `menu_open`, inversé.
+- [ ] `ui_click` — Clic générique (boutons, nav). Neutre et discret, texture bois/carton plutôt que plastique. [docs/sound-design/kenney_interface-sounds/Audio/bong_001.ogg]
+- [x] `ui_toggle` — Toggle "Aide" ON/OFF. Clic mécanique léger, sensation de bascule physique. [docs/sound-design/kenney_ui-audio/Audio/rollover2.ogg]
+- [x] `menu_open` — Ouverture du menu hamburger ou d'un drawer. Whoosh doux. [docs/sound-design/kenney_interface-sounds/Audio/bong_001.ogg]
+- [x] `menu_close` — Fermeture du menu hamburger ou d'un drawer. Même famille que `menu_open`, inversé. [docs/sound-design/kenney_interface-sounds/Audio/bong_001.ogg]
+
+### 🎵 Ambiance
+
+- [x] `ambient` — Musique de fond en boucle continue, démarrée au premier geste utilisateur. Calme, chaleureuse, discrète (ne doit pas fatiguer sur une session longue) — boucle sans coupure audible au point de reprise.
 
 ## Stratégie
 

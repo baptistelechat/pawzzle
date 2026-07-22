@@ -4,6 +4,7 @@ import { AnimatePresence, m, useReducedMotion } from "motion/react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { haptics } from "@/lib/haptics";
 import { EASE_DRAWER } from "@/lib/motion";
+import { sounds } from "@/lib/sounds";
 import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
@@ -55,6 +56,7 @@ export const Nav = () => {
             onClick={() => {
               haptics.cancel();
               haptics.trigger("selection");
+              sounds.play(open ? "menu_close" : "menu_open");
               setOpen((prev) => !prev);
             }}
             className="text-foreground md:hidden"
@@ -84,7 +86,10 @@ export const Nav = () => {
                 <a
                   key={link.href}
                   href={link.href}
-                  onClick={() => setOpen(false)}
+                  onClick={() => {
+                    sounds.play("ui_click");
+                    setOpen(false);
+                  }}
                   className={cn(
                     link.active
                       ? "font-medium text-primary"

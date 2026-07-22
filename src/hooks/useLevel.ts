@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { Vibration } from "web-haptics";
 import type { Level, Position } from "@/lib/engine/types";
 import { haptics } from "@/lib/haptics";
+import { sounds } from "@/lib/sounds";
 
 const GRID_SIZE = 6;
 const MAX_ERRORS = 3; // ponytail: budget arbitraire, à ajuster après test interne (Phase 3)
@@ -89,6 +90,15 @@ export const useLevel = () => {
       haptics.trigger(
         invalid ? (willLose ? "error" : "warning") : SUCCESS_HAPTIC,
       );
+      sounds.play(
+        invalid
+          ? willLose
+            ? "game_over"
+            : "paw_incorrect"
+          : willWin
+            ? "victory"
+            : "paw_correct",
+      );
 
       if (invalid) {
         setErrors((prev) => {
@@ -107,11 +117,13 @@ export const useLevel = () => {
     (candidate: Position) => {
       if (status !== "playing" || !help) return;
       if (placed.some((p) => samePosition(p, candidate))) return;
-      setMarkers((prev) =>
-        prev.some((m) => samePosition(m, candidate))
+      setMarkers((prev) => {
+        const exists = prev.some((m) => samePosition(m, candidate));
+        sounds.play(exists ? "marker_remove" : "marker_add");
+        return exists
           ? prev.filter((m) => !samePosition(m, candidate))
-          : [...prev, candidate],
-      );
+          : [...prev, candidate];
+      });
     },
     [placed, status, help],
   );
@@ -123,6 +135,7 @@ export const useLevel = () => {
       setMarkers((prev) => {
         const exists = prev.some((m) => samePosition(m, candidate));
         if (exists === shouldMark) return prev;
+        sounds.play("drag_paint_tick");
         return shouldMark
           ? [...prev, candidate]
           : prev.filter((m) => !samePosition(m, candidate));
