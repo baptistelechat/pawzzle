@@ -1,11 +1,11 @@
 ---
-id: BLK-010
+id: ZBLK-010
 type: blocker
 date: 2026-07-21
 tags: [pnpm, ffmpeg-static, onlybuiltdependencies, postinstall, build-script]
 ---
 
-# BLK-010 — `pnpm add ffmpeg-static` : binaire non téléchargé (build script ignoré)
+# ZBLK-010 — `pnpm add ffmpeg-static` : binaire non téléchargé (build script ignoré)
 
 | Friction                                                                                                                                                                                | Cause réelle                                                                                                                                              | Solution                                                                                                                                                   | Statut |
 | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
@@ -13,4 +13,4 @@ tags: [pnpm, ffmpeg-static, onlybuiltdependencies, postinstall, build-script]
 
 ## Références
 
-- [BDR-016](../decisions/BDR-016.md) — décision d'outillage à l'origine de ce blocage
+- [BDR-016](../../decisions/BDR-016.md) — décision d'outillage à l'origine de ce blocage

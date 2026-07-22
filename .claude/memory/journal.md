@@ -118,4 +118,28 @@ Préparation du sound design de la Phase 4 (en parallèle d'une autre session de
 **Entrées clés :**
 
 - [BDR-016](decisions/BDR-016.md) — pipeline sons Phase 4 : `public/sounds/` + normalisation `ffmpeg-static`
-- [BLK-010](blockers/BLK-010.md) — build script `ffmpeg-static` ignoré par pnpm (résolu)
+- [ZBLK-010](archive/blockers/ZBLK-010.md) — build script `ffmpeg-static` ignoré par pnpm (résolu)
+
+## 2026-07-22
+
+Implémentation du son de la Phase 4 (les fichiers `.mp3` étant ajoutés par Baptiste au fur et à mesure, en parallèle de l'implémentation) : `src/lib/sounds.ts` créé sur le modèle singleton de `haptics.ts`, préchargement silencieux des 12 sons listés dans `SOUND_DESIGN.md` (un fichier absent ne bloque rien), branché dans tous les points d'appel déjà identifiés pour l'haptique (`useLevel.ts`, `App.tsx`, `Nav.tsx`, `Grid.tsx`) — décision d'architecture actée en [BDR-017](decisions/BDR-017.md) : Web Audio API pour les SFX one-shot (superposition possible, gain réglable), `<audio loop>` natif pour l'ambiance (flux unique, pas besoin de la complexité Web Audio).
+
+Plusieurs allers-retours de test réel ont suivi, chacun corrigé :
+
+- Volume perçu bien plus fort que le fichier source → `GainNode` maître ajouté (Web Audio ne normalise pas le loudness contrairement à un lecteur média classique).
+- Latence perçue entre le tap et l'apparition du marqueur/son → identifiée comme un délai artificiel de 300ms (comptage tap/double-tap hérité de Phase 2, [BDR-006](decisions/BDR-006.md)) ; réduire à 0ms a réintroduit un flash visuel croix→patte sur un vrai double-tap, un compromis à 180ms a atténué sans éliminer un bug de fond (double-tap trop lent = pose puis retrait du marqueur). Remplacement complet du geste sur demande de Baptiste : tap = marqueur immédiat, appui long (450ms) = animal, glisser = chaîne inchangée ([BDR-018](decisions/BDR-018.md), [BLK-011](blockers/BLK-011.md)).
+- Son `new_game` jamais joué au 1er chargement, mal synchronisé avec l'animation d'apparition de la grille sur les relances → calé sur la fin réelle de l'animation (constantes `CELL_TRANSITION_MS`/`CELL_STAGGER_MS` exportées de `Grid.tsx`), puis totalement retiré du tout premier niveau auto-généré au montage (un futur écran de démarrage remplacera ce lancement automatique, donc plus la peine de le gérer).
+- Musique d'ambiance jamais audible sur mobile alors qu'elle fonctionnait en test desktop → déverrouillage attaché à `pointerdown`, non accepté par Safari/iOS comme geste valide (seul un événement de fin de geste l'est) ; passage à `pointerup` ([BLK-012](blockers/BLK-012.md)). Tentative de piste "autoplay muet + démute au 1er geste" explorée puis abandonnée sur retour de Baptiste (n'apporte rien puisque le son ne peut de toute façon pas être audible avant interaction) ; question sur un contournement via clic JS synthétique sur un div invisible également écartée (événements non-`isTrusted` explicitement ignorés par les navigateurs).
+- Gain individuel poussé jusqu'à 3x sur les sons jugés trop discrets sans aucune amélioration perçue → diagnostic : écrêtage numérique (sortie bornée à ±1.0), un gain plus élevé au-delà de ce seuil n'ajoute que de la distorsion. Fix : `DynamicsCompressorNode` inséré dans la chaîne, `GAIN_OVERRIDES` étendu à tous les sons (réglable individuellement) sur demande de Baptiste.
+
+`pnpm lint`/`pnpm build`/`tsc -b` vérifiés verts après chaque changement (le hook `rtk` local pointant vers un ESLint global cassé, contourné en appelant `./node_modules/.bin/eslint` directement).
+
+Rituel `/memory-close` : proposition initiale de créer des paires locale+globale pour chaque learning générique (pattern déjà suivi en session précédente, LRN-007/008/009 + GLRN-217/218/219) corrigée par Baptiste — un learning de portée globale ne doit avoir qu'une seule entrée (`GLRN-XXX`), pas de doublon local, les index globaux étant déjà lus à chaque démarrage de session quel que soit le projet. Feedback sauvegardé dans la mémoire agent transverse pour les prochains rituels.
+
+**Entrées clés :**
+
+- [BDR-017](decisions/BDR-017.md) — architecture son : Web Audio API (SFX) + `<audio loop>` natif (ambiance)
+- [BDR-018](decisions/BDR-018.md) — modèle d'interaction remplacé : tap=marqueur immédiat, appui long=animal
+- [BLK-011](blockers/BLK-011.md) — latence/flash du marqueur, 3 itérations (résolu)
+- [BLK-012](blockers/BLK-012.md) — ambiance jamais audible sur mobile (résolu)
+- [BLK-013](blockers/BLK-013.md) — gain à 3x sans effet perçu, écrêtage (résolu)
