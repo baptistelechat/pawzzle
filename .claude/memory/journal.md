@@ -127,9 +127,9 @@ Implémentation du son de la Phase 4 (les fichiers `.mp3` étant ajoutés par Ba
 Plusieurs allers-retours de test réel ont suivi, chacun corrigé :
 
 - Volume perçu bien plus fort que le fichier source → `GainNode` maître ajouté (Web Audio ne normalise pas le loudness contrairement à un lecteur média classique).
-- Latence perçue entre le tap et l'apparition du marqueur/son → identifiée comme un délai artificiel de 300ms (comptage tap/double-tap hérité de Phase 2, [BDR-006](decisions/BDR-006.md)) ; réduire à 0ms a réintroduit un flash visuel croix→patte sur un vrai double-tap, un compromis à 180ms a atténué sans éliminer un bug de fond (double-tap trop lent = pose puis retrait du marqueur). Remplacement complet du geste sur demande de Baptiste : tap = marqueur immédiat, appui long (450ms) = animal, glisser = chaîne inchangée ([BDR-018](decisions/BDR-018.md), [BLK-011](blockers/BLK-011.md)).
+- Latence perçue entre le tap et l'apparition du marqueur/son → identifiée comme un délai artificiel de 300ms (comptage tap/double-tap hérité de Phase 2, [BDR-006](decisions/BDR-006.md)) ; réduire à 0ms a réintroduit un flash visuel croix→patte sur un vrai double-tap, un compromis à 180ms a atténué sans éliminer un bug de fond (double-tap trop lent = pose puis retrait du marqueur). Remplacement complet du geste sur demande de Baptiste : tap = marqueur immédiat, appui long (450ms) = animal, glisser = chaîne inchangée ([BDR-018](decisions/BDR-018.md), [ZBLK-011](archive/blockers/ZBLK-011.md)).
 - Son `new_game` jamais joué au 1er chargement, mal synchronisé avec l'animation d'apparition de la grille sur les relances → calé sur la fin réelle de l'animation (constantes `CELL_TRANSITION_MS`/`CELL_STAGGER_MS` exportées de `Grid.tsx`), puis totalement retiré du tout premier niveau auto-généré au montage (un futur écran de démarrage remplacera ce lancement automatique, donc plus la peine de le gérer).
-- Musique d'ambiance jamais audible sur mobile alors qu'elle fonctionnait en test desktop → déverrouillage attaché à `pointerdown`, non accepté par Safari/iOS comme geste valide (seul un événement de fin de geste l'est) ; passage à `pointerup` ([BLK-012](blockers/BLK-012.md)). Tentative de piste "autoplay muet + démute au 1er geste" explorée puis abandonnée sur retour de Baptiste (n'apporte rien puisque le son ne peut de toute façon pas être audible avant interaction) ; question sur un contournement via clic JS synthétique sur un div invisible également écartée (événements non-`isTrusted` explicitement ignorés par les navigateurs).
+- Musique d'ambiance jamais audible sur mobile alors qu'elle fonctionnait en test desktop → déverrouillage attaché à `pointerdown`, non accepté par Safari/iOS comme geste valide (seul un événement de fin de geste l'est) ; passage à `pointerup` ([ZBLK-012](archive/blockers/ZBLK-012.md)). Tentative de piste "autoplay muet + démute au 1er geste" explorée puis abandonnée sur retour de Baptiste (n'apporte rien puisque le son ne peut de toute façon pas être audible avant interaction) ; question sur un contournement via clic JS synthétique sur un div invisible également écartée (événements non-`isTrusted` explicitement ignorés par les navigateurs).
 - Gain individuel poussé jusqu'à 3x sur les sons jugés trop discrets sans aucune amélioration perçue → diagnostic : écrêtage numérique (sortie bornée à ±1.0), un gain plus élevé au-delà de ce seuil n'ajoute que de la distorsion. Fix : `DynamicsCompressorNode` inséré dans la chaîne, `GAIN_OVERRIDES` étendu à tous les sons (réglable individuellement) sur demande de Baptiste.
 
 `pnpm lint`/`pnpm build`/`tsc -b` vérifiés verts après chaque changement (le hook `rtk` local pointant vers un ESLint global cassé, contourné en appelant `./node_modules/.bin/eslint` directement).
@@ -140,6 +140,105 @@ Rituel `/memory-close` : proposition initiale de créer des paires locale+global
 
 - [BDR-017](decisions/BDR-017.md) — architecture son : Web Audio API (SFX) + `<audio loop>` natif (ambiance)
 - [BDR-018](decisions/BDR-018.md) — modèle d'interaction remplacé : tap=marqueur immédiat, appui long=animal
-- [BLK-011](blockers/BLK-011.md) — latence/flash du marqueur, 3 itérations (résolu)
-- [BLK-012](blockers/BLK-012.md) — ambiance jamais audible sur mobile (résolu)
-- [BLK-013](blockers/BLK-013.md) — gain à 3x sans effet perçu, écrêtage (résolu)
+- [ZBLK-011](archive/blockers/ZBLK-011.md) — latence/flash du marqueur, 3 itérations (résolu)
+- [ZBLK-012](archive/blockers/ZBLK-012.md) — ambiance jamais audible sur mobile (résolu)
+- [ZBLK-013](archive/blockers/ZBLK-013.md) — gain à 3x sans effet perçu, écrêtage (résolu)
+
+## 2026-07-23
+
+Ajout d'un feedback visuel pour l'appui long (pose de l'animal, [BDR-018](decisions/BDR-018.md)) dans `Grid.tsx` : un cercle de progression SVG (`strokeDashoffset` animé via `motion/react`) apparaît autour de la case pressée pendant les 450ms de `LONG_PRESS_MS`, et se coupe immédiatement si le geste est relâché avant terme ([BDR-019](decisions/BDR-019.md)).
+
+Deux allers-retours de test réel ont suivi, tous deux corrigés :
+
+- Le cercle flashait sur un simple tap ou un début de glisser destiné à poser plusieurs marqueurs en chaîne → ajout d'un délai d'apparition purement visuel (`RING_APPEAR_DELAY_MS`, 120ms), sans toucher à `LONG_PRESS_MS` ; la durée d'animation restante du cercle est recalculée (`450 - 120ms`) pour finir exactement au moment où le pion se pose.
+- Le cercle restait malgré tout visible pendant un glisser plus lent → diagnostic : l'annulation de l'appui long ne se déclenchait qu'au changement de case et uniquement en mode aide (`help`), un glisser lent pouvant dépasser 120ms tout en restant dans la case de départ ([BLK-014](blockers/BLK-014.md)). Fix généralisable : seuil de distance en pixels (10px) sur le déplacement réel du pointeur depuis `pointerdown`, indépendant de `help` et du changement de case ([LRN-015](learnings/LRN-015.md)).
+
+`pnpm lint`/`pnpm build` vérifiés verts après chaque changement (toujours via `./node_modules/.bin/` directement, le hook `rtk` pointant vers un ESLint global cassé — problème d'environnement déjà connu, non ré-ouvert).
+
+Rituel `/memory-close` : 3 blockers résolus de la session précédente (BLK-011/012/013), jamais archivés, archivés maintenant vers `archive/blockers/`. Sur demande explicite de Baptiste ("full local"), le learning de cette session a été gardé en local (`LRN-015`) plutôt que promu en mémoire globale (`GLRN-`) malgré sa généralité potentielle.
+
+**Entrées clés :**
+
+- [BDR-019](decisions/BDR-019.md) — cercle de progression de l'appui long
+- [ZBLK-014](archive/blockers/ZBLK-014.md) — flash du cercle pendant un glisser, 2 itérations (résolu)
+- [LRN-015](learnings/LRN-015.md) — seuil de distance pixel > franchissement de case pour distinguer tap/glisser
+
+---
+
+Session démarrée sur une question hors-sujet (recherche de playlists lofi en streaming) reclarifiée en tâche projet : Baptiste voulait plusieurs pistes d'ambiance jouées dans le jeu en ordre aléatoire, pas une recommandation de playlists externes. L'existant (`src/lib/sounds.ts`) ne jouait qu'un seul `ambient.mp3` en boucle native (`<audio loop>`, [BDR-017](decisions/BDR-017.md)).
+
+Implémentation d'une vraie playlist : historique navigable (précédent/suivant, sans répéter la piste précédente), fade séquentiel (pas de vrai crossfade — un seul `<audio>`) amorcé juste avant la fin naturelle de chaque piste. Baptiste ayant déposé 34 pistes lofi Pixabay (`alex-morgan-*.mp3`) dans un dossier `public/sounds/ambient/` dédié (séparé des SFX), le script `pnpm sounds:normalize` a été étendu pour scanner récursivement `public/sounds/` et générer un `manifest.json` listant les pistes disponibles — `sounds.ts` charge ce manifest au lieu d'un tableau codé en dur ([BDR-020](decisions/BDR-020.md)). Le fichier source `ambient.wav` (22 Mo, déjà converti) a été déplacé vers `docs/sound-design/` plutôt que supprimé, sur demande explicite de Baptiste, en respectant la convention existante (sources brutes hors `public/`, [BDR-016](decisions/BDR-016.md)).
+
+Construction d'un mini-player "radio" flottant (`AmbientPlayer`) : titre/auteur (parsé du nom de fichier) + minuteur `mm:ss`, disque vinyle animé (rotation en lecture, figé en pause), précédent/lecture-pause/suivant/mute. Plusieurs itérations infructueuses ont suivi sur deux fronts, chacune signalée "aucun changement" par Baptiste :
+
+- Popover volume au survol du bouton mute (Base UI `openOnHover` + filtrage de la raison `"trigger-press"` pour ne pas ouvrir au clic) → bug où déplacer le slider réactivait le son coupé, plus des interactions hover/clic ambiguës sur le même bouton.
+- Animation de largeur de la pilule au changement de piste → plusieurs approches Motion tentées (`layout`, `layout="position"`, `mode="popLayout"` vs `"wait"`) sans transition satisfaisante ; cause identifiée après coup : `layout="position"` anime **uniquement** la position, jamais la taille — l'exact inverse de l'effet recherché ([LRN-016](learnings/LRN-016.md)).
+
+Sur directive explicite de Baptiste ("on va faire plus simple"), les deux fronts ont été résolus par simplification plutôt que par correction : popover retiré entièrement (mute simple au clic conservé, réglage volume/haptique reporté à un futur menu "Son / Vibration" noté dans `docs/ROADMAP.md`), largeur de la pilule fixée sur celle de la grille de jeu (`w-[calc(100%-2rem)] max-w-md`) au lieu d'être animée dynamiquement. Une animation de sortie/entrée du disque vinyle (glisser+rotation, `AnimatePresence mode="wait"`) a été ajoutée pour simuler un changement de disque et compenser l'abandon du redimensionnement animé ([BDR-021](decisions/BDR-021.md), [ZBLK-015](archive/blockers/ZBLK-015.md)).
+
+`pnpm lint`/`pnpm build` vérifiés verts après chaque changement significatif. Deux composants shadcn (`popover`, `slider`) ajoutés puis retirés dans la même session, aucune trace résiduelle (fichiers supprimés, imports nettoyés).
+
+Rituel `/memory-close` : sur demande explicite de Baptiste ("full local"), les deux learnings de cette session ([LRN-016](learnings/LRN-016.md), [LRN-017](learnings/LRN-017.md)) ont été gardés en local plutôt que promus en mémoire globale (`GLRN-`), malgré leur généralité potentielle — cohérent avec la préférence déjà actée en session précédente.
+
+**Entrées clés :**
+
+- [BDR-020](decisions/BDR-020.md) — playlist ambient via manifest.json généré
+- [BDR-021](decisions/BDR-021.md) — AmbientPlayer : largeur fixe, mute simple, volume reporté
+- [ZBLK-015](archive/blockers/ZBLK-015.md) — itérations UI infructueuses (largeur, mute), résolues par simplification
+- [LRN-016](learnings/LRN-016.md) — `layout="position"` (Motion) anime seulement la position
+- [LRN-017](learnings/LRN-017.md) — manifest généré au build > liste codée en dur
+
+---
+
+Session reprise après `/clear` sur deux demandes successives de Baptiste. D'abord un nettoyage de layout : navbar (`Nav.tsx`) masquée sans être supprimée, logo replacé à côté du titre au-dessus de la grille, `AmbientPlayer` sorti de son `position: fixed` flottant pour devenir un vrai `<footer>` en flux ([BDR-022](decisions/BDR-022.md)). Vérifié visuellement via `agent-browser` (screenshot) après build/lint verts (`./node_modules/.bin/eslint`/`tsc -b`/`vite build`, le hook `rtk` pointant toujours vers un ESLint global cassé — contournement déjà connu).
+
+Deux régressions signalées juste après livraison, chacune corrigée en une passe :
+
+- Le cercle de progression de l'appui long ([BDR-019](decisions/BDR-019.md)) se relançait sur une case déjà figée (pion correct ou en erreur) alors que `togglePaw`/`toggleMarker` y étaient des no-op silencieux par design ([BDR-007](decisions/BDR-007.md)) — fix : garde `if (pawn) return;` en tête de `onPointerDown` dans `Grid.tsx`, avant même de démarrer le timer.
+- Le passage de l'`AmbientPlayer` en footer statique poussait la grille vers le haut à son apparition (`<main>` en `flex-1 justify-center` recalculant son espace disponible) — fix : `min-h-20` sur le `<footer>`, hauteur réservée en permanence qu'il soit peuplé ou non.
+
+Les deux fixes ont chacun été résolus en une seule itération, aucun n'a nécessité de diagnostic prolongé — pas de blocker créé pour cette session.
+
+Rituel `/memory-close` : `BLK-015` (résolu, session concurrente précédente non encore archivée) archivé vers [ZBLK-015](archive/blockers/ZBLK-015.md) en étape 1bis. Les deux learnings de cette session ont été jugés 🌍 globaux (patterns React/CSS et UX génériques, sans lien avec Pawzzle spécifiquement) et classés uniquement en `GLRN-`, sans doublon local — conforme à la règle actée précédemment.
+
+**Entrées clés :**
+
+- [BDR-022](decisions/BDR-022.md) — layout épuré : navbar masquée, logo+titre, footer à hauteur réservée
+
+---
+
+Bug remonté par Baptiste sur la radio d'ambiance : le fondu sortant de 3s en fin de piste fonctionnait bien, mais la piste suivante démarrait en silence total — le temps affiché avançait normalement, sans aucun son. Plutôt que de deviner depuis le code (plusieurs hypothèses statiques explorées sans certitude — course entre `cancelAnimationFrame` et une nouvelle boucle, event `ended` interrompant un fondu sortant en cours), diagnostic en direct via `agent-browser` : exposition temporaire de l'`<audio>` sur `window`, sondage en boucle (`eval --stdin`) et `console.log` temporaires dans `fadeVolumeTo`/`loadAmbientTrack`/l'event `ended`. Preuve obtenue : le fondu entrant démarrait bien (`fadeVolumeTo` appelée) mais son tout premier `requestAnimationFrame` ne se déclenchait jamais, alors qu'un `requestAnimationFrame` indépendant lancé au même moment depuis la console fonctionnait normalement sur la même page. Une première piste de correction (`setTimeout(fn, 0)` pour découpler l'appel du call stack synchrone de l'event `ended`) a été testée et n'a rien changé. Le vrai fix : attendre la résolution de la promesse `ambient.play()` avant de lancer le fondu (`ambient.play().then(() => fadeVolumeTo(...))`), confirmé fonctionnel par un nouveau test en direct ([ZBLK-016](archive/blockers/ZBLK-016.md), [LRN-018](learnings/LRN-018.md)). ESLint local (`./node_modules/.bin/eslint`) vert ; le hook `rtk` reste cassé (ESLint global désynchronisé, problème d'environnement déjà connu, non ré-ouvert).
+
+Rituel `/memory-close` : sur "ok" sans réponse explicite à la question posée, LRN-018 conservé en 🏠 local (cohérent avec la préférence "full local" déjà actée sur ce projet) plutôt que promu en `GLRN-`.
+
+**Entrées clés :**
+
+- [ZBLK-016](archive/blockers/ZBLK-016.md) — piste suivante silencieuse après transition naturelle (résolu)
+- [LRN-018](learnings/LRN-018.md) — fondu `requestAnimationFrame` bloqué si lancé juste après `.play()`
+
+## 2026-07-24
+
+Grosse session sur le retour visuel des erreurs/victoire, en plusieurs allers-retours avec Baptiste. Point de départ : remplacer le texte "Erreurs x/3" par une rangée de `Heart`/`HeartCrack` animée (`HeartsRow.tsx`). Puis, sur demande, ajout d'une secousse de la grille à chaque erreur (`useAnimation` + comparaison à l'erreur précédente), d'un burst de confettis à la victoire (`ConfettiBurst.tsx`, pattes de chat colorées), d'un tremblement continu sur le dernier cœur restant, de la désactivation de la grille après fin de partie, et de l'affichage de la solution en cas d'échec.
+
+`Grid.tsx` a explosé à 339 lignes avec ces ajouts (limite du projet : 200/composant) — éclaté en `Grid/index.tsx` (orchestrateur, 122 lignes), `Grid/components/CellContent.tsx` et `PressRing.tsx` (présentation pure), et `hooks/useGridGestures.ts` (state machine tap/glisser/appui long + secousse, 214 lignes — acceptable hors composant). Généralisé en GLRN-229 (global).
+
+Plusieurs tours de feedback ont suivi :
+
+- Bordure verte de la solution qui fuyait vers les cases déjà trouvées par le joueur → fix : condition `!pawn` manquante dans le calcul de `isSolutionCell`. Halo `bg-background` derrière l'icône jugé inutile, retiré. Couleur `--accent` du design system jugée trop pâle sur les régions pastel vertes → remplacée par `emerald-600`/`emerald-400` saturé, patte remplie (voir [BDR-023](decisions/BDR-023.md)).
+- Le cercle de progression de l'appui long réapparaissait pendant un glisser lent — récidive de [ZBLK-014](archive/blockers/ZBLK-014.md) dont le seuil de 10px s'est révélé insuffisant. Ajout d'un second seuil dédié plus petit (4px), qui cache le cercle sans affecter l'annulation réelle de l'appui long ([BLK-002](blockers/BLK-002.md)).
+- Le tremblement du dernier cœur ne s'affichait jamais malgré une logique correcte (vérifiée via un attribut `data-debug-*` temporaire) — cause trouvée par inspection directe du DOM (`getComputedStyle(...).transform` figé à `"none"` en boucle via `agent-browser eval`) : `animate={undefined}` n'est pas détecté comme un changement vers un objet de keyframes plus tard. Fix : toujours passer un objet `animate` défini ([BLK-003](blockers/BLK-003.md), généralisé en GLRN-228 global). Baptiste a aussi demandé un tremblement en scale seul, sans rotation.
+- L'animation d'entrée des cœurs ne rejouait pas sur "Nouvelle partie" en cours de partie. Un premier fix (retirer `initial={false}`) n'a rien changé — la vraie cause était déjà documentée pour `Grid` dans [BDR-015](decisions/BDR-015.md)/[LRN-011](learnings/LRN-011.md)/[LRN-012](learnings/LRN-012.md) (statut `"loading"` trop éphémère pour être peint, donc jamais de remount) mais n'avait pas été appliquée à `HeartsRow` — fix : `key={levelId}` ([BLK-004](blockers/BLK-004.md)), même pattern que `Grid`.
+- Confettis jugés peu visibles (burst radial depuis le centre, trop de vide en haut d'écran) → redesign en pluie depuis le haut de l'écran (spawn aléatoire en largeur, chute jusqu'au bas du viewport), particules plus grosses et plus nombreuses (28→56), durée allongée (1.1s→~2s).
+
+Au passage, un bug ESLint (`react-hooks/purity` interdit `Math.random()` même dans `useMemo`) a forcé un passage en initialisation paresseuse `useState(() => ...)` pour le tirage aléatoire des confettis — généralisé en GLRN-227 (global), en complément de GLRN-214 (global) déjà connu.
+
+Baptiste a demandé de ne plus lancer de tests navigateur automatiques en fin de tâche ("je m'occupe de regarder à chaque fois") — préférence de collaboration à respecter dorénavant sur ce projet.
+
+Rituel `/memory-close` : archivage de l'ancien `BLK-002` (piste audio silencieuse, déjà résolu, jamais archivé) vers `ZBLK-016` en étape 1bis — collision de numéro évitée avec le `ZBLK-002` déjà existant (numérotation active repartie de 1 après une purge antérieure).
+
+**Entrées clés :**
+
+- [BDR-023](decisions/BDR-023.md) — style de révélation de solution (bordure+patte vert saturé)
+- [BLK-002](blockers/BLK-002.md) — récidive du cercle de glisser, seuil ZBLK-014 insuffisant
+- [BLK-003](blockers/BLK-003.md) — tremblement du dernier cœur invisible (`animate={undefined}`)
+- [BLK-004](blockers/BLK-004.md) — entrée des cœurs ne rejouait pas sur nouvelle partie

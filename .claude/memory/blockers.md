@@ -4,9 +4,9 @@ register: blockers
 
 ## Index
 
-| ID                             | Date       | Friction                                                                | Tags                                                               | Statut |
-| ------------------------------ | ---------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------ | ------ |
-| [BLK-001](blockers/BLK-001.md) | 2026-07-21 | Vercel Hobby = non-commercial + cap dur sans overage                    | #vercel #hobby-plan #commercial #cap #monetisation #vigilance      | ouvert |
-| [BLK-011](blockers/BLK-011.md) | 2026-07-22 | Latence/flash du marqueur au tap : 3 itérations avant la bonne solution | #ux #tap #double-tap #long-press #latency #flash #gesture-redesign | résolu |
-| [BLK-012](blockers/BLK-012.md) | 2026-07-22 | Musique d'ambiance jamais audible sur mobile                            | #web-audio #ios-safari #ambient #autoplay #mobile #pointerup       | résolu |
-| [BLK-013](blockers/BLK-013.md) | 2026-07-22 | Gain poussé à 3x sans effet audible perçu                               | #web-audio #gain #clipping #compressor #perceived-loudness         | résolu |
+| ID                             | Date       | Friction                                                                    | Tags                                                                         | Statut |
+| ------------------------------ | ---------- | --------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ------ |
+| [BLK-001](blockers/BLK-001.md) | 2026-07-21 | Vercel Hobby = non-commercial + cap dur sans overage                        | #vercel #hobby-plan #commercial #cap #monetisation #vigilance                | ouvert |
+| [BLK-002](blockers/BLK-002.md) | 2026-07-24 | Cercle de progression revu pendant un glisser, fix ZBLK-014 insuffisant     | #ux #long-press #drag #gesture #slide-threshold #regression #pawzzle         | résolu |
+| [BLK-003](blockers/BLK-003.md) | 2026-07-24 | Tremblement du dernier cœur invisible (`animate={undefined}`)               | #framer-motion #debugging #heart-shake #animate-prop #agent-browser #pawzzle | résolu |
+| [BLK-004](blockers/BLK-004.md) | 2026-07-24 | Entrée des cœurs ne rejouait pas sur "Nouvelle partie" (pattern déjà connu) | #framer-motion #animatepresence #remount #key-prop #recurrence #pawzzle      | résolu |
