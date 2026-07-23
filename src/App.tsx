@@ -3,8 +3,8 @@ import { Loader2, PawPrint, RotateCcw } from "lucide-react";
 import { AnimatePresence, m, useReducedMotion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
+import { AmbientPlayer } from "@/components/AmbientPlayer";
 import { CELL_STAGGER_MS, CELL_TRANSITION_MS, Grid } from "@/components/Grid";
-import { Nav } from "@/components/Nav";
 import { useLevel } from "@/hooks/useLevel";
 import { haptics } from "@/lib/haptics";
 import { EASE_OUT, SPRING_BOUNCE } from "@/lib/motion";
@@ -48,9 +48,11 @@ function App() {
 
   return (
     <div className="flex min-h-dvh flex-col">
-      <Nav />
       <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col items-center justify-center gap-4 p-4">
-        <h1 className="text-5xl font-bold">Pawzzle</h1>
+        <div className="flex items-center gap-3">
+          <img src="/icon.svg" alt="" className="size-10 rounded-lg" />
+          <h1 className="text-5xl font-bold">Pawzzle</h1>
+        </div>
 
         <AnimatePresence mode="wait" initial={false}>
           {status === "loading" || !level ? (
@@ -164,6 +166,12 @@ function App() {
           )}
         </AnimatePresence>
       </main>
+      {/* min-h réservée à la hauteur du pill : évite que son apparition/
+      disparition (AnimatePresence) ne pousse le contenu de <main> en changeant
+      la hauteur disponible pour son justify-center. */}
+      <footer className="flex min-h-20 items-center justify-center p-4">
+        <AmbientPlayer />
+      </footer>
     </div>
   );
 }

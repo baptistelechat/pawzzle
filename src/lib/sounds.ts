@@ -122,18 +122,187 @@ class SoundManager {
 
 export const sounds = new SoundManager();
 
-// Musique d'ambiance : <audio loop> natif plutôt que Web Audio API — un seul
-// flux long-format joué en continu, pas besoin de superposition ni de
-// décodage en mémoire (ponytail: rung 4, fonctionnalité native suffit).
+// Musique d'ambiance : <audio> natif plutôt que Web Audio API — un seul flux
+// long-format à la fois, pas besoin de superposition ni de décodage en
+// mémoire (ponytail: rung 4, fonctionnalité native suffit). Plusieurs pistes
+// dans public/sounds/ambient/, tirées au hasard (sans répéter la précédente).
+// Liste chargée depuis manifest.json (généré par `pnpm sounds:normalize`)
+// plutôt que codée en dur, pour suivre les ajouts/retraits de piste sans
+// repasser ici. Historique navigable (précédent/suivant) façon lecteur radio.
 const AMBIENT_VOLUME = 0.5;
-const ambient = new Audio("/sounds/ambient.mp3");
-ambient.loop = true;
-ambient.volume = AMBIENT_VOLUME;
+const FADE_MS = 600;
+
+const ambient = new Audio();
+ambient.volume = 0;
+
+let ambientTracks: string[] | null = null;
+let ambientHistory: string[] = [];
+let ambientIndex = -1;
+let fadeRAF: number | null = null;
+let fadingOut = false;
+let lastReportedSecond = -1;
+
+// Les pistes Pixabay sont préfixées `alex-morgan-<titre>-<id>` ; l'ancienne
+// piste `ambient` d'origine n'a pas d'auteur connu.
+const parseTrackMeta = (track: string) => {
+  const artist = track.startsWith("alex-morgan-") ? "Alex Morgan" : null;
+  const title = track
+    .replace(/^alex-morgan-/, "")
+    .replace(/-\d+$/, "")
+    .split("-")
+    .map((word) => word[0].toUpperCase() + word.slice(1))
+    .join(" ");
+  return { title, artist };
+};
+
+export interface AmbientState {
+  title: string;
+  artist: string | null;
+  isPlaying: boolean;
+  isMuted: boolean;
+  currentTime: number;
+  duration: number;
+}
+
+const ambientListeners = new Set<() => void>();
+let ambientState: AmbientState = {
+  title: "",
+  artist: null,
+  isPlaying: false,
+  isMuted: false,
+  currentTime: 0,
+  duration: 0,
+};
+const setAmbientState = (partial: Partial<AmbientState>) => {
+  ambientState = { ...ambientState, ...partial };
+  ambientListeners.forEach((listener) => listener());
+};
+export const subscribeAmbient = (listener: () => void) => {
+  ambientListeners.add(listener);
+  return () => ambientListeners.delete(listener);
+};
+export const getAmbientState = () => ambientState;
+
+ambient.addEventListener("play", () => setAmbientState({ isPlaying: true }));
+ambient.addEventListener("pause", () => setAmbientState({ isPlaying: false }));
+ambient.addEventListener("volumechange", () =>
+  setAmbientState({ isMuted: ambient.muted }),
+);
+
+const fadeVolumeTo = (target: number, duration: number) => {
+  if (fadeRAF !== null) cancelAnimationFrame(fadeRAF);
+  const start = ambient.volume;
+  const startTime = performance.now();
+  const step = (now: number) => {
+    const progress = Math.min((now - startTime) / duration, 1);
+    ambient.volume = start + (target - start) * progress;
+    fadeRAF = progress < 1 ? requestAnimationFrame(step) : null;
+  };
+  fadeRAF = requestAnimationFrame(step);
+};
+
+// Fondu sortant amorcé juste avant la fin naturelle d'une piste — un seul
+// <audio>, donc pas de vrai chevauchement, mais évite la coupure sèche.
+// Sert aussi à publier la progression (throttlée à la seconde, `timeupdate`
+// se déclenche bien plus souvent que ça n'a d'utilité pour un affichage).
+ambient.addEventListener("timeupdate", () => {
+  if (!fadingOut && ambient.duration) {
+    if (ambient.duration - ambient.currentTime <= FADE_MS / 1000) {
+      fadingOut = true;
+      fadeVolumeTo(0, FADE_MS);
+    }
+  }
+  const second = Math.floor(ambient.currentTime);
+  if (second !== lastReportedSecond) {
+    lastReportedSecond = second;
+    setAmbientState({
+      currentTime: ambient.currentTime,
+      duration: ambient.duration || 0,
+    });
+  }
+});
+ambient.addEventListener("ended", () => void goToAmbientTrack("next"));
+
+const loadAmbientTracks = async () => {
+  const tracks: string[] = await fetch("/sounds/ambient/manifest.json")
+    .then((res) => (res.ok ? res.json() : []))
+    .catch(() => []);
+  return tracks.length > 0 ? tracks : ["ambient"];
+};
+
+const pickRandomTrack = () => {
+  const last = ambientHistory[ambientIndex] ?? null;
+  const pool =
+    ambientTracks!.length > 1
+      ? ambientTracks!.filter((track) => track !== last)
+      : ambientTracks!;
+  return pool[Math.floor(Math.random() * pool.length)];
+};
+
+const loadAmbientTrack = (track: string) => {
+  fadingOut = false;
+  lastReportedSecond = -1;
+  ambient.src = `/sounds/ambient/${track}.mp3`;
+  ambient.volume = 0;
+  const { title, artist } = parseTrackMeta(track);
+  setAmbientState({ title, artist, currentTime: 0, duration: 0 });
+  // Le fade doit attendre la résolution de play() : lancé juste après un
+  // changement de `src` (fin naturelle d'une piste, paused=true), la boucle
+  // requestAnimationFrame du fondu ne se déclenche jamais tant que la
+  // lecture n'a pas réellement démarré — la piste avance en silence.
+  void ambient
+    .play()
+    .then(() => fadeVolumeTo(AMBIENT_VOLUME, FADE_MS))
+    .catch(() => {
+      // fichier pas encore ajouté, ou lecture bloquée : silencieux
+    });
+};
+
+async function goToAmbientTrack(direction: "next" | "prev") {
+  ambientTracks ??= await loadAmbientTracks();
+  if (direction === "prev" && ambientIndex > 0) {
+    ambientIndex -= 1;
+  } else if (direction === "next" && ambientIndex < ambientHistory.length - 1) {
+    ambientIndex += 1;
+  } else {
+    const track = pickRandomTrack();
+    ambientHistory = [...ambientHistory.slice(0, ambientIndex + 1), track];
+    ambientIndex = ambientHistory.length - 1;
+  }
+  const track = ambientHistory[ambientIndex];
+  if (ambient.src && !ambient.paused) {
+    fadeVolumeTo(0, FADE_MS / 2);
+    window.setTimeout(() => loadAmbientTrack(track), FADE_MS / 2);
+  } else {
+    loadAmbientTrack(track);
+  }
+}
+
+export const nextAmbientTrack = () => void goToAmbientTrack("next");
+export const previousAmbientTrack = () => void goToAmbientTrack("prev");
+
+export const toggleAmbientPlayback = () => {
+  if (ambient.paused) {
+    void ambient.play().catch(() => {
+      // lecture bloquée : silencieux
+    });
+  } else {
+    ambient.pause();
+  }
+};
+
+export const toggleAmbientMute = () => {
+  ambient.muted = !ambient.muted;
+};
 
 // À appeler depuis le même geste utilisateur que `sounds.unlock()` — un
 // <audio>.play() hors geste est bloqué par la même politique navigateur.
 export const playAmbient = () => {
+  if (!ambient.src) {
+    void goToAmbientTrack("next");
+    return;
+  }
   void ambient.play().catch(() => {
-    // fichier pas encore ajouté, ou lecture bloquée : silencieux
+    // lecture bloquée : silencieux
   });
 };

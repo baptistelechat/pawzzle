@@ -51,6 +51,7 @@ Scope figé par le brief (4.0) : **grille carrée classique uniquement**, aucune
 - [ ] Sound design : feedback sonore pose/erreur/victoire + toggle mute (persistant, `localStorage`)
 - [ ] Curseur de réglage du volume des sons (actuellement gain global fixe à 0.5 dans `src/lib/sounds.ts`)
 - [ ] Retour haptique mobile : vibration courte sur pose/erreur (`web-haptics`, déjà utilisé sur d'autres projets — 4 presets, no-op silencieux hors mobile, cf. mémoire globale)
+- [ ] Menu dédié "Son / Vibration" : regrouper mute ambiance + curseur volume (ambiance + SFX) + réglages haptique. Remplace une tentative de popover volume au survol du mini-player `AmbientPlayer` (retirée — Base UI Popover en hover+clic combinés trop capricieux pour un simple réglage)
 
 **Sortie** : les 3 règles de base (Phase 1-2) ont un feedback sensoriel complet. Fait avant 4.1 pour que le prochain test interne juge le gameplay différenciant sur une base déjà "finie" en sensations, pas sur un prototype nu.
 

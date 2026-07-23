@@ -178,6 +178,10 @@ export const Grid = ({
               data-col={col}
               aria-label={`Case ligne ${row + 1}, colonne ${col + 1}`}
               onPointerDown={(event) => {
+                // Case déjà tentée (correcte ou fautive) : figée, aucune
+                // action possible (togglePaw/toggleMarker no-op dessus) — pas
+                // la peine de lancer l'appui long ni son cercle.
+                if (pawn) return;
                 pressStart.current = { row, col };
                 pressOrigin.current = { x: event.clientX, y: event.clientY };
                 if (help) dragStart.current = { row, col };
