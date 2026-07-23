@@ -4,7 +4,9 @@ import { AnimatePresence, m, useReducedMotion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { AmbientPlayer } from "@/components/AmbientPlayer";
+import { ConfettiBurst } from "@/components/ConfettiBurst";
 import { CELL_STAGGER_MS, CELL_TRANSITION_MS, Grid } from "@/components/Grid";
+import { HeartsRow } from "@/components/HeartsRow";
 import { useLevel } from "@/hooks/useLevel";
 import { haptics } from "@/lib/haptics";
 import { EASE_OUT, SPRING_BOUNCE } from "@/lib/motion";
@@ -74,8 +76,9 @@ function App() {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3, ease: EASE_OUT }}
             >
+              {status === "won" && <ConfettiBurst key={levelId} />}
               <div className="flex items-center gap-4">
-                <p
+                <div
                   className={cn(
                     "text-sm font-medium",
                     status === "won" && "text-primary",
@@ -110,14 +113,20 @@ function App() {
                       }
                       style={{ display: "inline-block" }}
                     >
-                      {status === "won"
-                        ? "Niveau réussi !"
-                        : status === "lost"
-                          ? "Niveau échoué — budget d'erreur épuisé."
-                          : `Erreurs : ${errors} / ${maxErrors}`}
+                      {status === "won" ? (
+                        "Niveau réussi !"
+                      ) : status === "lost" ? (
+                        "Niveau échoué"
+                      ) : (
+                        <HeartsRow
+                          key={levelId}
+                          errors={errors}
+                          maxErrors={maxErrors}
+                        />
+                      )}
                     </m.span>
                   </AnimatePresence>
-                </p>
+                </div>
                 <label className="flex items-center gap-2 text-sm">
                   <Switch
                     checked={help}
@@ -139,6 +148,10 @@ function App() {
                     placed={placed}
                     markers={markers}
                     help={help}
+                    errors={errors}
+                    disabled={status !== "playing"}
+                    showSolution={status === "lost"}
+                    solution={level.solution}
                     onTogglePaw={togglePaw}
                     onToggleMarker={toggleMarker}
                     onSetMarker={setMarker}
