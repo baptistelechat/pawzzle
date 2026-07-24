@@ -58,12 +58,29 @@ class SoundManager {
   private ctx: AudioContext | null = null;
   private masterGain: GainNode | null = null;
   private buffers = new Map<SoundId, AudioBuffer>();
+  private volume = DEFAULT_VOLUME;
+  private muted = false;
+
+  private applyGain() {
+    if (this.masterGain)
+      this.masterGain.gain.value = this.muted ? 0 : this.volume;
+  }
+
+  setVolume(volume: number) {
+    this.volume = volume;
+    this.applyGain();
+  }
+
+  setMuted(muted: boolean) {
+    this.muted = muted;
+    this.applyGain();
+  }
 
   private context() {
     if (!this.ctx) {
       this.ctx = new AudioContext();
       this.masterGain = this.ctx.createGain();
-      this.masterGain.gain.value = DEFAULT_VOLUME;
+      this.masterGain.gain.value = this.muted ? 0 : this.volume;
       // Sans ça, un GAIN_OVERRIDES élevé écrête brutalement à ±1.0 (distortion,
       // pas de gain perçu en plus) dès que la source approche déjà du maximum —
       // le compresseur resserre la dynamique au lieu de tronquer, ce qui rend
@@ -129,7 +146,7 @@ export const sounds = new SoundManager();
 // Liste chargée depuis manifest.json (généré par `pnpm sounds:normalize`)
 // plutôt que codée en dur, pour suivre les ajouts/retraits de piste sans
 // repasser ici. Historique navigable (précédent/suivant) façon lecteur radio.
-const AMBIENT_VOLUME = 0.5;
+let ambientVolume = 0.5;
 const FADE_MS = 600;
 
 const ambient = new Audio();
@@ -182,6 +199,15 @@ export const subscribeAmbient = (listener: () => void) => {
   return () => ambientListeners.delete(listener);
 };
 export const getAmbientState = () => ambientState;
+
+export const setAmbientVolume = (volume: number) => {
+  ambientVolume = volume;
+  if (!ambient.muted && !fadingOut) ambient.volume = volume;
+};
+
+export const setAmbientMuted = (muted: boolean) => {
+  ambient.muted = muted;
+};
 
 ambient.addEventListener("play", () => setAmbientState({ isPlaying: true }));
 ambient.addEventListener("pause", () => setAmbientState({ isPlaying: false }));
@@ -252,7 +278,7 @@ const loadAmbientTrack = (track: string) => {
   // lecture n'a pas réellement démarré — la piste avance en silence.
   void ambient
     .play()
-    .then(() => fadeVolumeTo(AMBIENT_VOLUME, FADE_MS))
+    .then(() => fadeVolumeTo(ambientVolume, FADE_MS))
     .catch(() => {
       // fichier pas encore ajouté, ou lecture bloquée : silencieux
     });
@@ -269,13 +295,14 @@ async function goToAmbientTrack(direction: "next" | "prev") {
     ambientHistory = [...ambientHistory.slice(0, ambientIndex + 1), track];
     ambientIndex = ambientHistory.length - 1;
   }
-  const track = ambientHistory[ambientIndex];
-  if (ambient.src && !ambient.paused) {
-    fadeVolumeTo(0, FADE_MS / 2);
-    window.setTimeout(() => loadAmbientTrack(track), FADE_MS / 2);
-  } else {
-    loadAmbientTrack(track);
-  }
+  // ponytail: pas de fondu sortant + `setTimeout` avant le swap ici — un
+  // `.play()` différé par un timer sort du contexte synchrone du geste
+  // utilisateur (tap sur suivant/précédent) et iOS Safari ne le joue plus
+  // (isPlaying passe bien à true, mais le son reste inaudible, cf. LRN-018 /
+  // GLRN-222). Le changement de `src` coupe de toute façon la piste en cours
+  // instantanément ; seule la fin naturelle d'une piste bénéficie déjà d'un
+  // vrai fondu sortant via le `timeupdate` ci-dessus.
+  loadAmbientTrack(ambientHistory[ambientIndex]);
 }
 
 export const nextAmbientTrack = () => void goToAmbientTrack("next");
