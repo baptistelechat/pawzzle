@@ -225,9 +225,9 @@ Grosse session sur le retour visuel des erreurs/victoire, en plusieurs allers-re
 Plusieurs tours de feedback ont suivi :
 
 - Bordure verte de la solution qui fuyait vers les cases déjà trouvées par le joueur → fix : condition `!pawn` manquante dans le calcul de `isSolutionCell`. Halo `bg-background` derrière l'icône jugé inutile, retiré. Couleur `--accent` du design system jugée trop pâle sur les régions pastel vertes → remplacée par `emerald-600`/`emerald-400` saturé, patte remplie (voir [BDR-023](decisions/BDR-023.md)).
-- Le cercle de progression de l'appui long réapparaissait pendant un glisser lent — récidive de [ZBLK-014](archive/blockers/ZBLK-014.md) dont le seuil de 10px s'est révélé insuffisant. Ajout d'un second seuil dédié plus petit (4px), qui cache le cercle sans affecter l'annulation réelle de l'appui long ([BLK-002](blockers/BLK-002.md)).
-- Le tremblement du dernier cœur ne s'affichait jamais malgré une logique correcte (vérifiée via un attribut `data-debug-*` temporaire) — cause trouvée par inspection directe du DOM (`getComputedStyle(...).transform` figé à `"none"` en boucle via `agent-browser eval`) : `animate={undefined}` n'est pas détecté comme un changement vers un objet de keyframes plus tard. Fix : toujours passer un objet `animate` défini ([BLK-003](blockers/BLK-003.md), généralisé en GLRN-228 global). Baptiste a aussi demandé un tremblement en scale seul, sans rotation.
-- L'animation d'entrée des cœurs ne rejouait pas sur "Nouvelle partie" en cours de partie. Un premier fix (retirer `initial={false}`) n'a rien changé — la vraie cause était déjà documentée pour `Grid` dans [BDR-015](decisions/BDR-015.md)/[LRN-011](learnings/LRN-011.md)/[LRN-012](learnings/LRN-012.md) (statut `"loading"` trop éphémère pour être peint, donc jamais de remount) mais n'avait pas été appliquée à `HeartsRow` — fix : `key={levelId}` ([BLK-004](blockers/BLK-004.md)), même pattern que `Grid`.
+- Le cercle de progression de l'appui long réapparaissait pendant un glisser lent — récidive de [ZBLK-014](archive/blockers/ZBLK-014.md) dont le seuil de 10px s'est révélé insuffisant. Ajout d'un second seuil dédié plus petit (4px), qui cache le cercle sans affecter l'annulation réelle de l'appui long ([ZBLK-017](archive/blockers/ZBLK-017.md)).
+- Le tremblement du dernier cœur ne s'affichait jamais malgré une logique correcte (vérifiée via un attribut `data-debug-*` temporaire) — cause trouvée par inspection directe du DOM (`getComputedStyle(...).transform` figé à `"none"` en boucle via `agent-browser eval`) : `animate={undefined}` n'est pas détecté comme un changement vers un objet de keyframes plus tard. Fix : toujours passer un objet `animate` défini ([ZBLK-018](archive/blockers/ZBLK-018.md), généralisé en GLRN-228 global). Baptiste a aussi demandé un tremblement en scale seul, sans rotation.
+- L'animation d'entrée des cœurs ne rejouait pas sur "Nouvelle partie" en cours de partie. Un premier fix (retirer `initial={false}`) n'a rien changé — la vraie cause était déjà documentée pour `Grid` dans [BDR-015](decisions/BDR-015.md)/[LRN-011](learnings/LRN-011.md)/[LRN-012](learnings/LRN-012.md) (statut `"loading"` trop éphémère pour être peint, donc jamais de remount) mais n'avait pas été appliquée à `HeartsRow` — fix : `key={levelId}` ([ZBLK-019](archive/blockers/ZBLK-019.md)), même pattern que `Grid`.
 - Confettis jugés peu visibles (burst radial depuis le centre, trop de vide en haut d'écran) → redesign en pluie depuis le haut de l'écran (spawn aléatoire en largeur, chute jusqu'au bas du viewport), particules plus grosses et plus nombreuses (28→56), durée allongée (1.1s→~2s).
 
 Au passage, un bug ESLint (`react-hooks/purity` interdit `Math.random()` même dans `useMemo`) a forcé un passage en initialisation paresseuse `useState(() => ...)` pour le tirage aléatoire des confettis — généralisé en GLRN-227 (global), en complément de GLRN-214 (global) déjà connu.
@@ -239,6 +239,58 @@ Rituel `/memory-close` : archivage de l'ancien `BLK-002` (piste audio silencieus
 **Entrées clés :**
 
 - [BDR-023](decisions/BDR-023.md) — style de révélation de solution (bordure+patte vert saturé)
-- [BLK-002](blockers/BLK-002.md) — récidive du cercle de glisser, seuil ZBLK-014 insuffisant
-- [BLK-003](blockers/BLK-003.md) — tremblement du dernier cœur invisible (`animate={undefined}`)
-- [BLK-004](blockers/BLK-004.md) — entrée des cœurs ne rejouait pas sur nouvelle partie
+- [ZBLK-017](archive/blockers/ZBLK-017.md) — récidive du cercle de glisser, seuil ZBLK-014 insuffisant (résolu)
+- [ZBLK-018](archive/blockers/ZBLK-018.md) — tremblement du dernier cœur invisible (`animate={undefined}`) (résolu)
+- [ZBLK-019](archive/blockers/ZBLK-019.md) — entrée des cœurs ne rejouait pas sur nouvelle partie (résolu)
+
+---
+
+Bug remonté par Baptiste : la musique d'ambiance restait muette au changement de piste sur mobile uniquement (temps affiché avançant normalement, sans aucun son), reproduit sur le build Vercel de la branche `development`. Dans `goToAmbientTrack` (`src/lib/sounds.ts`), le swap de piste passait par un fondu sortant puis un `window.setTimeout(() => loadAmbientTrack(track), 300)` — hypothèse initiale posée sans vérifier la plateforme réelle (règle iOS Safari de perte du geste utilisateur, GLRN-222), invalidée par Baptiste qui testait sur Android. Fix appliqué malgré tout valide : suppression du `setTimeout`, `loadAmbientTrack` appelé directement dans le tick du clic — confirmé fonctionnel par Baptiste après test réel sur son téléphone Android, mécanisme exact du délai non ré-instrumenté pour être confirmé avec certitude. `pnpm lint`/`pnpm build` vérifiés verts après le fix.
+
+Rituel `/memory-close` : 3 blockers résolus de la session précédente (BLK-002/003/004, cercle de glisser/tremblement de cœur/remount cœurs) archivés vers `ZBLK-017/018/019` (collision de numéro avec les `ZBLK-002/003/004` déjà existants, repris depuis le max archive courant `ZBLK-016`). Sur confirmation explicite de Baptiste ("le mieux est de rester en local"), `LRN-019` et `BLK-005` de cette session gardés en 🏠 local plutôt que promus en mémoire globale — cohérent avec la préférence "full local" déjà actée sur ce projet, renforcée ici par l'incertitude sur le mécanisme exact.
+
+**Entrées clés :**
+
+- [LRN-019](learnings/LRN-019.md) — `.play()` différé via `setTimeout` : symptôme résolu, mécanisme mobile non confirmé
+- [ZBLK-020](archive/blockers/ZBLK-020.md) — musique de piste suivante inaudible sur mobile (Android), diagnostic initial erroné (résolu)
+
+---
+
+Ajout d'un compteur de pattes de chat trouvées (`PawCounter.tsx`, icône + `x/6`) à côté des cœurs de vie, sur demande de Baptiste. Plusieurs allers-retours de polish : repositionnement (compteur à gauche, cœurs au centre), alignement des valeurs d'animation entre le chiffre trouvé et `/6`, avant deux blocages plus consistants.
+
+Premier blocage : après un clic sur "Nouvelle partie", deux instances de `PawCounter` restaient affichées côte à côte en permanence ("0/6 0/6"), sans que `HeartsRow` (juste à côté, même pattern de clé `key={levelId}`) ne soit affecté. Deux hypothèses fausses explorées sans effet (nesting `AnimatePresence mode="popLayout"` imbriqué, wrapper `m.div` racine) — Baptiste a explicitement demandé d'arrêter de déléguer la vérification à des agents en arrière-plan (tués/peu fiables dans cet environnement pour ce type de debug DOM en direct) et de reprendre en direct. Root cause trouvée en inspectant les fibres React réelles des deux nœuds dupliqués puis en testant par bissection (remplacement de `PawCounter` par un `<span>` trivial à la même position, qui dupliquait aussi) : `PawCounter` et `HeartsRow` partageaient la MÊME valeur de clé (`key={levelId}`) en tant que frères — une collision de clé sibling que React ne gère pas proprement ([ZBLK-021](archive/blockers/ZBLK-021.md), généralisé en GLRN-230 global). Fix : clés préfixées par composant (`paw-${levelId}` / `hearts-${levelId}`).
+
+Second blocage, juste après : l'animation d'entrée du compteur (scale+fade) ne jouait plus du tout au relancement d'une partie, malgré une structure `AnimatePresence` par sous-élément identique à celle de `HeartsRow`. Cause : aucune de ces `AnimatePresence` imbriquées ne fixait explicitement sa propre valeur de `initial` — l'ancêtre `AnimatePresence initial={false}` du panneau de statut (`App.tsx`) propage ce `false` via contexte à tout descendant qui ne définit pas le sien, même sans jamais l'avoir écrit localement ([ZBLK-022](archive/blockers/ZBLK-022.md), généralisé en GLRN-231 global, complète [LRN-012](learnings/LRN-012.md) qui couvrait la copie explicite par réflexe plutôt que l'héritage silencieux). Fix : `initial` explicite sur chaque `AnimatePresence` imbriquée du composant. Vérifié par échantillonnage `requestAnimationFrame` d'opacité/transform en direct dans le navigateur (agent-browser, appelé en Bash direct plutôt que via agent délégué).
+
+Convention actée pour les futurs mini-composants stats du projet : [BDR-024](decisions/BDR-024.md).
+
+**Entrées clés :**
+
+- [BDR-024](decisions/BDR-024.md) — PawCounter : clé de remount préfixée + `initial` explicite
+- [ZBLK-021](archive/blockers/ZBLK-021.md) — doublon DOM permanent, collision de clé sibling (résolu)
+- [ZBLK-022](archive/blockers/ZBLK-022.md) — animation d'entrée absente, héritage `initial` silencieux (résolu)
+
+## 2026-07-25
+
+Longue session de construction de deux nouveaux panneaux demandés par Baptiste : réglages audio/vibration et explication illustrée des 3 règles du jeu. Recherche initiale via un agent Explore pour cartographier l'existant (`sounds.ts`, `haptics.ts`, composants shadcn disponibles) avant de planifier en mode plan, puis implémentation validée ([BDR-025](decisions/BDR-025.md)) : `settings.ts` en singleton + `useSyncExternalStore` + `localStorage`, exactement le pattern déjà utilisé pour l'ambiant ; `SettingsDialog` (vibrations/sons/ambiance en toggles icônes, gros, variant `icon-xl` ajouté à `buttonVariants` pour favoriser le réemploi) et `RulesDialog` (3 mini-grilles 3×3 statiques réutilisant le style visuel de `Grid`).
+
+Nombreux allers-retours de polish sur plusieurs messages successifs : icône engrenage correcte (`Settings`, pas `Settings2` qui est en fait un icône de curseurs), style Switch/Slider retravaillé façon "jeu mobile" (piste épaisse, dégradé, poignée bordée), sliders de volume finalement retirés après une première implémentation — Baptiste a jugé que le mix son est déjà calibré et qu'un curseur exposé au joueur risque de dégrader l'expérience ([BDR-026](decisions/BDR-026.md)). Couleurs des mini-grilles de règles réajustées pour utiliser les 6 couleurs de région du jeu plutôt qu'un gris neutre. Boutons Réglages/Règles déplacés à plusieurs reprises (topbar → ligne du compteur avec `Separator` → de retour à côté du titre, en `flex-col`, masqués tant que le premier niveau n'est pas chargé) au fil des retours de Baptiste.
+
+Deux diagnostics de layout ont suivi un signalement direct de Baptiste ("la grid n'est plus exactement au centre") :
+
+- La grille se décalait du centre réel de l'écran dès qu'un contenu asymétrique (le texte d'instructions ajouté sous le bouton) alourdissait le dessous par rapport au dessus dans le bloc `flex-col justify-center` englobant — comportement généralisé en [LRN-020](learnings/LRN-020.md) (lié à GLRN-225 déjà en mémoire, mais mécanisme distinct : poids interne du contenu du même bloc, pas hauteur d'un frère à montage conditionnel). Fix : isoler titre+contenu de partie dans un wrapper `flex-1 items-center justify-center` dédié, sortir les instructions de ce wrapper.
+- Un second problème plus tenace persiste : le titre "descend puis remonte en flash" à chaque clic sur "Nouvelle partie", `AnimatePresence mode="wait"` basculant entre un état chargement court et un état niveau chargé nettement plus haut. Une tentative de fix (remplacer le spinner par un skeleton de même hauteur que le contenu chargé) n'a pas supprimé le flash aux yeux de Baptiste, qui a demandé de revenir purement et simplement au spinner `Loader2` d'origine — non résolu, tracé en [BLK-008](blockers/BLK-008.md).
+
+Tentative avortée d'ajouter un test unitaire pour `settings.ts` (aucun test dédié pour cette logique de persistance) : `settings.ts` importe `sounds.ts`, qui exécute `new Audio()` au niveau module — crash immédiat en environnement `vitest` Node pur (pas de jsdom configuré sur ce projet). Décision de ne pas ajouter jsdom pour ce seul test et de s'appuyer sur une vérification manuelle à la place, généralisé en [LRN-021](learnings/LRN-021.md).
+
+Tentative de vérification visuelle via `agent-browser` (protocole standard pour les changements UI) : `open` puis `doctor --offline --quick` sont tous deux restés bloqués indéfiniment dans ce sandbox, sans sortie exploitable. Abandon après 2 échecs — en creusant, la vraie leçon était déjà actée le 2026-07-24 en prose dans ce journal (Baptiste préfère vérifier lui-même) mais n'avait jamais été indexée en décision retrouvable par tag ; réparé en indexant [BDR-027](decisions/BDR-027.md) pour que ça ne se reproduise pas.
+
+Rituel `/memory-close` : 2 blockers résolus de la session précédente ([BLK-006](blockers/BLK-006.md)/[BLK-007](blockers/BLK-007.md), doublon DOM et animation d'entrée du PawCounter) archivés vers [ZBLK-021](archive/blockers/ZBLK-021.md)/[ZBLK-022](archive/blockers/ZBLK-022.md) en étape 1bis. Les deux learnings de cette session ont d'abord été proposés en 🌍 global, mais Baptiste a tranché "full local" — cohérent avec la préférence déjà actée sur ce projet — donc classés uniquement en `LRN-020`/`LRN-021`, sans entrée `GLRN-`.
+
+**Entrées clés :**
+
+- [BDR-025](decisions/BDR-025.md) — panneaux Réglages/Règles : Dialog + store singleton
+- [BDR-026](decisions/BDR-026.md) — pas de slider de volume, mix déjà calibré
+- [BDR-027](decisions/BDR-027.md) — pas de vérif navigateur auto sur ce projet
+- [LRN-020](learnings/LRN-020.md) — `justify-center` : poids du contenu voisin décale un enfant
+- [BLK-008](blockers/BLK-008.md) — titre qui saute au clic sur "Nouvelle partie" (ouvert)
