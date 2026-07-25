@@ -431,3 +431,17 @@ Au passage, Baptiste a précisé qu'il ne possède que des appareils Android che
 **Entrées clés :**
 
 - [LRN-028](learnings/LRN-028.md) — certificat mkcert non approuvé sur le téléphone bloque l'installabilité PWA
+
+---
+
+Après le commit du fix safe-area, Baptiste a signalé un comportement déroutant : premier chargement sans scrollbar, actualisation → scrollbar. Diagnostic confirmé dans le code source de `@base-ui/react` (pas une supposition) : `useDialogRoot.mjs` verrouille le scroll de la page tant qu'une modale `modal={true}` est ouverte, et `WelcomeDialog` ne s'ouvre qu'à la toute première visite (`localStorage`) — le débordement réel était donc masqué par ce scroll-lock au premier chargement, et redevenait visible dès que la modale ne se rouvrait plus. Généralisé en GLRN-240.
+
+Tentative de fix "propre" en réaction : suppression complète du budget `calc(100dvh-19rem-env(...))` et reconstruction de la grille en flex/`aspect-ratio` natif (`flex-1`/`min-h-0`/`aspect-square`/`h-full` sur plusieurs niveaux, `Grid` récrit avec `size-full` + `gridTemplateRows`), pour que le navigateur calcule l'espace disponible plutôt qu'un nombre deviné. `pnpm lint`/`pnpm build` verts, jamais vérifié visuellement. Baptiste a testé sur son téléphone : la grille était cassée, cases énormes débordant largement l'écran ([BLK-033](blockers/BLK-033.md), généralisé en GLRN-239 — mécanisme exact non diagnostiqué, revert immédiat demandé).
+
+Sur demande explicite de Baptiste ("va à l'essentiel"), retour complet à la structure d'origine (`Grid/index.tsx` et le wrapper de la grille redeviennent identiques à l'avant-session) et abandon total de tout calcul par élément — la seule contrainte conservée est globale : racine `h-dvh overflow-hidden` au lieu de `min-h-dvh`, grille et boutons en `max-w-md` fixe comme avant [BDR-039](decisions/BDR-039.md) ([BDR-040](decisions/BDR-040.md), qui remplace BDR-039). Honnêteté actée avec Baptiste : `overflow-hidden` garantit structurellement l'absence de scrollbar (propriété CSS, pas une hypothèse), mais ne garantit pas l'absence de rognage visuel sur un écran très court — risque accepté sciemment plutôt que rouvrir un calcul par élément. `pnpm lint`/`pnpm build` verts après le revert.
+
+**Entrées clés :**
+
+- [BDR-040](decisions/BDR-040.md) — contrainte anti-scroll ramenée au niveau app, remplace BDR-039
+- [BLK-033](blockers/BLK-033.md) — reconstruction flex/aspect-ratio cassée en usage réel (résolu par revert)
+- [BLK-032](blockers/BLK-032.md) — scrollbar mobile, résolu par construction via BDR-040
