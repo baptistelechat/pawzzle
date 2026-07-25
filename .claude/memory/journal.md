@@ -419,3 +419,15 @@ Rituel `/memory-close` : deuxième passage de la journée. [ZBLK-030](archive/bl
 - [BDR-039](decisions/BDR-039.md) — grille plafonnée par un budget de hauteur `100dvh`
 - [LRN-027](learnings/LRN-027.md) — `sticky` rend visible, ne supprime pas le débordement
 - [BLK-032](blockers/BLK-032.md) — scrollbar verticale sur mobile (ouvert, vérification appareil en attente)
+
+---
+
+Baptiste a signalé que le scroll de [BLK-032](blockers/BLK-032.md) réapparaît spécifiquement en mode PWA installé, où il n'y a plus de barre d'URL du tout. Le budget de 19rem n'avait jamais compté les zones système (encoche, indicateur d'accueil) : en navigateur classique la marge de la barre d'URL masquait cet oubli, en standalone `100dvh` ne les exclut pas. Fix : `viewport-fit=cover` ajouté au meta viewport, `env(safe-area-inset-top)`/`env(safe-area-inset-bottom)` soustraits en plus dans le calc de [BDR-039](decisions/BDR-039.md), et padding de sécurité équivalent sur le footer épinglé — sans changement de comportement hors PWA (`env()` vaut `0`). `pnpm lint`/`pnpm build` verts, vérification device toujours en attente (périmètre élargi : navigateur mobile et PWA standalone).
+
+Question suivante de Baptiste : pourquoi `https://192.168.1.74:4173/` (vite preview --host) ne proposait pas l'installation PWA sur son Android. Manifest, icônes, service worker et `display: standalone` tous vérifiés corrects — pas un bug de config. Cause réelle : le certificat auto-signé `mkcert` n'est approuvé que sur le PC de dev, pas sur le téléphone ; Chrome exige un certificat HTTPS valide pour proposer l'installation, donc `beforeinstallprompt` ne se déclenche jamais même si la page charge après un bypass manuel de l'avertissement ([LRN-028](learnings/LRN-028.md)). Recommandation donnée : tester via le lien de déploiement Vercel (certificat valide) plutôt qu'en LAN, ou installer la CA mkcert sur le téléphone pour du testing LAN répété.
+
+Au passage, Baptiste a précisé qu'il ne possède que des appareils Android chez lui, avec un accès seulement ponctuel à un iPhone qui n'est pas le sien — testing iOS très limité. Fait générique, capturé en portée globale (voir aussi GLRN-238) plutôt qu'en local, pour s'appliquer à tout projet futur impliquant du test mobile.
+
+**Entrées clés :**
+
+- [LRN-028](learnings/LRN-028.md) — certificat mkcert non approuvé sur le téléphone bloque l'installabilité PWA

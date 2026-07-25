@@ -118,8 +118,11 @@ function App() {
                 // Plafond posé ici et pas sur la grille seule : le bloc entier
                 // suit, donc la rangée de boutons reste alignée sur la grille.
                 // Sur un écran haut, `min()` retombe sur 28rem = `max-w-md`
-                // d'origine, rien ne change.
-                className="flex w-full max-w-[min(28rem,calc(100dvh-19rem))] flex-col items-center gap-4"
+                // d'origine, rien ne change. En PWA standalone (pas de barre
+                // d'URL), `100dvh` inclut la zone sous l'encoche/l'indicateur
+                // d'accueil — non comptée dans les 19rem — d'où les
+                // `env(safe-area-inset-*)` en plus, à 0 hors PWA.
+                className="flex w-full max-w-[min(28rem,calc(100dvh-19rem-env(safe-area-inset-top)-env(safe-area-inset-bottom)))] flex-col items-center gap-4"
                 initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
@@ -241,7 +244,7 @@ function App() {
       pill semblait absente — elle ne réapparaissait qu'après une rotation, qui
       replie la barre. Épinglé en bas du viewport, le lecteur reste visible quelle
       que soit la hauteur du contenu. */}
-      <footer className="sticky bottom-0 z-10 flex min-h-20 items-center justify-center p-4">
+      <footer className="sticky bottom-0 z-10 flex min-h-20 items-center justify-center p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
         <AmbientPlayer />
       </footer>
     </div>
