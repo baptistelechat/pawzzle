@@ -127,6 +127,22 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html,
+  body,
+  #root {
+    /* Verrou réel, indépendant de tout calcul `dvh` : `body` ne peut pas
+    devenir plus grand que `html` (= la fenêtre), donc jamais scrollable, même
+    si un descendant surestime sa propre hauteur (`h-dvh`/`100dvh` en PWA
+    standalone). `#root` (point de montage React) doit aussi être dans la
+    chaîne — sinon un `h-full` posé plus bas n'a rien à quoi se raccrocher et
+    retombe sur la taille du contenu, laissant un vide en bas d'écran. */
+    height: 100%;
+  }
+  html,
+  body {
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
   body {
     @apply bg-background text-foreground;
   }

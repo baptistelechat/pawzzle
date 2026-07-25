@@ -410,7 +410,7 @@ Suite immédiate du correctif précédent : le `sticky bottom-0` avait bien fait
 
 Le vrai correctif plafonne le bloc de niveau par un budget de hauteur dérivé du viewport : `max-w-[min(28rem,calc(100dvh-19rem))]` ([BDR-039](decisions/BDR-039.md)). Posé sur le bloc entier plutôt que sur la grille seule, pour que la rangée de boutons suive et reste alignée. Les 19rem sont un budget assumé (32 px de padding + 48 titre + 28 statut + 48 gaps + 48 boutons + 80 footer = 284 px, arrondi avec marge) — c'était l'alternative explicitement écartée en [BDR-038](decisions/BDR-038.md) au motif du « nombre magique », amendée en conséquence. Trois autres pistes ont été pesées puis écartées : une chaîne flex `min-h-0`/`flex-1`/`aspect-square` (tient sans nombre magique mais décentre le groupe titre/grille/boutons sur desktop), le footer en `fixed` (libère les 80 px réservés mais recouvre le bouton d'action sur petit écran et contredit [BDR-022](decisions/BDR-022.md)), et `h-dvh overflow-hidden` (rogne au lieu d'adapter). Le `sticky` est conservé en filet.
 
-Sur écran haut, `min()` retombe sur 28rem, donc le desktop est censé être strictement inchangé — c'est le point à confirmer en priorité, puisque c'est le seul endroit où une sous-estimation du budget se verrait. `pnpm lint`/`pnpm build` verts, vérification appareil en attente ([BLK-032](blockers/BLK-032.md), ouvert).
+Sur écran haut, `min()` retombe sur 28rem, donc le desktop est censé être strictement inchangé — c'est le point à confirmer en priorité, puisque c'est le seul endroit où une sous-estimation du budget se verrait. `pnpm lint`/`pnpm build` verts, vérification appareil en attente ([ZBLK-032](archive/blockers/ZBLK-032.md), résolu depuis).
 
 Rituel `/memory-close` : deuxième passage de la journée. [ZBLK-030](archive/blockers/ZBLK-030.md) et [ZBLK-031](archive/blockers/ZBLK-031.md), créés résolus au rituel précédent, archivés en étape 1bis — pour une fois sans collision de numéro, la renumérotation de la veille ayant aligné le compteur actif sur le max archive. Les deux entrées de cette session sont restées en 🏠 local sans re-poser la question de portée, la préférence « full local » étant établie sur ce projet.
 
@@ -418,11 +418,11 @@ Rituel `/memory-close` : deuxième passage de la journée. [ZBLK-030](archive/bl
 
 - [BDR-039](decisions/BDR-039.md) — grille plafonnée par un budget de hauteur `100dvh`
 - [LRN-027](learnings/LRN-027.md) — `sticky` rend visible, ne supprime pas le débordement
-- [BLK-032](blockers/BLK-032.md) — scrollbar verticale sur mobile (ouvert, vérification appareil en attente)
+- [ZBLK-032](archive/blockers/ZBLK-032.md) — scrollbar verticale sur mobile (résolu depuis)
 
 ---
 
-Baptiste a signalé que le scroll de [BLK-032](blockers/BLK-032.md) réapparaît spécifiquement en mode PWA installé, où il n'y a plus de barre d'URL du tout. Le budget de 19rem n'avait jamais compté les zones système (encoche, indicateur d'accueil) : en navigateur classique la marge de la barre d'URL masquait cet oubli, en standalone `100dvh` ne les exclut pas. Fix : `viewport-fit=cover` ajouté au meta viewport, `env(safe-area-inset-top)`/`env(safe-area-inset-bottom)` soustraits en plus dans le calc de [BDR-039](decisions/BDR-039.md), et padding de sécurité équivalent sur le footer épinglé — sans changement de comportement hors PWA (`env()` vaut `0`). `pnpm lint`/`pnpm build` verts, vérification device toujours en attente (périmètre élargi : navigateur mobile et PWA standalone).
+Baptiste a signalé que le scroll de [ZBLK-032](archive/blockers/ZBLK-032.md) réapparaît spécifiquement en mode PWA installé, où il n'y a plus de barre d'URL du tout. Le budget de 19rem n'avait jamais compté les zones système (encoche, indicateur d'accueil) : en navigateur classique la marge de la barre d'URL masquait cet oubli, en standalone `100dvh` ne les exclut pas. Fix : `viewport-fit=cover` ajouté au meta viewport, `env(safe-area-inset-top)`/`env(safe-area-inset-bottom)` soustraits en plus dans le calc de [BDR-039](decisions/BDR-039.md), et padding de sécurité équivalent sur le footer épinglé — sans changement de comportement hors PWA (`env()` vaut `0`). `pnpm lint`/`pnpm build` verts, vérification device toujours en attente (périmètre élargi : navigateur mobile et PWA standalone).
 
 Question suivante de Baptiste : pourquoi `https://192.168.1.74:4173/` (vite preview --host) ne proposait pas l'installation PWA sur son Android. Manifest, icônes, service worker et `display: standalone` tous vérifiés corrects — pas un bug de config. Cause réelle : le certificat auto-signé `mkcert` n'est approuvé que sur le PC de dev, pas sur le téléphone ; Chrome exige un certificat HTTPS valide pour proposer l'installation, donc `beforeinstallprompt` ne se déclenche jamais même si la page charge après un bypass manuel de l'avertissement ([LRN-028](learnings/LRN-028.md)). Recommandation donnée : tester via le lien de déploiement Vercel (certificat valide) plutôt qu'en LAN, ou installer la CA mkcert sur le téléphone pour du testing LAN répété.
 
@@ -436,12 +436,28 @@ Au passage, Baptiste a précisé qu'il ne possède que des appareils Android che
 
 Après le commit du fix safe-area, Baptiste a signalé un comportement déroutant : premier chargement sans scrollbar, actualisation → scrollbar. Diagnostic confirmé dans le code source de `@base-ui/react` (pas une supposition) : `useDialogRoot.mjs` verrouille le scroll de la page tant qu'une modale `modal={true}` est ouverte, et `WelcomeDialog` ne s'ouvre qu'à la toute première visite (`localStorage`) — le débordement réel était donc masqué par ce scroll-lock au premier chargement, et redevenait visible dès que la modale ne se rouvrait plus. Généralisé en GLRN-240.
 
-Tentative de fix "propre" en réaction : suppression complète du budget `calc(100dvh-19rem-env(...))` et reconstruction de la grille en flex/`aspect-ratio` natif (`flex-1`/`min-h-0`/`aspect-square`/`h-full` sur plusieurs niveaux, `Grid` récrit avec `size-full` + `gridTemplateRows`), pour que le navigateur calcule l'espace disponible plutôt qu'un nombre deviné. `pnpm lint`/`pnpm build` verts, jamais vérifié visuellement. Baptiste a testé sur son téléphone : la grille était cassée, cases énormes débordant largement l'écran ([BLK-033](blockers/BLK-033.md), généralisé en GLRN-239 — mécanisme exact non diagnostiqué, revert immédiat demandé).
+Tentative de fix "propre" en réaction : suppression complète du budget `calc(100dvh-19rem-env(...))` et reconstruction de la grille en flex/`aspect-ratio` natif (`flex-1`/`min-h-0`/`aspect-square`/`h-full` sur plusieurs niveaux, `Grid` récrit avec `size-full` + `gridTemplateRows`), pour que le navigateur calcule l'espace disponible plutôt qu'un nombre deviné. `pnpm lint`/`pnpm build` verts, jamais vérifié visuellement. Baptiste a testé sur son téléphone : la grille était cassée, cases énormes débordant largement l'écran ([ZBLK-033](archive/blockers/ZBLK-033.md), généralisé en GLRN-239 — mécanisme exact non diagnostiqué, revert immédiat demandé).
 
 Sur demande explicite de Baptiste ("va à l'essentiel"), retour complet à la structure d'origine (`Grid/index.tsx` et le wrapper de la grille redeviennent identiques à l'avant-session) et abandon total de tout calcul par élément — la seule contrainte conservée est globale : racine `h-dvh overflow-hidden` au lieu de `min-h-dvh`, grille et boutons en `max-w-md` fixe comme avant [BDR-039](decisions/BDR-039.md) ([BDR-040](decisions/BDR-040.md), qui remplace BDR-039). Honnêteté actée avec Baptiste : `overflow-hidden` garantit structurellement l'absence de scrollbar (propriété CSS, pas une hypothèse), mais ne garantit pas l'absence de rognage visuel sur un écran très court — risque accepté sciemment plutôt que rouvrir un calcul par élément. `pnpm lint`/`pnpm build` verts après le revert.
 
 **Entrées clés :**
 
 - [BDR-040](decisions/BDR-040.md) — contrainte anti-scroll ramenée au niveau app, remplace BDR-039
-- [BLK-033](blockers/BLK-033.md) — reconstruction flex/aspect-ratio cassée en usage réel (résolu par revert)
-- [BLK-032](blockers/BLK-032.md) — scrollbar mobile, résolu par construction via BDR-040
+- [ZBLK-033](archive/blockers/ZBLK-033.md) — reconstruction flex/aspect-ratio cassée en usage réel (résolu par revert)
+- [ZBLK-032](archive/blockers/ZBLK-032.md) — scrollbar mobile, résolu par construction via BDR-040
+
+---
+
+Baptiste a testé la version restaurée et signalé qu'elle scrollait encore, en navigateur ET en PWA — malgré l'annonce d'une garantie structurelle. Il a demandé d'arrêter d'itérer en avant et d'identifier via `git log` la version qu'il jugeait la moins mauvaise empiriquement : le commit `21c5551` (4 après le dernier merge), qui portait `viewport-fit=cover` + le budget `calc(100dvh-19rem-env(safe-area-inset))`. Restauré à l'identique via `git checkout 21c5551 -- index.html src/App.tsx`, sans réinventer quoi que ce soit (généralisé en GLRN-243).
+
+Même cette version scrollait encore selon Baptiste. Diagnostic du vrai trou dans ma garantie précédente : `overflow-hidden` était posé sur le `<div>` racine de l'app, pas sur `html`/`body` — si ce div (`h-dvh`) calculait une hauteur supérieure à l'espace réellement visible en PWA, `body` non contraint devenait simplement aussi grand que lui et le document scrollait pour l'atteindre ([BLK-034](blockers/BLK-034.md), généralisé en GLRN-241). Fix : `html, body, #root { height:100%; }` + `overflow:hidden`/`overscroll-behavior:none` sur `html`/`body` dans `index.css`, racine d'`App.tsx` passée de `h-dvh` à `h-full`. Cette garantie ne dépend plus d'aucun calcul `dvh`.
+
+Baptiste a immédiatement signalé un nouveau symptôme (capture d'écran à l'appui) : l'app n'occupait plus tout l'écran, un grand vide apparaissait sous le lecteur ambiant. Diagnostic : `#root` (point de montage React) manquait dans la chaîne `height:100%` tout juste posée — un `h-full` plus bas n'avait donc rien à quoi se raccrocher et retombait sur la taille du contenu ([BLK-035](blockers/BLK-035.md), généralisé en GLRN-242). Ajouté à la règle, résolu. `pnpm lint`/`pnpm build` verts après chaque étape ; vérification device toujours en attente à la clôture de cette session.
+
+[BDR-040](decisions/BDR-040.md) marqué remplacé par [BDR-041](decisions/BDR-041.md), qui documente ce verrou définitif.
+
+**Entrées clés :**
+
+- [BDR-041](decisions/BDR-041.md) — verrou anti-scroll définitif sur `html`/`body`/`#root`
+- [BLK-034](blockers/BLK-034.md) — `overflow-hidden` sur un div descendant insuffisant (résolu)
+- [BLK-035](blockers/BLK-035.md) — chaîne `height:100%` cassée à `#root` (résolu)

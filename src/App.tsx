@@ -66,9 +66,11 @@ function App() {
   }, [levelId]);
 
   return (
-    // `h-dvh` (pas `min-h-dvh`) + `overflow-hidden` : la page ne peut plus
-    // jamais dépasser l'écran ni scroller, quel que soit l'appareil.
-    <div className="flex h-dvh flex-col overflow-hidden">
+    // `h-full` (100% de `body`, lui-même verrouillé à 100% de `html` dans
+    // index.css) plutôt que `h-dvh` : ne dépend d'aucun calcul `dvh`, qui peut
+    // surestimer l'espace réellement visible en PWA standalone.
+    // `overflow-hidden` en défense supplémentaire.
+    <div className="flex h-full flex-col overflow-hidden">
       {import.meta.env.DEV && (
         <Button
           variant="destructive"
@@ -113,7 +115,18 @@ function App() {
             ) : (
               <m.div
                 key="level"
-                className="flex w-full max-w-md flex-col items-center gap-4"
+                // Le reste de la colonne (titre, statut, boutons, gaps, padding
+                // de `main`, footer) mesure ~19rem. Au-delà, la grille doit
+                // rétrécir plutôt que pousser le contenu hors de l'écran — sinon
+                // la page déborde de quelques pixels et scrolle sur mobile.
+                // Plafond posé ici et pas sur la grille seule : le bloc entier
+                // suit, donc la rangée de boutons reste alignée sur la grille.
+                // Sur un écran haut, `min()` retombe sur 28rem = `max-w-md`
+                // d'origine, rien ne change. En PWA standalone (pas de barre
+                // d'URL), `100dvh` inclut la zone sous l'encoche/l'indicateur
+                // d'accueil — non comptée dans les 19rem — d'où les
+                // `env(safe-area-inset-*)` en plus, à 0 hors PWA.
+                className="flex w-full max-w-[min(28rem,calc(100dvh-19rem-env(safe-area-inset-top)-env(safe-area-inset-bottom)))] flex-col items-center gap-4"
                 initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
@@ -229,10 +242,13 @@ function App() {
       </main>
       {/* min-h réservée à la hauteur du pill : évite que son apparition/
       disparition (AnimatePresence) ne pousse le contenu de <main> en changeant
-      la hauteur disponible pour son justify-center. `sticky` gardé en filet si
-      le budget de hauteur de `key="level"` est sous-estimé sur un appareil
-      donné. */}
-      <footer className="sticky bottom-0 z-10 flex min-h-20 items-center justify-center p-4">
+      la hauteur disponible pour son justify-center.
+      `sticky` : sur mobile le contenu dépasse de peu la hauteur visible (barre
+      d'URL déployée), le footer passait alors sous la ligne de flottaison et la
+      pill semblait absente — elle ne réapparaissait qu'après une rotation, qui
+      replie la barre. Épinglé en bas du viewport, le lecteur reste visible quelle
+      que soit la hauteur du contenu. */}
+      <footer className="sticky bottom-0 z-10 flex min-h-20 items-center justify-center p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
         <AmbientPlayer />
       </footer>
     </div>
