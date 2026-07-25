@@ -2,5 +2,9 @@
 import { generateLevel } from "@/lib/engine/generator";
 
 self.onmessage = (event: MessageEvent<{ size: number }>) => {
-  self.postMessage(generateLevel(event.data.size));
+  try {
+    self.postMessage({ ok: true, level: generateLevel(event.data.size) });
+  } catch {
+    self.postMessage({ ok: false });
+  }
 };

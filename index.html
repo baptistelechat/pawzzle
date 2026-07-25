@@ -8,6 +8,13 @@
     <meta name="theme-color" content="#ff8a65" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pawzzle</title>
+    <script>
+      window.__deferredInstallPrompt = null;
+      window.addEventListener("beforeinstallprompt", (e) => {
+        e.preventDefault();
+        window.__deferredInstallPrompt = e;
+      });
+    </script>
   </head>
   <body>
     <div id="root"></div>

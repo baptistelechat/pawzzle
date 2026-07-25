@@ -1,0 +1,16 @@
+---
+id: ZBLK-011
+type: blocker
+date: 2026-07-22
+tags: [ux, tap, double-tap, long-press, latency, flash, gesture-redesign]
+---
+
+# ZBLK-011 — Latence/flash du marqueur au tap : 3 itérations avant la bonne solution
+
+| Friction                                                                                                                                                                                                                                                                                                                                                                                                                | Cause réelle                                                                                                                                                                                                                                               | Solution                                                                                                                                                                                                                                                                       | Statut |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------ |
+| Le marqueur d'aide se posait après un délai artificiel (300ms) pour distinguer tap simple et double-tap, perçu comme une latence gênante par Baptiste. Réduire le délai à 0ms a réintroduit un flash visuel (croix visible brièvement avant d'être remplacée par la patte sur un vrai double-tap). Un compromis à 180ms a atténué sans éliminer le problème : un double-tap trop lent posait puis retirait le marqueur. | Le comptage temporel tap/double-tap est intrinsèquement fragile à la vitesse d'appui réelle de l'utilisateur — aucune valeur de délai ne peut à la fois éliminer la latence ET le flash ET tolérer un appui lent (voir aussi GLRN-224 en mémoire globale). | Remplacement du geste : tap = marqueur immédiat (zéro délai), appui long (450ms) = pose de l'animal — `togglePaw` retirant déjà le marqueur de la case au moment de poser l'animal, plus besoin d'anticiper un flash. Décision actée en [BDR-018](../../decisions/BDR-018.md). | résolu |
+
+## Références
+
+- [BDR-018](../../decisions/BDR-018.md) — décision de remplacement du geste

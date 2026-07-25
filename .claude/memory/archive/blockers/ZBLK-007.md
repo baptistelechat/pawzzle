@@ -1,11 +1,11 @@
 ---
-id: BLK-007
+id: ZBLK-007
 type: blocker
 date: 2026-07-21
 tags: [pwa, vite-pwa-assets-generator, apple-touch-icon, padding, resizeOptions]
 ---
 
-# BLK-007 — Icône Apple Touch avec fond blanc parasite
+# ZBLK-007 — Icône Apple Touch avec fond blanc parasite
 
 | Friction                                                                                                                                                                                                                         | Cause réelle                                                                                                                                                                                                                                                                                                                                                                                                               | Solution                                                                                                                                                                                           | Statut |
 | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
@@ -13,5 +13,5 @@ tags: [pwa, vite-pwa-assets-generator, apple-touch-icon, padding, resizeOptions]
 
 ## Références
 
-- [BDR-009](../decisions/BDR-009.md) — identité visuelle dont ce logo fait partie
+- [BDR-009](../../decisions/BDR-009.md) — identité visuelle dont ce logo fait partie
 - Pattern déjà documenté en mémoire globale sous GLRN-206 (padding differs par preset, couvre déjà `apple`) — aucune nouvelle entrée globale créée, cette session reste full local sur demande de Baptiste.
