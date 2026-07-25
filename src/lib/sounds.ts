@@ -318,10 +318,6 @@ export const toggleAmbientPlayback = () => {
   }
 };
 
-export const toggleAmbientMute = () => {
-  ambient.muted = !ambient.muted;
-};
-
 // À appeler depuis le même geste utilisateur que `sounds.unlock()` — un
 // <audio>.play() hors geste est bloqué par la même politique navigateur.
 export const playAmbient = () => {
