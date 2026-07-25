@@ -32,3 +32,4 @@ register: learnings
 | [LRN-024](learnings/LRN-024.md) | 2026-07-25 | Corriger la stale closure sur UN état ne suffit pas si le handler en touche plusieurs                                     | #react #stale-closure #race-condition #ref-mirror #multi-touch #event-handler             |
 | [LRN-025](learnings/LRN-025.md) | 2026-07-25 | Symptôme réparé par une rotation d'écran = layout, jamais état | #debugging #mobile #viewport #orientation #layout #state-vs-layout #dvh |
 | [LRN-026](learnings/LRN-026.md) | 2026-07-25 | `vite preview` n'écoute pas le réseau, même si `dev` a `--host` | #vite #preview #host #lan #mobile-testing #package-json #misdiagnosis |
+| [LRN-027](learnings/LRN-027.md) | 2026-07-25 | `sticky` rend visible, ne supprime pas le débordement | #css #sticky #overflow #layout #document-height #scroll #root-cause |

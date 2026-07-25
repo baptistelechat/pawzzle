@@ -44,3 +44,4 @@ register: decisions
 | [BDR-036](decisions/BDR-036.md) | 2026-07-25 | Exception : règle localStorage désactivée globalement                       | #react-doctor #doctor-config #exception #localstorage #product-decision #pawzzle             | actif    |
 | [BDR-037](decisions/BDR-037.md) | 2026-07-25 | Infra de test hooks conservée, périmètre restreint                          | #testing #vitest #jsdom #testing-library #scope #hooks #pawzzle                              | actif    |
 | [BDR-038](decisions/BDR-038.md) | 2026-07-25 | Lecteur ambiant épinglé (`sticky bottom-0`) en bas du viewport | #layout #sticky #footer #ambient-player #mobile-viewport #dvh #pawzzle | actif |
+| [BDR-039](decisions/BDR-039.md) | 2026-07-25 | Grille plafonnée par un budget de hauteur dérivé de `100dvh` | #layout #dvh #max-width #grid-sizing #mobile-viewport #single-screen #pawzzle | actif |

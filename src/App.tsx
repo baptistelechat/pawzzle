@@ -111,7 +111,15 @@ function App() {
             ) : (
               <m.div
                 key="level"
-                className="flex w-full flex-col items-center gap-4"
+                // Le reste de la colonne (titre, statut, boutons, gaps, padding
+                // de `main`, footer) mesure ~19rem. Au-delà, la grille doit
+                // rétrécir plutôt que pousser le contenu hors de l'écran — sinon
+                // la page déborde de quelques pixels et scrolle sur mobile.
+                // Plafond posé ici et pas sur la grille seule : le bloc entier
+                // suit, donc la rangée de boutons reste alignée sur la grille.
+                // Sur un écran haut, `min()` retombe sur 28rem = `max-w-md`
+                // d'origine, rien ne change.
+                className="flex w-full max-w-[min(28rem,calc(100dvh-19rem))] flex-col items-center gap-4"
                 initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
