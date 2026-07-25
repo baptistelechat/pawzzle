@@ -450,14 +450,66 @@ Sur demande explicite de Baptiste ("va à l'essentiel"), retour complet à la st
 
 Baptiste a testé la version restaurée et signalé qu'elle scrollait encore, en navigateur ET en PWA — malgré l'annonce d'une garantie structurelle. Il a demandé d'arrêter d'itérer en avant et d'identifier via `git log` la version qu'il jugeait la moins mauvaise empiriquement : le commit `21c5551` (4 après le dernier merge), qui portait `viewport-fit=cover` + le budget `calc(100dvh-19rem-env(safe-area-inset))`. Restauré à l'identique via `git checkout 21c5551 -- index.html src/App.tsx`, sans réinventer quoi que ce soit (généralisé en GLRN-243).
 
-Même cette version scrollait encore selon Baptiste. Diagnostic du vrai trou dans ma garantie précédente : `overflow-hidden` était posé sur le `<div>` racine de l'app, pas sur `html`/`body` — si ce div (`h-dvh`) calculait une hauteur supérieure à l'espace réellement visible en PWA, `body` non contraint devenait simplement aussi grand que lui et le document scrollait pour l'atteindre ([BLK-034](blockers/BLK-034.md), généralisé en GLRN-241). Fix : `html, body, #root { height:100%; }` + `overflow:hidden`/`overscroll-behavior:none` sur `html`/`body` dans `index.css`, racine d'`App.tsx` passée de `h-dvh` à `h-full`. Cette garantie ne dépend plus d'aucun calcul `dvh`.
+Même cette version scrollait encore selon Baptiste. Diagnostic du vrai trou dans ma garantie précédente : `overflow-hidden` était posé sur le `<div>` racine de l'app, pas sur `html`/`body` — si ce div (`h-dvh`) calculait une hauteur supérieure à l'espace réellement visible en PWA, `body` non contraint devenait simplement aussi grand que lui et le document scrollait pour l'atteindre ([ZBLK-034](archive/blockers/ZBLK-034.md), généralisé en GLRN-241). Fix : `html, body, #root { height:100%; }` + `overflow:hidden`/`overscroll-behavior:none` sur `html`/`body` dans `index.css`, racine d'`App.tsx` passée de `h-dvh` à `h-full`. Cette garantie ne dépend plus d'aucun calcul `dvh`.
 
-Baptiste a immédiatement signalé un nouveau symptôme (capture d'écran à l'appui) : l'app n'occupait plus tout l'écran, un grand vide apparaissait sous le lecteur ambiant. Diagnostic : `#root` (point de montage React) manquait dans la chaîne `height:100%` tout juste posée — un `h-full` plus bas n'avait donc rien à quoi se raccrocher et retombait sur la taille du contenu ([BLK-035](blockers/BLK-035.md), généralisé en GLRN-242). Ajouté à la règle, résolu. `pnpm lint`/`pnpm build` verts après chaque étape ; vérification device toujours en attente à la clôture de cette session.
+Baptiste a immédiatement signalé un nouveau symptôme (capture d'écran à l'appui) : l'app n'occupait plus tout l'écran, un grand vide apparaissait sous le lecteur ambiant. Diagnostic : `#root` (point de montage React) manquait dans la chaîne `height:100%` tout juste posée — un `h-full` plus bas n'avait donc rien à quoi se raccrocher et retombait sur la taille du contenu ([ZBLK-035](archive/blockers/ZBLK-035.md), généralisé en GLRN-242). Ajouté à la règle, résolu. `pnpm lint`/`pnpm build` verts après chaque étape ; vérification device toujours en attente à la clôture de cette session.
 
 [BDR-040](decisions/BDR-040.md) marqué remplacé par [BDR-041](decisions/BDR-041.md), qui documente ce verrou définitif.
 
 **Entrées clés :**
 
 - [BDR-041](decisions/BDR-041.md) — verrou anti-scroll définitif sur `html`/`body`/`#root`
-- [BLK-034](blockers/BLK-034.md) — `overflow-hidden` sur un div descendant insuffisant (résolu)
-- [BLK-035](blockers/BLK-035.md) — chaîne `height:100%` cassée à `#root` (résolu)
+- [ZBLK-034](archive/blockers/ZBLK-034.md) — `overflow-hidden` sur un div descendant insuffisant (résolu)
+- [ZBLK-035](archive/blockers/ZBLK-035.md) — chaîne `height:100%` cassée à `#root` (résolu)
+
+---
+
+Baptiste a signalé trois manques sur le son : aucun son sur les boutons qui ouvrent les modals Règles/Réglages, aucun son sur les 4 boutons du pill radio (précédent/pause/suivant/mute), et une désync entre le mute du pill radio et le toggle "Ambiance" du panneau Réglages — symptôme qu'il a lui-même identifié comme une possible absence de state global pour l'audio. Avant d'implémenter, question posée par Baptiste : le son de clic devrait-il être centralisé au niveau de `components/ui/button.tsx` pour un comportement global ? Réponse argumentée : non — les sons diffèrent par bouton (`ui_click`/`ui_toggle`/`menu_open`/`menu_close`/aucun) et la grille de jeu n'utilise pas `<Button>`, un prop générique aurait threadé un identifiant partout avec risque de double son. Le vrai point commun identifié : les 3 modals passent toutes par le même composant `Dialog` (base-ui) dans `src/components/ui/dialog.tsx`, qui expose déjà `onOpenChange`.
+
+Trois fixes ciblés validés puis appliqués : (1) `dialog.tsx` — `onOpenChange` joue désormais `menu_open`/`menu_close` + haptique pour les 3 dialogs (Règles/Réglages/Bienvenue) d'un coup ; (2) `AmbientPlayer.tsx` — les 4 boutons du pill radio jouent chacun un son (`ui_click` précédent/suivant, `ui_toggle` lecture-pause/mute) ; (3) le bouton mute du pill radio appelle désormais `setAmbientEnabled()` (le store singleton `settings.ts`) au lieu de `toggleAmbientMute()` (accès direct à `<audio>.muted` dans `sounds.ts`), pour n'avoir plus qu'une seule source de vérité — `toggleAmbientMute()`, devenu mort, supprimé. `pnpm lint`/`pnpm build` verts. Vérification manuelle laissée à Baptiste (BDR-027 : agent-browser HS dans ce sandbox).
+
+**Entrées clés :**
+
+- [BDR-042](decisions/BDR-042.md) — son de dialog centralisé sur `onOpenChange`, pas de prop sur `Button`
+- [LRN-029](learnings/LRN-029.md) — store singleton existant contourné par un accès direct parallèle (mute radio vs toggle Réglages)
+
+---
+
+Refonte du dialog "Règles du jeu" en 4 rounds itératifs. Round 1 : remplacement de la liste verticale des 3 règles + `ScrollArea` par un carrousel (CSS natif `overflow-x-auto`/`snap-x`, pas de lib), demande initiale de Baptiste pour naviguer au swipe/flèches et voir "Comment jouer" sans scroller — implémenté en 4ème carte du carrousel. Round 2 : Baptiste a corrigé trois points — "Comment jouer" devait être une section fixe hors carrousel (pas une carte de plus, [LRN-032](learnings/LRN-032.md)), les flèches devaient flanquer la carte (pas être au-dessus, à côté des points), les points devaient passer sous la carte. Ajout au passage de `snap-always` pour empêcher un swipe rapide de sauter plusieurs cartes ([LRN-030](learnings/LRN-030.md)) — tout confirmé par capture d'écran. Round 3 : ajout d'un autoplay (4s, boucle), pause sur toute interaction manuelle, bouton play/pause + compteur `n/m` en bas à droite ([BDR-044](decisions/BDR-044.md)) — testé en conditions réelles (pause immédiate, relance au clic confirmées). Round 4 : ajout d'une reprise automatique après 6s d'inactivité (confirmé), tentative de drag souris desktop (code standard mousedown/mousemove/mouseup, mais vérification automatisée impossible — voir plus bas), et agrandissement des grilles de démo, d'abord trop généreux (`w-32`→`w-48`, jugé "trop grand" par Baptiste) puis corrigé à `w-36` ([LRN-033](learnings/LRN-033.md)).
+
+Tentative de vérifier le drag souris (et plus tôt le swipe tactile) via `agent-browser` : trois approches distinctes (mouse wheel, séquence mouse down/move/up, dispatch `MouseEvent` natif via `eval`) ont toutes échoué à déclencher le comportement attendu de façon fiable ([BLK-036](blockers/BLK-036.md)). Abandon après plusieurs tentatives, bascule sur relecture de code + demande de vérification manuelle à Baptiste. Point important au passage : `agent-browser` a par ailleurs fonctionné de façon fiable tout au long de cette session pour navigation/click/snapshot/screenshot/eval (3 rounds de test distincts) — ce qui contredit [BDR-027](decisions/BDR-027.md) ("agent-browser HS dans ce sandbox"), créé la veille sur la base d'un échec `open`/`doctor` isolé. BDR-027 marqué remplacé par [BDR-045](decisions/BDR-045.md), qui restreint le constat à la seule simulation de gestes.
+
+Sur validation de la mémoire, Baptiste a demandé "full local" — toutes les entrées de cette session (initialement proposées en mix local/global) sont restées en 🏠 local, y compris la correction d'agent-browser.
+
+**Entrées clés :**
+
+- [BDR-043](decisions/BDR-043.md) — carrousel de règles CSS natif, Comment jouer en section fixe
+- [BDR-044](decisions/BDR-044.md) — autoplay carrousel : pause sur interaction + reprise après 6s
+- [BDR-045](decisions/BDR-045.md) — agent-browser fonctionne dans ce sandbox, remplace BDR-027
+- [ZBLK-036](archive/blockers/ZBLK-036.md) — simulation drag/swipe/wheel headless échouée (résolu)
+
+---
+
+Session de polish mobile PWA sur trois signalements successifs de Baptiste : le tirer-pour-actualiser (pull-to-refresh) ne fonctionnait plus, le bouton "C'est parti" de `WelcomeDialog` n'avait pas la même hauteur que "Nouvelle partie"/"Rejouer", et le geste/bouton retour sur mobile devait fermer les dialogs (Welcome/Rules/Settings) plutôt que naviguer hors de l'app.
+
+Le bouton corrigé en une passe (`h-12` ajouté). Le pull-to-refresh a demandé deux diagnostics ratés avant la bonne cause : `overscroll-behavior: none` retiré en premier sans effet, puis affirmation trop confiante que `overflow:hidden` n'y était pour rien — Baptiste a explicitement demandé confirmation ("tu es certain ?"), qui a révélé l'erreur après recherche. Une analyse menée par Baptiste dans une autre conversation a fourni la vraie explication (confirmée par recherche croisée) : `overflow:hidden` posé sur `html`/`body` se propage au scroller racine du viewport — ce n'est pas un `overflow` local, ça tue le pull-to-refresh indépendamment d'`overscroll-behavior` ([BLK-037](blockers/BLK-037.md), généralisé en GLRN-246). Fix : le clip déplacé sur `#root` (ni `html` ni `body`), qui amende [BDR-041](decisions/BDR-041.md) sans toucher à la chaîne `height:100%` ([BDR-046](decisions/BDR-046.md)). Confirmé fonctionnel par Baptiste.
+
+Geste retour : implémenté de façon centralisée dans le `Dialog` partagé (`ui/dialog.tsx`) — une entrée d'historique factice poussée à l'ouverture, consommée via `popstate`/`actionsRef.close()` à la fermeture, `history.scrollRestoration = "manual"` réglé au démarrage ([BDR-048](decisions/BDR-048.md)). A immédiatement cassé `WelcomeDialog` (apparaît puis disparaît) — diagnostic : React StrictMode rejoue l'effet une fois au montage, et le `history.back()` posé dans le cleanup se résolvait de façon asynchrone sur l'écouteur du second montage, refermant le dialog aussitôt ouvert (uniquement en dev, jamais en prod) ; corrigé en gardant le push par une ref plutôt que par le timing du cleanup (généralisé en GLRN-248).
+
+Baptiste a ensuite demandé de bloquer le pincer-zoomer. Discussion sur `user-scalable=no` (rejeté, casse WCAG 1.4.4) vs `touch-action` — fix : `touch-action: pan-x pan-y` sur `html`, qui bloque le pincer-zoomer sans casser le panoramique/pull-to-refresh, contrairement à `manipulation` qui l'autorise encore ([BDR-047](decisions/BDR-047.md), généralisé en GLRN-247). Confirmé fonctionnel sur Android Chrome.
+
+Nouveau bug signalé juste après (tout sauf `WelcomeDialog`) : l'app apparaissait zoomée à la fermeture de `RulesDialog`/`SettingsDialog`. Première hypothèse fausse : restauration de scroll/zoom liée au nouveau `history.back()` — écartée par Baptiste qui a confirmé que ça touchait TOUTES les fermetures (croix, clic dehors, retour), pas seulement le retour, et épargnait `WelcomeDialog` qui utilise pourtant le même mécanisme d'historique. Vraie cause, trouvée par recherche après avoir posé les bonnes questions de diagnostic : Base UI ramène le focus sur le bouton déclencheur à la fermeture — `WelcomeDialog` n'a pas de déclencheur (ouverture automatique), Rules/Settings en ont un — et un focus programmatique après interaction tactile déclenche un zoom natif connu d'Android Chrome ([BLK-038](blockers/BLK-038.md), généralisé en GLRN-249). Fix : `finalFocus` désactivé uniquement pour une fermeture tactile, focus clavier préservé pour l'a11y ([BDR-049](decisions/BDR-049.md)). Confirmé fonctionnel par Baptiste.
+
+Dernière demande de la session : le carrousel de règles devait boucler en continuité visuelle réelle (pas un jump numérique au bout). Réécriture avec la technique standard des clones de slides (clone de la dernière avant la 1ère, clone de la 1ère après la dernière) — le scroll natif continue dans le même sens, un repositionnement instantané et invisible se fait au settle sur le clone ([BDR-050](decisions/BDR-050.md), [LRN-038](learnings/LRN-038.md)). `pnpm lint`/`pnpm build` vérifiés verts après chaque fix de la session.
+
+Rituel `/memory-close` : `BLK-036` de la session précédente archivé vers [ZBLK-036](archive/blockers/ZBLK-036.md) en étape 1bis. Sur validation explicite de Baptiste, les 4 learnings génériques de cette session promus en mémoire globale (GLRN-246 à 249, sans doublon local) ; seule la technique de carrousel (spécifique à ce composant) reste locale (`LRN-038`).
+
+**Entrées clés :**
+
+- [BDR-046](decisions/BDR-046.md) — pull-to-refresh restauré, verrou déplacé sur `#root`
+- [BDR-047](decisions/BDR-047.md) — pincer-zoomer bloqué via `touch-action`
+- [BDR-048](decisions/BDR-048.md) — geste/bouton retour ferme les dialogs
+- [BDR-049](decisions/BDR-049.md) — `finalFocus` désactivé en fermeture tactile
+- [BDR-050](decisions/BDR-050.md) — carrousel de règles en boucle infinie via clones
+- [BLK-037](blockers/BLK-037.md) — pull-to-refresh cassé, 2 diagnostics erronés (résolu)
+- [BLK-038](blockers/BLK-038.md) — zoom parasite à la fermeture d'un modal (résolu)
