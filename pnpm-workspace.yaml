@@ -2,6 +2,31 @@ onlyBuiltDependencies:
   - sharp
   - ffmpeg-static
 
+# Quarantaine 7j (en minutes) : refuse toute version publiée trop récemment,
+# fenêtre pendant laquelle un paquet compromis est habituellement détecté.
+# ⚠️ Contrepartie : un correctif de CVE publié cette semaine est refusé lui
+# aussi, silencieusement (l'install réussit sur l'ancienne version vulnérable).
+# Échappatoire en cas de patch urgent → ajouter le paquet ci-dessous, ou
+# installer une fois avec `pnpm install --minimum-release-age 0`.
+minimumReleaseAge: 10080
 minimumReleaseAgeExclude:
   - lightningcss*
   - "@tailwindcss/oxide*"
+
+# Refuse une version dont la preuve de publication est plus faible que celle
+# d'une version antérieure (typiquement un hotfix publié à la main hors CI).
+#
+# ⚠️ Vérifié le 2026-07-25 sur cet arbre de dépendances :
+#   • `pnpm install --frozen-lockfile` (= CI/Vercel) passe : le contrôle ne
+#     s'applique pas à un lockfile déjà résolu → aucun risque pour les deploys.
+#   • `pnpm add` / `pnpm update` échoue en revanche sur le sous-arbre
+#     workbox-build → @babel/preset-env, qui contient des paquets antérieurs
+#     aux provenance attestations (@trickfilm400/rollup-plugin-off-main-thread,
+#     semver@6.3.1, …). Ce sont des faux positifs : ces versions sont déjà dans
+#     le lockfile et déjà embarquées dans les builds.
+#
+# Échappatoire (préférée, ponctuelle, ne troue pas la politique) :
+#   pnpm add <paquet> --trust-policy=none
+# Exclusion permanente possible via `trustPolicyExclude:` — à éviter, chaque
+# entrée exempte le paquet pour de bon.
+trustPolicy: no-downgrade

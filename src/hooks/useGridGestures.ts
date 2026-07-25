@@ -191,6 +191,13 @@ export const useGridGestures = ({
     // Case déjà tentée (correcte ou fautive) : figée, ou partie terminée :
     // aucune action possible — pas la peine de lancer l'appui long ni son cercle.
     if (disabled || hasPawn) return;
+    // Un second doigt écrasait `longPressTimeout` sans annuler le timer déjà
+    // armé : les deux finissaient par appeler onTogglePaw, d'où deux togglePaw
+    // concurrents avant le moindre re-render (cf. BLK-011). Tout l'état de
+    // geste ci-dessous est déjà mono-pointeur (refs uniques) — on annule donc
+    // le geste en cours pour de vrai avant d'en armer un nouveau.
+    clearLongPress();
+    setPressingCell(null);
     pressStart.current = { row, col };
     pressOrigin.current = { x: event.clientX, y: event.clientY };
     if (help) dragStart.current = { row, col };

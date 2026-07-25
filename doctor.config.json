@@ -1,0 +1,22 @@
+{
+  "$schema": "https://react.doctor/schema/config.json",
+  "ignore": {
+    "overrides": [
+      {
+        "files": ["src/components/Nav.tsx"],
+        "rules": ["react-doctor/no-layout-property-animation"]
+      },
+      {
+        "files": ["src/components/ConfettiBurst.tsx"],
+        "rules": ["react-doctor/no-array-index-as-key"]
+      },
+      {
+        "files": ["src/components/ui/**"],
+        "rules": ["react-doctor/only-export-components"]
+      }
+    ]
+  },
+  "rules": {
+    "react-doctor/client-localstorage-no-version": "off"
+  }
+}
