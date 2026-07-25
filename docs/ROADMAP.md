@@ -47,13 +47,15 @@ Scope figé par le brief (4.0) : **grille carrée classique uniquement**, aucune
 
 ### Phase 4.0 — Game feel : animation, son, haptique
 
-- [ ] Micro-animations : pose de pion, erreur (shake/flash), victoire de niveau
-- [ ] Sound design : feedback sonore pose/erreur/victoire + toggle mute (persistant, `localStorage`)
-- [ ] Curseur de réglage du volume des sons (actuellement gain global fixe à 0.5 dans `src/lib/sounds.ts`)
-- [ ] Retour haptique mobile : vibration courte sur pose/erreur (`web-haptics`, déjà utilisé sur d'autres projets — 4 presets, no-op silencieux hors mobile, cf. mémoire globale)
-- [ ] Menu dédié "Son / Vibration" : regrouper mute ambiance + curseur volume (ambiance + SFX) + réglages haptique. Remplace une tentative de popover volume au survol du mini-player `AmbientPlayer` (retirée — Base UI Popover en hover+clic combinés trop capricieux pour un simple réglage)
+- [x] Micro-animations : pose de pion, secousse de grille sur erreur, confettis à la victoire — Motion centralisé (`LazyMotion` + tokens, BDR-012)
+- [x] Sound design : feedback sonore pose/erreur/victoire + mute persistant (`localStorage`) — Web Audio API pour les SFX, `<audio loop>` natif pour l'ambiance (BDR-016, BDR-017)
+- [x] ~~Curseur de réglage du volume des sons~~ — abandonné, mix déjà calibré, exposer un curseur risquait de dégrader l'expérience (BDR-026)
+- [x] Retour haptique mobile : vibration courte sur pose/erreur/victoire (`web-haptics`, singleton `src/lib/haptics.ts`, BDR-013)
+- [x] Panneau "Réglages" (Dialog) : vibrations/sons/ambiance en toggles + aide au marquage (BDR-025). Remplace une tentative de popover volume au survol du mini-player `AmbientPlayer` (retirée — Base UI Popover en hover+clic combinés trop capricieux pour un simple réglage, BDR-021)
+- [x] Panneau "Règles du jeu" (Dialog) : 3 règles illustrées + section "Comment jouer ?" (BDR-025, BDR-029)
+- [x] Ouvrir `HowToPlayDialog` automatiquement au tout premier lancement (`localStorage: pawzzle:seenIntro`, une seule fois)
 
-**Sortie** : les 3 règles de base (Phase 1-2) ont un feedback sensoriel complet. Fait avant 4.1 pour que le prochain test interne juge le gameplay différenciant sur une base déjà "finie" en sensations, pas sur un prototype nu.
+**Sortie** : les 3 règles de base (Phase 1-2) ont un feedback sensoriel complet.
 
 ### Phase 4.1 — Mécaniques différenciantes (brief 4.1)
 
@@ -83,4 +85,4 @@ Scope figé par le brief (4.0) : **grille carrée classique uniquement**, aucune
 
 ---
 
-**Prochaine étape immédiate** : Phase 4.0 (game feel) après merge.
+**Prochaine étape immédiate** : Phase 4.0 close — passer à la Phase 4.1.

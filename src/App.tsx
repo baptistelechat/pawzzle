@@ -2,6 +2,8 @@ import { AmbientPlayer } from "@/components/AmbientPlayer";
 import { ConfettiBurst } from "@/components/ConfettiBurst";
 import { CELL_STAGGER_MS, CELL_TRANSITION_MS, Grid } from "@/components/Grid";
 import { HeartsRow } from "@/components/HeartsRow";
+import { WelcomeDialog } from "@/components/WelcomeDialog";
+import { InstallButton } from "@/components/InstallButton";
 import { PawCounter } from "@/components/PawCounter";
 import { RulesDialog } from "@/components/RulesDialog";
 import { SettingsDialog } from "@/components/SettingsDialog";
@@ -11,9 +13,11 @@ import { haptics } from "@/lib/haptics";
 import { EASE_OUT, SPRING_BOUNCE } from "@/lib/motion";
 import { sounds } from "@/lib/sounds";
 import { cn } from "@/lib/utils";
-import { Loader2, PawPrint, RotateCcw, X } from "lucide-react";
+import { Loader2, PawPrint, RotateCcw, Trash2 } from "lucide-react";
 import { AnimatePresence, m, useReducedMotion } from "motion/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+
+const SEEN_INTRO_KEY = "pawzzle:seenIntro";
 
 function App() {
   const {
@@ -32,6 +36,9 @@ function App() {
     newLevel,
   } = useLevel();
   const reduceMotion = useReducedMotion();
+  const [showIntro, setShowIntro] = useState(
+    () => !localStorage.getItem(SEEN_INTRO_KEY),
+  );
 
   // Joue `new_game` une fois la grille complètement apparue (dernière case =
   // delay max + durée de sa transition), pas au moment de la demande. Pas sur
@@ -52,6 +59,27 @@ function App() {
 
   return (
     <div className="flex min-h-dvh flex-col">
+      {import.meta.env.DEV && (
+        <Button
+          variant="destructive"
+          size="icon-sm"
+          aria-label="Vider le localStorage (dev)"
+          className="fixed top-2 right-2 z-50"
+          onClick={() => {
+            localStorage.clear();
+            window.location.reload();
+          }}
+        >
+          <Trash2 />
+        </Button>
+      )}
+      <WelcomeDialog
+        open={showIntro}
+        onOpenChange={(open) => {
+          setShowIntro(open);
+          if (!open) localStorage.setItem(SEEN_INTRO_KEY, "1");
+        }}
+      />
       <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col p-4">
         <div className="flex flex-1 flex-col items-center justify-center gap-4">
           <div className="flex items-center justify-center gap-4">
@@ -59,12 +87,6 @@ function App() {
               <img src="/icon.svg" alt="" className="size-10 rounded-lg" />
               <h1 className="text-5xl font-bold">Pawzzle</h1>
             </div>
-            {level && (
-              <div className="flex gap-1">
-                <SettingsDialog help={help} onHelpChange={setHelp} />
-                <RulesDialog />
-              </div>
-            )}
           </div>
 
           <AnimatePresence mode="wait" initial={false}>
@@ -164,9 +186,14 @@ function App() {
                     />
                   </AnimatePresence>
                 </div>
-                <div className="w-full max-w-md">
+                <div className="flex w-full max-w-md items-center gap-2">
+                  <SettingsDialog
+                    help={help}
+                    onHelpChange={setHelp}
+                    size="icon-xl"
+                  />
                   <Button
-                    className="h-12 w-full text-base"
+                    className="h-12 flex-1 text-base"
                     onClick={() => {
                       haptics.cancel();
                       haptics.trigger("light");
@@ -180,27 +207,13 @@ function App() {
                     )}
                     {status === "playing" ? "Nouvelle partie" : "Rejouer"}
                   </Button>
+                  <RulesDialog size="icon-xl" />
+                  <InstallButton size="icon-xl" />
                 </div>
               </m.div>
             )}
           </AnimatePresence>
         </div>
-        {level && status !== "loading" && (
-          <div className="mx-auto mt-4 flex w-full max-w-md flex-col gap-2 text-left text-xs text-muted-foreground">
-            <div className="flex items-center gap-2">
-              <span className="flex size-6 shrink-0 items-center justify-center rounded-[28%] bg-muted [corner-shape:squircle]">
-                <X className="size-3.5 text-foreground/60" />
-              </span>
-              Appui court : marquer une case d'une croix.
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="flex size-6 shrink-0 items-center justify-center rounded-[28%] bg-muted [corner-shape:squircle]">
-                <PawPrint className="size-3.5 text-foreground" />
-              </span>
-              Appui long : poser un chat.
-            </div>
-          </div>
-        )}
       </main>
       {/* min-h réservée à la hauteur du pill : évite que son apparition/
       disparition (AnimatePresence) ne pousse le contenu de <main> en changeant

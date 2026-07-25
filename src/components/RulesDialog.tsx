@@ -7,6 +7,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Separator } from "@/components/ui/separator";
+import { TapInstructions } from "@/components/TapInstructions";
 import { REGION_COLORS } from "@/lib/regionColors";
 import { cn } from "@/lib/utils";
 import { BookOpen, PawPrint, X } from "lucide-react";
@@ -21,7 +23,7 @@ interface RuleCell {
 const RULES: { title: string; description: string; cells: RuleCell[] }[] = [
   {
     title: "Un chat par couleur",
-    description: "Chaque région colorée n'accueille qu'un seul chat.",
+    description: "Un quartier coloré n'accueille qu'un seul chat.",
     cells: [
       { region: 0, mark: "cross" }, // A1
       { region: 0, mark: "cross" }, // A2
@@ -56,12 +58,12 @@ const RULES: { title: string; description: string; cells: RuleCell[] }[] = [
       { region: 0, mark: "cross" }, // A1
       { region: 0, mark: "cross" }, // A2
       { region: 0, mark: "cross" }, // A3
-      { region: 0, mark: "cross" }, // B1
+      { region: 1, mark: "cross" }, // B1
       { region: 3, mark: "paw" }, // B2
-      { region: 0, mark: "cross" }, // B3
-      { region: 0, mark: "cross" }, // C1
-      { region: 0, mark: "cross" }, // C2
-      { region: 0, mark: "cross" }, // C3
+      { region: 2, mark: "cross" }, // B3
+      { region: 1, mark: "cross" }, // C1
+      { region: 1, mark: "cross" }, // C2
+      { region: 1, mark: "cross" }, // C3
     ],
   },
 ];
@@ -90,11 +92,21 @@ const RuleGrid = ({ cells }: { cells: RuleCell[] }) => (
   </div>
 );
 
-export const RulesDialog = () => (
+interface RulesDialogProps {
+  size?: "icon" | "icon-lg" | "icon-xl";
+  className?: string;
+}
+
+export const RulesDialog = ({ size = "icon", className }: RulesDialogProps) => (
   <Dialog>
     <DialogTrigger
       render={
-        <Button variant="outline" size="icon" aria-label="Règles du jeu">
+        <Button
+          variant="outline"
+          size={size}
+          className={className}
+          aria-label="Règles du jeu"
+        >
           <BookOpen />
         </Button>
       }
@@ -106,8 +118,16 @@ export const RulesDialog = () => (
           Règles du jeu
         </DialogTitle>
         <DialogDescription>
-          Les 3 règles à respecter pour valider une grille.
+          Dans ce village, chaque chat a son quartier préféré et déteste avoir
+          un voisin trop collé. Aide chacun à trouver sa place, sans jamais
+          croiser la moustache d'un autre :<br />
+          <span className="font-semibold text-primary">
+            Un chat par couleur, par ligne, par colonne.
+            <br />
+            Zéro contact, même du bout de la patte.
+          </span>
         </DialogDescription>
+        <Separator className="mt-2" />
       </DialogHeader>
       <div className="min-h-0 flex-1 overflow-y-auto">
         <div className="flex flex-col gap-6 pr-1">
@@ -122,6 +142,10 @@ export const RulesDialog = () => (
               <RuleGrid cells={rule.cells} />
             </section>
           ))}
+          <section className="flex flex-col gap-3 border-t border-border pt-6">
+            <h3 className="text-sm font-semibold">Comment jouer ?</h3>
+            <TapInstructions />
+          </section>
         </div>
       </div>
     </DialogContent>

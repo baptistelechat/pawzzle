@@ -54,7 +54,7 @@ const IconToggle = ({
       }}
       className={cn(!active && "text-muted-foreground")}
     >
-      <Icon />
+      <Icon className="size-6" />
     </Button>
     <span className="text-xs text-muted-foreground">{label}</span>
   </div>
@@ -63,16 +63,28 @@ const IconToggle = ({
 interface SettingsDialogProps {
   help: boolean;
   onHelpChange: (value: boolean) => void;
+  size?: "icon" | "icon-lg" | "icon-xl";
+  className?: string;
 }
 
-export const SettingsDialog = ({ help, onHelpChange }: SettingsDialogProps) => {
+export const SettingsDialog = ({
+  help,
+  onHelpChange,
+  size = "icon",
+  className,
+}: SettingsDialogProps) => {
   const settings = useSettings();
 
   return (
     <Dialog>
       <DialogTrigger
         render={
-          <Button variant="outline" size="icon" aria-label="Réglages">
+          <Button
+            variant="outline"
+            size={size}
+            className={className}
+            aria-label="Réglages"
+          >
             <Settings />
           </Button>
         }
