@@ -294,3 +294,52 @@ Rituel `/memory-close` : 2 blockers résolus de la session précédente ([BLK-00
 - [BDR-027](decisions/BDR-027.md) — pas de vérif navigateur auto sur ce projet
 - [LRN-020](learnings/LRN-020.md) — `justify-center` : poids du contenu voisin décale un enfant
 - [BLK-008](blockers/BLK-008.md) — titre qui saute au clic sur "Nouvelle partie" (ouvert)
+
+---
+
+Suite à un retour de Baptiste sur le placement des boutons Réglages/Règles ("pas convaincu"), déplacement du header vers une rangée flanquant le bouton "Nouvelle partie"/"Rejouer" (`size="icon-xl"`), avec correction de la taille des icônes (`size-5` explicite) pour matcher les icônes du bouton d'action — le variant `icon-xl` ne les agrandissait à `size-6` que faute de classe `size-*` propre ([BDR-028](decisions/BDR-028.md), [LRN-022](learnings/LRN-022.md)).
+
+Sur la même session, extraction du bloc d'instructions tactiles ("Appui court : marquer une croix" / "Appui long : poser un chat") en composant partagé `TapInstructions`, retiré de l'affichage permanent sous la grille pour gagner de l'espace, dupliqué dans une nouvelle section de `RulesDialog` ("Comment jouer ?") et préparé dans une modal dédiée `HowToPlayDialog` — créée mais pas encore ouverte automatiquement, le déclenchement au premier lancement étant noté dans `docs/ROADMAP.md` (Phase 4.0) pour plus tard ([BDR-029](decisions/BDR-029.md)). `pnpm lint` vérifié vert après chaque changement.
+
+Rituel `/memory-close` : sur confirmation explicite de Baptiste ("full local"), LRN-022 gardé en 🏠 local plutôt que promu en `GLRN-` — cohérent avec la préférence "full local" déjà actée sur ce projet.
+
+**Entrées clés :**
+
+- [BDR-028](decisions/BDR-028.md) — boutons Réglages/Règles flanquant l'action principale
+- [BDR-029](decisions/BDR-029.md) — instructions tactiles extraites en modal (non branchée)
+- [LRN-022](learnings/LRN-022.md) — variant CVA n'écrase la taille d'icône que sans classe size-\* propre
+
+---
+
+Branchement du dernier point ouvert de la Phase 4.0 : ouverture automatique de la modal (renommée `HowToPlayDialog`) au tout premier lancement, via un flag `localStorage` (`pawzzle:seenIntro`) lu en initialisation paresseuse de `useState`, posé à la fermeture — `docs/ROADMAP.md` Phase 4.0 entièrement cochée. Ajout au passage d'un bouton dev-only (`import.meta.env.DEV`) pour vider `localStorage` et recharger la page, utile pour retester l'onboarding sans ouvrir les devtools.
+
+Baptiste a ensuite demandé de transformer cette modal "comment jouer" en une vraie page de bienvenue avec du lore, pas seulement les gestes. Renommée `WelcomeDialog`, un premier texte de lore a été écrit autour du thème "Atelier Feutrine" (chats en feutrine épinglés sur un patchwork) — rejeté par Baptiste car ça obligerait à refaire le design de l'app dans un registre couture pour rester cohérent visuellement. Sur sa demande, 5 directions de lore alternatives (sans thème couture) ont été rédigées dans un fichier dédié `docs/welcome-lore-proposals.md` pour comparaison facile plutôt qu'en aller-retours de chat. Baptiste a choisi un mix de deux directions ("village de chats" + "territoire/loi du voisin"), en demandant explicitement de ne jamais chiffrer le nombre de chats/couleurs dans le texte — la taille et la forme du plateau vont évoluer en Phase 4.1, un texte figé sur un compte précis se périmerait ([BDR-030](decisions/BDR-030.md)). Le texte final a ensuite été retravaillé par Baptiste lui-même (mise en emphase `font-semibold text-primary` du rappel des 3 règles), puis dupliqué tel quel dans `RulesDialog` (même pattern que [BDR-029](decisions/BDR-029.md)), avec un `Separator` shadcn ajouté après la description pour séparer visuellement le lore des règles détaillées.
+
+Un défaut de focus a été signalé sur le bouton "C'est parti !" de `WelcomeDialog` : Base UI `Dialog` déplace automatiquement le focus vers le premier élément focusable à l'ouverture, ce qui affichait un anneau `focus-visible` même sans navigation clavier — fixé avec `initialFocus={false}` sur `DialogContent` ([LRN-023](learnings/LRN-023.md)). `pnpm lint`/`tsc -b`/`vite build` vérifiés verts à chaque étape (le hook `rtk` continue de casser sur un fichier non lié à la session, `useInstallPrompt.ts`, non touché et non commité — signalé à Baptiste sans y toucher).
+
+Rituel `/memory-close` : sur "ok" sans réponse explicite à la question de portée, LRN-023 gardé en 🏠 local d'emblée (préférence "full local" déjà confirmée 3 fois sur ce projet cette semaine), sans re-proposer le choix.
+
+**Entrées clés :**
+
+- [BDR-030](decisions/BDR-030.md) — lore de bienvenue sans thème feutrine ni compte fixe
+- [LRN-023](learnings/LRN-023.md) — Base UI Dialog autofocus le premier élément focusable
+
+---
+
+Session portant sur le bouton d'installation PWA in-app, repris du pattern déjà validé sur ifecho (`useInstallPrompt` + `InstallButton`, GLRN-136) : hook + composant créés, stylés avec le `Button` shadcn existant (variant `outline`) pour matcher `RulesDialog`/`SettingsDialog`, intégré dans la rangée d'action sous la grille.
+
+Long diagnostic suite au signalement de Baptiste : aucun bouton visible sur Chrome/Edge desktop sans override d'user-agent. Plusieurs tours ont été nécessaires rien que pour localiser le panneau DevTools pertinent (masqué dans les menus, renommé "Appli" en français sur Edge plutôt qu'"Application"). Une fois trouvé : manifest valide, service worker activé, et l'icône native d'install présente dans la barre d'adresse — ce qui a d'abord semblé confirmer que tout fonctionnait côté navigateur. La vraie cause, découverte en creusant plus loin : cette icône native est gérée par le navigateur indépendamment du JS, sa présence ne prouve pas que `beforeinstallprompt` a été capté côté React — le `useEffect` du hook posait son listener après le montage, trop tard si l'event avait déjà été émis (race condition). Fix : capture de l'event au plus tôt via un `<script>` inline dans `index.html`, stockée sur `window.__deferredInstallPrompt`, relue en `useState` lazy initializer au montage du hook ([BLK-009](blockers/BLK-009.md)). Pattern suffisamment générique pour enrichir l'entrée globale existante plutôt que d'en créer une nouvelle en doublon (GLRN-136, sur confirmation explicite de Baptiste pour la portée globale).
+
+Deux allers-retours de polish visuel ont suivi. D'abord une incohérence de taille d'icône entre `InstallButton` et ses voisins (`RulesDialog`/`SettingsDialog`) — récidive du pattern déjà documenté le jour même ([LRN-022](learnings/LRN-022.md)), corrigée en un premier temps par un `size-5` explicite sur les icônes. Puis, sur demande explicite de Baptiste, refactor pour centraliser cette taille directement dans `button.tsx` (variants `icon`/`icon-xl`) plutôt que de la dupliquer par composant consommateur — remplace l'approche de [BDR-028](decisions/BDR-028.md) (statut mis à jour en `remplacé`), avec `IconToggle` de `SettingsDialog` explicitement fixé à `size-6` pour préserver son apparence antérieure ([BDR-031](decisions/BDR-031.md)).
+
+Enfin, question de Baptiste sur le message d'instructions iOS ("Dans Safari...") : clarifié que le flux "Partager → Sur l'écran d'accueil" est un comportement plateforme WebKit partagé par tous les navigateurs iOS (Chrome iOS, Firefox iOS inclus), pas propre à Safari — texte généralisé, mention "Dans Safari" retirée. Un dernier signalement (icône du bouton iOS toujours différente en taille) reste non confirmé à la fermeture de session — le code semble correct (résolution `twMerge` identique pour toutes les icônes), cause la plus probable : cache du service worker PWA servant encore l'ancien bundle, contournement indiqué à Baptiste sans confirmation retour ([BLK-010](blockers/BLK-010.md), ouvert).
+
+`pnpm lint`/`pnpm build` vérifiés verts après chaque changement de code.
+
+Rituel `/memory-close` : sur confirmation explicite de Baptiste, les deux patterns génériques de cette session (race condition `beforeinstallprompt`, flux iOS non-Safari-spécifique) ont été promus en portée globale — mais fusionnés dans l'entrée GLRN-136 déjà existante (créée lors de la session ifecho d'origine) plutôt que dupliqués en nouvelles entrées, la même hook/pattern étant concerné.
+
+**Entrées clés :**
+
+- [BLK-009](blockers/BLK-009.md) — bouton d'installation invisible, race condition `beforeinstallprompt` (résolu)
+- [BDR-031](decisions/BDR-031.md) — taille d'icône `size-5` centralisée dans `button.tsx`
+- [BLK-010](blockers/BLK-010.md) — icône du bouton iOS toujours signalée différente, cache SW suspecté (ouvert)
