@@ -40,6 +40,14 @@ function App() {
     () => !localStorage.getItem(SEEN_INTRO_KEY),
   );
 
+  // Une régénération repasse `status` à "loading" alors que `level` reste en
+  // mémoire : l'affichage continue de montrer la partie en cours plutôt que de
+  // basculer sur le spinner. Démonter tout le bloc (statut+grille+boutons) le
+  // temps du worker faisait se recentrer le parent `justify-center`, d'où le
+  // titre qui sautait (BLK-008). `status` brut reste la source pour `disabled`,
+  // qui doit bien bloquer la grille pendant la génération.
+  const displayStatus = status === "loading" ? "playing" : status;
+
   // Joue `new_game` une fois la grille complètement apparue (dernière case =
   // delay max + durée de sa transition), pas au moment de la demande. Pas sur
   // le tout premier niveau (levelId === 1, auto-généré au montage sans geste
@@ -90,7 +98,7 @@ function App() {
           </div>
 
           <AnimatePresence mode="wait" initial={false}>
-            {status === "loading" || !level ? (
+            {!level ? (
               <m.div
                 key="loading"
                 initial={{ opacity: 0 }}
@@ -114,25 +122,25 @@ function App() {
                   <div
                     className={cn(
                       "text-sm font-medium",
-                      status === "won" && "text-primary",
-                      status === "lost" && "text-destructive",
-                      status === "playing" && "text-muted-foreground",
+                      displayStatus === "won" && "text-primary",
+                      displayStatus === "lost" && "text-destructive",
+                      displayStatus === "playing" && "text-muted-foreground",
                     )}
                   >
                     <AnimatePresence mode="popLayout" initial={false}>
                       <m.span
-                        key={status}
+                        key={displayStatus}
                         initial={
                           reduceMotion
                             ? { opacity: 0 }
-                            : status === "won"
+                            : displayStatus === "won"
                               ? { opacity: 0, scale: 0.9 }
                               : { opacity: 0, y: 4 }
                         }
                         animate={
                           reduceMotion
                             ? { opacity: 1 }
-                            : status === "won"
+                            : displayStatus === "won"
                               ? { opacity: 1, scale: 1 }
                               : { opacity: 1, y: 0 }
                         }
@@ -140,15 +148,15 @@ function App() {
                           reduceMotion ? { opacity: 0 } : { opacity: 0, y: -4 }
                         }
                         transition={
-                          status === "won" && !reduceMotion
+                          displayStatus === "won" && !reduceMotion
                             ? SPRING_BOUNCE
                             : { duration: 0.25, ease: EASE_OUT }
                         }
                         style={{ display: "inline-block" }}
                       >
-                        {status === "won" ? (
+                        {displayStatus === "won" ? (
                           "Niveau réussi !"
-                        ) : status === "lost" ? (
+                        ) : displayStatus === "lost" ? (
                           "Niveau échoué"
                         ) : (
                           <div className="flex items-center gap-3">
@@ -200,12 +208,14 @@ function App() {
                       newLevel();
                     }}
                   >
-                    {status === "playing" ? (
+                    {displayStatus === "playing" ? (
                       <PawPrint className="size-5" />
                     ) : (
                       <RotateCcw className="size-5" />
                     )}
-                    {status === "playing" ? "Nouvelle partie" : "Rejouer"}
+                    {displayStatus === "playing"
+                      ? "Nouvelle partie"
+                      : "Rejouer"}
                   </Button>
                   <RulesDialog size="icon-xl" />
                   <InstallButton size="icon-xl" />
