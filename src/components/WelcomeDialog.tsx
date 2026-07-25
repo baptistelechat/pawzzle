@@ -26,8 +26,9 @@ export const WelcomeDialog = ({ open, onOpenChange }: WelcomeDialogProps) => (
           un voisin trop collé. Aide chacun à trouver sa place, sans jamais
           croiser la moustache d'un autre :<br />
           <span className="font-semibold text-primary">
-            Un chat par couleur, par ligne, par colonne.<br/>
-          Zéro contact, même du bout de la patte.
+            Un chat par couleur, par ligne, par colonne.
+            <br />
+            Zéro contact, même du bout de la patte.
           </span>
         </DialogDescription>
       </DialogHeader>
@@ -36,7 +37,7 @@ export const WelcomeDialog = ({ open, onOpenChange }: WelcomeDialogProps) => (
         <TapInstructions />
       </div>
       <DialogFooter>
-        <Button className="w-full" onClick={() => onOpenChange(false)}>
+        <Button className="h-12 w-full" onClick={() => onOpenChange(false)}>
           <PawPrint className="size-4" />
           C'est parti !
         </Button>

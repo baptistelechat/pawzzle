@@ -7,15 +7,58 @@ import { haptics } from "@/lib/haptics";
 import { sounds } from "@/lib/sounds";
 import { XIcon } from "lucide-react";
 
-function Dialog({ onOpenChange, ...props }: DialogPrimitive.Root.Props) {
+function Dialog({
+  open: openProp,
+  onOpenChange,
+  ...props
+}: DialogPrimitive.Root.Props) {
+  const [openState, setOpenState] = React.useState(openProp ?? false);
+  const open = openProp ?? openState;
+  const actionsRef = React.useRef<DialogPrimitive.Root.Actions>(null);
+  const pushedRef = React.useRef(false);
+  const closingViaBackRef = React.useRef(false);
+
+  React.useEffect(() => {
+    // Sur mobile, le geste/bouton retour doit fermer le dialog plutôt que
+    // quitter l'app : une entrée d'historique factice est poussée à
+    // l'ouverture, consommée silencieusement à la fermeture — sauf si
+    // c'est justement ce retour qui vient de la déclencher. Le `pushState`
+    // ne dépend que de `pushedRef` (pas de la fonction de nettoyage) : en
+    // StrictMode, React rejoue effet+cleanup une fois au montage, et un
+    // `history.back()` posé dans le cleanup se résout de façon asynchrone —
+    // le `popstate` qui en résulte arrivait alors sur l'écouteur du second
+    // montage et refermait le dialog aussitôt ouvert.
+    if (open) {
+      if (!pushedRef.current) {
+        history.pushState({ pawzzleDialog: true }, "");
+        pushedRef.current = true;
+      }
+      const handlePopState = () => {
+        closingViaBackRef.current = true;
+        actionsRef.current?.close();
+      };
+      window.addEventListener("popstate", handlePopState);
+      return () => window.removeEventListener("popstate", handlePopState);
+    }
+    if (pushedRef.current) {
+      pushedRef.current = false;
+      if (!closingViaBackRef.current) history.back();
+      closingViaBackRef.current = false;
+    }
+    return undefined;
+  }, [open]);
+
   return (
     <DialogPrimitive.Root
       data-slot="dialog"
-      onOpenChange={(open, eventDetails) => {
+      open={open}
+      actionsRef={actionsRef}
+      onOpenChange={(next, eventDetails) => {
         haptics.cancel();
         haptics.trigger("selection");
-        sounds.play(open ? "menu_open" : "menu_close");
-        onOpenChange?.(open, eventDetails);
+        sounds.play(next ? "menu_open" : "menu_close");
+        setOpenState(next);
+        onOpenChange?.(next, eventDetails);
       }}
       {...props}
     />
@@ -54,6 +97,12 @@ function DialogContent({
   className,
   children,
   showCloseButton = true,
+  // Base UI ramène le focus sur le déclencheur à la fermeture (comportement
+  // par défaut, nécessaire au clavier) — mais reposer le focus sur un petit
+  // bouton juste après une interaction tactile fait zoomer Chrome Android
+  // dessus (bug connu : https://github.com/ckeditor/ckeditor5/issues/1070).
+  // On ne désactive donc ce retour de focus qu'au tactile.
+  finalFocus = (closeType) => closeType !== "touch",
   ...props
 }: DialogPrimitive.Popup.Props & {
   showCloseButton?: boolean;
@@ -67,6 +116,7 @@ function DialogContent({
           "fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-4 rounded-xl bg-popover p-4 text-sm text-popover-foreground ring-1 ring-foreground/10 duration-100 outline-none sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
           className,
         )}
+        finalFocus={finalFocus}
         {...props}
       >
         {children}
