@@ -227,8 +227,13 @@ function App() {
       </main>
       {/* min-h réservée à la hauteur du pill : évite que son apparition/
       disparition (AnimatePresence) ne pousse le contenu de <main> en changeant
-      la hauteur disponible pour son justify-center. */}
-      <footer className="flex min-h-20 items-center justify-center p-4">
+      la hauteur disponible pour son justify-center.
+      `sticky` : sur mobile le contenu dépasse de peu la hauteur visible (barre
+      d'URL déployée), le footer passait alors sous la ligne de flottaison et la
+      pill semblait absente — elle ne réapparaissait qu'après une rotation, qui
+      replie la barre. Épinglé en bas du viewport, le lecteur reste visible quelle
+      que soit la hauteur du contenu. */}
+      <footer className="sticky bottom-0 z-10 flex min-h-20 items-center justify-center p-4">
         <AmbientPlayer />
       </footer>
     </div>

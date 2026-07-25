@@ -9,7 +9,7 @@
     "build": "tsc -b && vite build",
     "build:analyze": "tsc -b && vite build --mode analyze",
     "lint": "eslint .",
-    "preview": "vite preview",
+    "preview": "vite preview --host",
     "test": "vitest run",
     "generate-pwa-assets": "pwa-assets-generator",
     "sounds:normalize": "node scripts/normalize-sounds.mjs"

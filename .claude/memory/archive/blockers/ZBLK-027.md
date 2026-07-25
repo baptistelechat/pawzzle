@@ -1,11 +1,11 @@
 ---
-id: BLK-012
+id: ZBLK-027
 type: blocker
 date: 2026-07-25
 tags: [eslint, rtk, npm-global, windows, tooling, misdiagnosis, pawzzle]
 ---
 
-# BLK-012 — `pnpm lint` cassé par un ESLint global 9.9.0 capté par rtk
+# ZBLK-027 — `pnpm lint` cassé par un ESLint global 9.9.0 capté par rtk
 
 | Friction                                                                                                                                                                           | Cause réelle                                                                                                                                                                                                                                                                                                                                                                                                            | Solution                                                                                                                                                                        | Statut |
 | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
@@ -17,4 +17,4 @@ Premier diagnostic erroné : attribué à un simple masquage de PATH dans la ré
 
 ## Références
 
-- [BDR-037](../decisions/BDR-037.md) — session où le blocage a été rencontré, en validant les gates lint/test/build
+- [BDR-037](../../decisions/BDR-037.md) — session où le blocage a été rencontré, en validant les gates lint/test/build
