@@ -73,6 +73,8 @@ export const Grid = ({
       >
         {grid.regions.map((rowRegions, row) =>
           rowRegions.map((region, col) => {
+            if (!grid.active[row][col])
+              return <div key={`${row}-${col}`} className="aspect-square" />;
             const pawn = getPawn(row, col);
             // Uniquement les cases jamais tentées : celles déjà trouvées par
             // le joueur gardent leur rendu normal (pas de bordure verte en trop).

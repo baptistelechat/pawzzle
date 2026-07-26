@@ -50,9 +50,9 @@ export const useLevel = () => {
   const [pendingSize, setPendingSize] = useState(() => getSettings().gridSize);
 
   const requestLevel = useCallback((worker: Worker | null) => {
-    const size = getSettings().gridSize;
+    const { gridSize: size, gridShape: shape } = getSettings();
     setPendingSize(size);
-    worker?.postMessage({ size });
+    worker?.postMessage({ size, shape });
   }, []);
 
   // Seul point d'écriture du statut : met le ref et le state à jour d'un même
@@ -96,7 +96,8 @@ export const useLevel = () => {
     // Appel direct (pas requestLevel) : pendingSize est déjà initialisé à la
     // même valeur via son useState paresseux, un setState ici serait redondant
     // et déclenché en synchrone dans le corps de l'effet (react-hooks/set-state-in-effect).
-    worker.postMessage({ size: getSettings().gridSize });
+    const { gridSize: size, gridShape: shape } = getSettings();
+    worker.postMessage({ size, shape });
     return () => worker.terminate();
   }, [updateStatus, requestLevel]);
 

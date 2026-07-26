@@ -30,6 +30,7 @@ export const countSolutions = (grid: Grid, cap: number): Position[][] => {
       return;
     }
     for (let col = 0; col < grid.size; col++) {
+      if (!grid.active[row][col]) continue;
       const candidate: Position = { row, col };
       if (canPlace(grid, placed, candidate)) {
         placed.push(candidate);

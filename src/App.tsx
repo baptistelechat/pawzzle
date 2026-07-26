@@ -213,7 +213,7 @@ function App() {
                   <SettingsDialog
                     help={help}
                     onHelpChange={setHelp}
-                    onGridSizeChange={newLevel}
+                    onLevelSettingsChange={newLevel}
                     size="icon-xl"
                   />
                   <Button

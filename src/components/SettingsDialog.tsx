@@ -1,11 +1,18 @@
 import type { LucideIcon } from "lucide-react";
 import {
+  Circle,
+  Grid2x2,
+  Grid3x3,
+  LayoutGrid,
   Music2,
   Settings,
+  Shapes,
+  Square,
   Vibrate,
   VibrateOff,
   Volume2,
   VolumeX,
+  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,15 +26,30 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { useSettings } from "@/hooks/useSettings";
 import { haptics } from "@/lib/haptics";
+import type { GridShape } from "@/lib/engine/types";
 import {
+  GRID_SHAPE_OPTIONS,
   GRID_SIZE_OPTIONS,
+  type GridSize,
   setAmbientEnabled,
+  setGridShape,
   setGridSize,
   setHapticsSetting,
   setSfxEnabled,
 } from "@/lib/settings";
 import { sounds } from "@/lib/sounds";
 import { cn } from "@/lib/utils";
+
+const SIZE_ICONS: Record<GridSize, LucideIcon> = {
+  6: LayoutGrid,
+  8: Grid2x2,
+  10: Grid3x3,
+};
+
+const SHAPE_ICONS: Record<GridShape, LucideIcon> = {
+  square: Square,
+  circle: Circle,
+};
 
 interface IconToggleProps {
   icon: LucideIcon;
@@ -65,7 +87,7 @@ const IconToggle = ({
 interface SettingsDialogProps {
   help: boolean;
   onHelpChange: (value: boolean) => void;
-  onGridSizeChange: () => void;
+  onLevelSettingsChange: () => void;
   size?: "icon" | "icon-lg" | "icon-xl";
   className?: string;
 }
@@ -73,7 +95,7 @@ interface SettingsDialogProps {
 export const SettingsDialog = ({
   help,
   onHelpChange,
-  onGridSizeChange,
+  onLevelSettingsChange,
   size = "icon",
   className,
 }: SettingsDialogProps) => {
@@ -125,30 +147,72 @@ export const SettingsDialog = ({
             />
           </div>
           <div className="flex items-center justify-between border-t border-border pt-4">
-            <span className="text-sm font-medium">Taille de grille</span>
+            <span className="flex items-center gap-1.5 text-sm font-medium">
+              <Grid3x3 className="size-4" />
+              Taille de grille
+            </span>
             <div className="flex gap-1.5">
-              {GRID_SIZE_OPTIONS.map((size) => (
-                <Button
-                  key={size}
-                  type="button"
-                  variant={settings.gridSize === size ? "default" : "outline"}
-                  size="sm"
-                  aria-pressed={settings.gridSize === size}
-                  onClick={() => {
-                    if (settings.gridSize === size) return;
-                    haptics.trigger("selection");
-                    sounds.play("ui_toggle");
-                    setGridSize(size);
-                    onGridSizeChange();
-                  }}
-                >
-                  {size}×{size}
-                </Button>
-              ))}
+              {GRID_SIZE_OPTIONS.map((size) => {
+                const Icon = SIZE_ICONS[size];
+                return (
+                  <Button
+                    key={size}
+                    type="button"
+                    variant={settings.gridSize === size ? "default" : "outline"}
+                    size="sm"
+                    aria-pressed={settings.gridSize === size}
+                    onClick={() => {
+                      if (settings.gridSize === size) return;
+                      haptics.trigger("selection");
+                      sounds.play("ui_toggle");
+                      setGridSize(size);
+                      onLevelSettingsChange();
+                    }}
+                  >
+                    <Icon />
+                    {size}×{size}
+                  </Button>
+                );
+              })}
             </div>
           </div>
           <div className="flex items-center justify-between border-t border-border pt-4">
-            <span className="text-sm font-medium">Marquage des cases</span>
+            <span className="flex items-center gap-1.5 text-sm font-medium">
+              <Shapes className="size-4" />
+              Forme
+            </span>
+            <div className="flex gap-1.5">
+              {GRID_SHAPE_OPTIONS.map((shape) => {
+                const Icon = SHAPE_ICONS[shape.value];
+                return (
+                  <Button
+                    key={shape.value}
+                    type="button"
+                    variant={
+                      settings.gridShape === shape.value ? "default" : "outline"
+                    }
+                    size="sm"
+                    aria-pressed={settings.gridShape === shape.value}
+                    onClick={() => {
+                      if (settings.gridShape === shape.value) return;
+                      haptics.trigger("selection");
+                      sounds.play("ui_toggle");
+                      setGridShape(shape.value);
+                      onLevelSettingsChange();
+                    }}
+                  >
+                    <Icon />
+                    {shape.label}
+                  </Button>
+                );
+              })}
+            </div>
+          </div>
+          <div className="flex items-center justify-between border-t border-border pt-4">
+            <span className="flex items-center gap-1.5 text-sm font-medium">
+              <X className="size-4" />
+              Marquage des cases
+            </span>
             <Switch
               checked={help}
               onCheckedChange={(checked) => {
