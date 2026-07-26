@@ -1,4 +1,5 @@
 import type { Grid, GridShape, Level, Position } from "@/lib/engine/types";
+import { computeDifficulty } from "@/lib/engine/difficulty";
 import { countSolutions } from "@/lib/engine/solver";
 import { createShapeMask } from "@/lib/engine/shapes";
 
@@ -69,10 +70,17 @@ const generateRegions = (size: number, active: boolean[][]): number[][] => {
 
 export const generateLevel = (size: number, shape: GridShape): Level => {
   const active = createShapeMask(shape, size);
+  const activeCells = active.flat().filter(Boolean).length;
   for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
     const grid: Grid = { size, regions: generateRegions(size, active), active };
-    const solutions = countSolutions(grid, 2);
-    if (solutions.length === 1) return { grid, solution: solutions[0] };
+    const { solutions, nodesExplored } = countSolutions(grid, 2);
+    if (solutions.length === 1) {
+      return {
+        grid,
+        solution: solutions[0],
+        difficulty: computeDifficulty(nodesExplored / activeCells, size),
+      };
+    }
   }
   throw new Error(
     `generateLevel: aucune grille à solution unique trouvée pour size=${size} après ${MAX_ATTEMPTS} tentatives`,

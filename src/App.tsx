@@ -1,6 +1,7 @@
 import { AmbientPlayer } from "@/components/AmbientPlayer";
 import { ConfettiBurst } from "@/components/ConfettiBurst";
 import { CELL_STAGGER_MS, CELL_TRANSITION_MS, Grid } from "@/components/Grid";
+import { DifficultyBadge } from "@/components/DifficultyBadge";
 import { GridSkeleton } from "@/components/GridSkeleton";
 import { HeartsRow } from "@/components/HeartsRow";
 import { WelcomeDialog } from "@/components/WelcomeDialog";
@@ -171,6 +172,7 @@ function App() {
                           "Niveau échoué"
                         ) : (
                           <div className="flex items-center gap-3">
+                            <DifficultyBadge difficulty={level.difficulty} />
                             <PawCounter
                               key={`paw-${levelId}`}
                               found={placed.filter((p) => !p.invalid).length}

@@ -11,7 +11,8 @@
     "lint": "eslint .",
     "preview": "vite preview --host",
     "generate-pwa-assets": "pwa-assets-generator",
-    "sounds:normalize": "node scripts/normalize-sounds.mjs"
+    "sounds:normalize": "node scripts/normalize-sounds.mjs",
+    "difficulty:calibrate": "node scripts/calibrate-difficulty.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",

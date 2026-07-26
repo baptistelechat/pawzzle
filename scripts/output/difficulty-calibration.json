@@ -1,0 +1,4817 @@
+{
+  "meta": {
+    "generatedAt": "2026-07-26T19:53:30.880Z",
+    "samplesPerCombo": 100,
+    "gridSizes": [
+      6,
+      8,
+      10
+    ],
+    "gridShapes": [
+      "square",
+      "circle"
+    ]
+  },
+  "records": [
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 73,
+      "activeCells": 36,
+      "score": 2.0277777777777777,
+      "generationAttempts": 24
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 27,
+      "activeCells": 36,
+      "score": 0.75,
+      "generationAttempts": 10
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 109,
+      "activeCells": 36,
+      "score": 3.0277777777777777,
+      "generationAttempts": 10
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 181,
+      "activeCells": 36,
+      "score": 5.027777777777778,
+      "generationAttempts": 20
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 98,
+      "activeCells": 36,
+      "score": 2.7222222222222223,
+      "generationAttempts": 11
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 122,
+      "activeCells": 36,
+      "score": 3.388888888888889,
+      "generationAttempts": 22
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 50,
+      "activeCells": 36,
+      "score": 1.3888888888888888,
+      "generationAttempts": 3
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 68,
+      "activeCells": 36,
+      "score": 1.8888888888888888,
+      "generationAttempts": 14
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 23,
+      "activeCells": 36,
+      "score": 0.6388888888888888,
+      "generationAttempts": 17
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 165,
+      "activeCells": 36,
+      "score": 4.583333333333333,
+      "generationAttempts": 10
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 49,
+      "activeCells": 36,
+      "score": 1.3611111111111112,
+      "generationAttempts": 1
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 63,
+      "activeCells": 36,
+      "score": 1.75,
+      "generationAttempts": 3
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 67,
+      "activeCells": 36,
+      "score": 1.8611111111111112,
+      "generationAttempts": 3
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 87,
+      "activeCells": 36,
+      "score": 2.4166666666666665,
+      "generationAttempts": 18
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 109,
+      "activeCells": 36,
+      "score": 3.0277777777777777,
+      "generationAttempts": 16
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 113,
+      "activeCells": 36,
+      "score": 3.138888888888889,
+      "generationAttempts": 4
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 123,
+      "activeCells": 36,
+      "score": 3.4166666666666665,
+      "generationAttempts": 4
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 92,
+      "activeCells": 36,
+      "score": 2.5555555555555554,
+      "generationAttempts": 2
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 84,
+      "activeCells": 36,
+      "score": 2.3333333333333335,
+      "generationAttempts": 19
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 41,
+      "activeCells": 36,
+      "score": 1.1388888888888888,
+      "generationAttempts": 21
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 110,
+      "activeCells": 36,
+      "score": 3.0555555555555554,
+      "generationAttempts": 13
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 52,
+      "activeCells": 36,
+      "score": 1.4444444444444444,
+      "generationAttempts": 1
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 73,
+      "activeCells": 36,
+      "score": 2.0277777777777777,
+      "generationAttempts": 35
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 47,
+      "activeCells": 36,
+      "score": 1.3055555555555556,
+      "generationAttempts": 11
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 34,
+      "activeCells": 36,
+      "score": 0.9444444444444444,
+      "generationAttempts": 22
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 35,
+      "activeCells": 36,
+      "score": 0.9722222222222222,
+      "generationAttempts": 53
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 136,
+      "activeCells": 36,
+      "score": 3.7777777777777777,
+      "generationAttempts": 5
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 97,
+      "activeCells": 36,
+      "score": 2.6944444444444446,
+      "generationAttempts": 13
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 119,
+      "activeCells": 36,
+      "score": 3.3055555555555554,
+      "generationAttempts": 1
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 91,
+      "activeCells": 36,
+      "score": 2.5277777777777777,
+      "generationAttempts": 29
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 84,
+      "activeCells": 36,
+      "score": 2.3333333333333335,
+      "generationAttempts": 1
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 47,
+      "activeCells": 36,
+      "score": 1.3055555555555556,
+      "generationAttempts": 5
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 50,
+      "activeCells": 36,
+      "score": 1.3888888888888888,
+      "generationAttempts": 18
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 83,
+      "activeCells": 36,
+      "score": 2.3055555555555554,
+      "generationAttempts": 35
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 57,
+      "activeCells": 36,
+      "score": 1.5833333333333333,
+      "generationAttempts": 4
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 87,
+      "activeCells": 36,
+      "score": 2.4166666666666665,
+      "generationAttempts": 29
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 50,
+      "activeCells": 36,
+      "score": 1.3888888888888888,
+      "generationAttempts": 1
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 64,
+      "activeCells": 36,
+      "score": 1.7777777777777777,
+      "generationAttempts": 7
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 37,
+      "activeCells": 36,
+      "score": 1.0277777777777777,
+      "generationAttempts": 7
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 68,
+      "activeCells": 36,
+      "score": 1.8888888888888888,
+      "generationAttempts": 8
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 47,
+      "activeCells": 36,
+      "score": 1.3055555555555556,
+      "generationAttempts": 2
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 70,
+      "activeCells": 36,
+      "score": 1.9444444444444444,
+      "generationAttempts": 6
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 62,
+      "activeCells": 36,
+      "score": 1.7222222222222223,
+      "generationAttempts": 8
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 156,
+      "activeCells": 36,
+      "score": 4.333333333333333,
+      "generationAttempts": 6
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 25,
+      "activeCells": 36,
+      "score": 0.6944444444444444,
+      "generationAttempts": 5
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 43,
+      "activeCells": 36,
+      "score": 1.1944444444444444,
+      "generationAttempts": 32
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 47,
+      "activeCells": 36,
+      "score": 1.3055555555555556,
+      "generationAttempts": 6
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 107,
+      "activeCells": 36,
+      "score": 2.9722222222222223,
+      "generationAttempts": 3
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 37,
+      "activeCells": 36,
+      "score": 1.0277777777777777,
+      "generationAttempts": 10
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 37,
+      "activeCells": 36,
+      "score": 1.0277777777777777,
+      "generationAttempts": 1
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 45,
+      "activeCells": 36,
+      "score": 1.25,
+      "generationAttempts": 47
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 71,
+      "activeCells": 36,
+      "score": 1.9722222222222223,
+      "generationAttempts": 5
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 65,
+      "activeCells": 36,
+      "score": 1.8055555555555556,
+      "generationAttempts": 8
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 65,
+      "activeCells": 36,
+      "score": 1.8055555555555556,
+      "generationAttempts": 2
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 80,
+      "activeCells": 36,
+      "score": 2.2222222222222223,
+      "generationAttempts": 2
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 32,
+      "activeCells": 36,
+      "score": 0.8888888888888888,
+      "generationAttempts": 10
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 85,
+      "activeCells": 36,
+      "score": 2.361111111111111,
+      "generationAttempts": 18
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 64,
+      "activeCells": 36,
+      "score": 1.7777777777777777,
+      "generationAttempts": 16
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 105,
+      "activeCells": 36,
+      "score": 2.9166666666666665,
+      "generationAttempts": 2
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 89,
+      "activeCells": 36,
+      "score": 2.4722222222222223,
+      "generationAttempts": 1
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 33,
+      "activeCells": 36,
+      "score": 0.9166666666666666,
+      "generationAttempts": 2
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 51,
+      "activeCells": 36,
+      "score": 1.4166666666666667,
+      "generationAttempts": 67
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 148,
+      "activeCells": 36,
+      "score": 4.111111111111111,
+      "generationAttempts": 7
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 100,
+      "activeCells": 36,
+      "score": 2.7777777777777777,
+      "generationAttempts": 29
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 67,
+      "activeCells": 36,
+      "score": 1.8611111111111112,
+      "generationAttempts": 3
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 100,
+      "activeCells": 36,
+      "score": 2.7777777777777777,
+      "generationAttempts": 3
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 74,
+      "activeCells": 36,
+      "score": 2.0555555555555554,
+      "generationAttempts": 13
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 52,
+      "activeCells": 36,
+      "score": 1.4444444444444444,
+      "generationAttempts": 4
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 34,
+      "activeCells": 36,
+      "score": 0.9444444444444444,
+      "generationAttempts": 10
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 61,
+      "activeCells": 36,
+      "score": 1.6944444444444444,
+      "generationAttempts": 23
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 33,
+      "activeCells": 36,
+      "score": 0.9166666666666666,
+      "generationAttempts": 10
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 114,
+      "activeCells": 36,
+      "score": 3.1666666666666665,
+      "generationAttempts": 13
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 57,
+      "activeCells": 36,
+      "score": 1.5833333333333333,
+      "generationAttempts": 4
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 92,
+      "activeCells": 36,
+      "score": 2.5555555555555554,
+      "generationAttempts": 8
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 91,
+      "activeCells": 36,
+      "score": 2.5277777777777777,
+      "generationAttempts": 1
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 124,
+      "activeCells": 36,
+      "score": 3.4444444444444446,
+      "generationAttempts": 3
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 65,
+      "activeCells": 36,
+      "score": 1.8055555555555556,
+      "generationAttempts": 10
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 54,
+      "activeCells": 36,
+      "score": 1.5,
+      "generationAttempts": 17
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 51,
+      "activeCells": 36,
+      "score": 1.4166666666666667,
+      "generationAttempts": 13
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 110,
+      "activeCells": 36,
+      "score": 3.0555555555555554,
+      "generationAttempts": 43
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 81,
+      "activeCells": 36,
+      "score": 2.25,
+      "generationAttempts": 21
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 102,
+      "activeCells": 36,
+      "score": 2.8333333333333335,
+      "generationAttempts": 1
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 52,
+      "activeCells": 36,
+      "score": 1.4444444444444444,
+      "generationAttempts": 14
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 50,
+      "activeCells": 36,
+      "score": 1.3888888888888888,
+      "generationAttempts": 5
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 47,
+      "activeCells": 36,
+      "score": 1.3055555555555556,
+      "generationAttempts": 6
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 100,
+      "activeCells": 36,
+      "score": 2.7777777777777777,
+      "generationAttempts": 25
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 116,
+      "activeCells": 36,
+      "score": 3.2222222222222223,
+      "generationAttempts": 18
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 54,
+      "activeCells": 36,
+      "score": 1.5,
+      "generationAttempts": 30
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 114,
+      "activeCells": 36,
+      "score": 3.1666666666666665,
+      "generationAttempts": 1
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 40,
+      "activeCells": 36,
+      "score": 1.1111111111111112,
+      "generationAttempts": 12
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 33,
+      "activeCells": 36,
+      "score": 0.9166666666666666,
+      "generationAttempts": 7
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 31,
+      "activeCells": 36,
+      "score": 0.8611111111111112,
+      "generationAttempts": 7
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 46,
+      "activeCells": 36,
+      "score": 1.2777777777777777,
+      "generationAttempts": 6
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 132,
+      "activeCells": 36,
+      "score": 3.6666666666666665,
+      "generationAttempts": 6
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 96,
+      "activeCells": 36,
+      "score": 2.6666666666666665,
+      "generationAttempts": 16
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 43,
+      "activeCells": 36,
+      "score": 1.1944444444444444,
+      "generationAttempts": 51
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 84,
+      "activeCells": 36,
+      "score": 2.3333333333333335,
+      "generationAttempts": 15
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 65,
+      "activeCells": 36,
+      "score": 1.8055555555555556,
+      "generationAttempts": 1
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 118,
+      "activeCells": 36,
+      "score": 3.2777777777777777,
+      "generationAttempts": 13
+    },
+    {
+      "size": 6,
+      "shape": "square",
+      "nodesExplored": 42,
+      "activeCells": 36,
+      "score": 1.1666666666666667,
+      "generationAttempts": 43
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 180,
+      "activeCells": 64,
+      "score": 2.8125,
+      "generationAttempts": 48
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 1045,
+      "activeCells": 64,
+      "score": 16.328125,
+      "generationAttempts": 54
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 576,
+      "activeCells": 64,
+      "score": 9,
+      "generationAttempts": 65
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 333,
+      "activeCells": 64,
+      "score": 5.203125,
+      "generationAttempts": 38
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 351,
+      "activeCells": 64,
+      "score": 5.484375,
+      "generationAttempts": 39
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 941,
+      "activeCells": 64,
+      "score": 14.703125,
+      "generationAttempts": 8
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 1193,
+      "activeCells": 64,
+      "score": 18.640625,
+      "generationAttempts": 6
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 988,
+      "activeCells": 64,
+      "score": 15.4375,
+      "generationAttempts": 28
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 493,
+      "activeCells": 64,
+      "score": 7.703125,
+      "generationAttempts": 91
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 439,
+      "activeCells": 64,
+      "score": 6.859375,
+      "generationAttempts": 57
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 244,
+      "activeCells": 64,
+      "score": 3.8125,
+      "generationAttempts": 215
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 100,
+      "activeCells": 64,
+      "score": 1.5625,
+      "generationAttempts": 195
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 237,
+      "activeCells": 64,
+      "score": 3.703125,
+      "generationAttempts": 90
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 208,
+      "activeCells": 64,
+      "score": 3.25,
+      "generationAttempts": 14
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 1147,
+      "activeCells": 64,
+      "score": 17.921875,
+      "generationAttempts": 59
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 532,
+      "activeCells": 64,
+      "score": 8.3125,
+      "generationAttempts": 46
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 868,
+      "activeCells": 64,
+      "score": 13.5625,
+      "generationAttempts": 45
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 186,
+      "activeCells": 64,
+      "score": 2.90625,
+      "generationAttempts": 96
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 761,
+      "activeCells": 64,
+      "score": 11.890625,
+      "generationAttempts": 130
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 700,
+      "activeCells": 64,
+      "score": 10.9375,
+      "generationAttempts": 56
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 827,
+      "activeCells": 64,
+      "score": 12.921875,
+      "generationAttempts": 156
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 1268,
+      "activeCells": 64,
+      "score": 19.8125,
+      "generationAttempts": 223
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 112,
+      "activeCells": 64,
+      "score": 1.75,
+      "generationAttempts": 51
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 1718,
+      "activeCells": 64,
+      "score": 26.84375,
+      "generationAttempts": 16
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 252,
+      "activeCells": 64,
+      "score": 3.9375,
+      "generationAttempts": 17
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 618,
+      "activeCells": 64,
+      "score": 9.65625,
+      "generationAttempts": 17
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 1604,
+      "activeCells": 64,
+      "score": 25.0625,
+      "generationAttempts": 10
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 278,
+      "activeCells": 64,
+      "score": 4.34375,
+      "generationAttempts": 32
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 181,
+      "activeCells": 64,
+      "score": 2.828125,
+      "generationAttempts": 36
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 474,
+      "activeCells": 64,
+      "score": 7.40625,
+      "generationAttempts": 256
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 132,
+      "activeCells": 64,
+      "score": 2.0625,
+      "generationAttempts": 52
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 359,
+      "activeCells": 64,
+      "score": 5.609375,
+      "generationAttempts": 60
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 161,
+      "activeCells": 64,
+      "score": 2.515625,
+      "generationAttempts": 26
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 375,
+      "activeCells": 64,
+      "score": 5.859375,
+      "generationAttempts": 60
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 89,
+      "activeCells": 64,
+      "score": 1.390625,
+      "generationAttempts": 170
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 638,
+      "activeCells": 64,
+      "score": 9.96875,
+      "generationAttempts": 161
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 104,
+      "activeCells": 64,
+      "score": 1.625,
+      "generationAttempts": 66
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 656,
+      "activeCells": 64,
+      "score": 10.25,
+      "generationAttempts": 21
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 1797,
+      "activeCells": 64,
+      "score": 28.078125,
+      "generationAttempts": 149
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 283,
+      "activeCells": 64,
+      "score": 4.421875,
+      "generationAttempts": 82
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 277,
+      "activeCells": 64,
+      "score": 4.328125,
+      "generationAttempts": 51
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 97,
+      "activeCells": 64,
+      "score": 1.515625,
+      "generationAttempts": 5
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 793,
+      "activeCells": 64,
+      "score": 12.390625,
+      "generationAttempts": 11
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 241,
+      "activeCells": 64,
+      "score": 3.765625,
+      "generationAttempts": 148
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 283,
+      "activeCells": 64,
+      "score": 4.421875,
+      "generationAttempts": 59
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 557,
+      "activeCells": 64,
+      "score": 8.703125,
+      "generationAttempts": 60
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 382,
+      "activeCells": 64,
+      "score": 5.96875,
+      "generationAttempts": 163
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 2300,
+      "activeCells": 64,
+      "score": 35.9375,
+      "generationAttempts": 65
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 119,
+      "activeCells": 64,
+      "score": 1.859375,
+      "generationAttempts": 31
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 302,
+      "activeCells": 64,
+      "score": 4.71875,
+      "generationAttempts": 135
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 597,
+      "activeCells": 64,
+      "score": 9.328125,
+      "generationAttempts": 37
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 178,
+      "activeCells": 64,
+      "score": 2.78125,
+      "generationAttempts": 52
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 542,
+      "activeCells": 64,
+      "score": 8.46875,
+      "generationAttempts": 66
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 79,
+      "activeCells": 64,
+      "score": 1.234375,
+      "generationAttempts": 161
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 505,
+      "activeCells": 64,
+      "score": 7.890625,
+      "generationAttempts": 1
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 289,
+      "activeCells": 64,
+      "score": 4.515625,
+      "generationAttempts": 328
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 95,
+      "activeCells": 64,
+      "score": 1.484375,
+      "generationAttempts": 182
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 292,
+      "activeCells": 64,
+      "score": 4.5625,
+      "generationAttempts": 124
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 980,
+      "activeCells": 64,
+      "score": 15.3125,
+      "generationAttempts": 3
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 291,
+      "activeCells": 64,
+      "score": 4.546875,
+      "generationAttempts": 36
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 1454,
+      "activeCells": 64,
+      "score": 22.71875,
+      "generationAttempts": 24
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 515,
+      "activeCells": 64,
+      "score": 8.046875,
+      "generationAttempts": 219
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 213,
+      "activeCells": 64,
+      "score": 3.328125,
+      "generationAttempts": 2
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 67,
+      "activeCells": 64,
+      "score": 1.046875,
+      "generationAttempts": 138
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 111,
+      "activeCells": 64,
+      "score": 1.734375,
+      "generationAttempts": 203
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 428,
+      "activeCells": 64,
+      "score": 6.6875,
+      "generationAttempts": 96
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 181,
+      "activeCells": 64,
+      "score": 2.828125,
+      "generationAttempts": 71
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 1326,
+      "activeCells": 64,
+      "score": 20.71875,
+      "generationAttempts": 256
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 191,
+      "activeCells": 64,
+      "score": 2.984375,
+      "generationAttempts": 413
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 1508,
+      "activeCells": 64,
+      "score": 23.5625,
+      "generationAttempts": 106
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 133,
+      "activeCells": 64,
+      "score": 2.078125,
+      "generationAttempts": 252
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 166,
+      "activeCells": 64,
+      "score": 2.59375,
+      "generationAttempts": 30
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 1015,
+      "activeCells": 64,
+      "score": 15.859375,
+      "generationAttempts": 69
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 121,
+      "activeCells": 64,
+      "score": 1.890625,
+      "generationAttempts": 52
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 439,
+      "activeCells": 64,
+      "score": 6.859375,
+      "generationAttempts": 460
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 574,
+      "activeCells": 64,
+      "score": 8.96875,
+      "generationAttempts": 54
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 1473,
+      "activeCells": 64,
+      "score": 23.015625,
+      "generationAttempts": 24
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 628,
+      "activeCells": 64,
+      "score": 9.8125,
+      "generationAttempts": 90
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 101,
+      "activeCells": 64,
+      "score": 1.578125,
+      "generationAttempts": 10
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 778,
+      "activeCells": 64,
+      "score": 12.15625,
+      "generationAttempts": 65
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 418,
+      "activeCells": 64,
+      "score": 6.53125,
+      "generationAttempts": 40
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 497,
+      "activeCells": 64,
+      "score": 7.765625,
+      "generationAttempts": 74
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 178,
+      "activeCells": 64,
+      "score": 2.78125,
+      "generationAttempts": 165
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 108,
+      "activeCells": 64,
+      "score": 1.6875,
+      "generationAttempts": 64
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 903,
+      "activeCells": 64,
+      "score": 14.109375,
+      "generationAttempts": 34
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 188,
+      "activeCells": 64,
+      "score": 2.9375,
+      "generationAttempts": 44
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 261,
+      "activeCells": 64,
+      "score": 4.078125,
+      "generationAttempts": 34
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 149,
+      "activeCells": 64,
+      "score": 2.328125,
+      "generationAttempts": 4
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 692,
+      "activeCells": 64,
+      "score": 10.8125,
+      "generationAttempts": 89
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 896,
+      "activeCells": 64,
+      "score": 14,
+      "generationAttempts": 73
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 576,
+      "activeCells": 64,
+      "score": 9,
+      "generationAttempts": 30
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 413,
+      "activeCells": 64,
+      "score": 6.453125,
+      "generationAttempts": 12
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 405,
+      "activeCells": 64,
+      "score": 6.328125,
+      "generationAttempts": 132
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 595,
+      "activeCells": 64,
+      "score": 9.296875,
+      "generationAttempts": 73
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 635,
+      "activeCells": 64,
+      "score": 9.921875,
+      "generationAttempts": 23
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 776,
+      "activeCells": 64,
+      "score": 12.125,
+      "generationAttempts": 84
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 1415,
+      "activeCells": 64,
+      "score": 22.109375,
+      "generationAttempts": 147
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 2084,
+      "activeCells": 64,
+      "score": 32.5625,
+      "generationAttempts": 11
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 60,
+      "activeCells": 64,
+      "score": 0.9375,
+      "generationAttempts": 132
+    },
+    {
+      "size": 8,
+      "shape": "square",
+      "nodesExplored": 246,
+      "activeCells": 64,
+      "score": 3.84375,
+      "generationAttempts": 117
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 1415,
+      "activeCells": 100,
+      "score": 14.15,
+      "generationAttempts": 1059
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 1915,
+      "activeCells": 100,
+      "score": 19.15,
+      "generationAttempts": 504
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 13416,
+      "activeCells": 100,
+      "score": 134.16,
+      "generationAttempts": 672
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 7713,
+      "activeCells": 100,
+      "score": 77.13,
+      "generationAttempts": 444
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 1050,
+      "activeCells": 100,
+      "score": 10.5,
+      "generationAttempts": 1228
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 10341,
+      "activeCells": 100,
+      "score": 103.41,
+      "generationAttempts": 146
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 1083,
+      "activeCells": 100,
+      "score": 10.83,
+      "generationAttempts": 182
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 2262,
+      "activeCells": 100,
+      "score": 22.62,
+      "generationAttempts": 60
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 584,
+      "activeCells": 100,
+      "score": 5.84,
+      "generationAttempts": 106
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 20735,
+      "activeCells": 100,
+      "score": 207.35,
+      "generationAttempts": 722
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 769,
+      "activeCells": 100,
+      "score": 7.69,
+      "generationAttempts": 340
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 3612,
+      "activeCells": 100,
+      "score": 36.12,
+      "generationAttempts": 243
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 1491,
+      "activeCells": 100,
+      "score": 14.91,
+      "generationAttempts": 225
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 7492,
+      "activeCells": 100,
+      "score": 74.92,
+      "generationAttempts": 295
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 2995,
+      "activeCells": 100,
+      "score": 29.95,
+      "generationAttempts": 255
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 1930,
+      "activeCells": 100,
+      "score": 19.3,
+      "generationAttempts": 331
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 1402,
+      "activeCells": 100,
+      "score": 14.02,
+      "generationAttempts": 320
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 930,
+      "activeCells": 100,
+      "score": 9.3,
+      "generationAttempts": 13
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 15715,
+      "activeCells": 100,
+      "score": 157.15,
+      "generationAttempts": 167
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 33341,
+      "activeCells": 100,
+      "score": 333.41,
+      "generationAttempts": 168
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 5825,
+      "activeCells": 100,
+      "score": 58.25,
+      "generationAttempts": 18
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 12834,
+      "activeCells": 100,
+      "score": 128.34,
+      "generationAttempts": 489
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 1459,
+      "activeCells": 100,
+      "score": 14.59,
+      "generationAttempts": 1010
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 1407,
+      "activeCells": 100,
+      "score": 14.07,
+      "generationAttempts": 1087
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 1238,
+      "activeCells": 100,
+      "score": 12.38,
+      "generationAttempts": 1733
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 23843,
+      "activeCells": 100,
+      "score": 238.43,
+      "generationAttempts": 127
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 1624,
+      "activeCells": 100,
+      "score": 16.24,
+      "generationAttempts": 621
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 1015,
+      "activeCells": 100,
+      "score": 10.15,
+      "generationAttempts": 441
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 1080,
+      "activeCells": 100,
+      "score": 10.8,
+      "generationAttempts": 227
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 5294,
+      "activeCells": 100,
+      "score": 52.94,
+      "generationAttempts": 670
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 1982,
+      "activeCells": 100,
+      "score": 19.82,
+      "generationAttempts": 638
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 3333,
+      "activeCells": 100,
+      "score": 33.33,
+      "generationAttempts": 50
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 5816,
+      "activeCells": 100,
+      "score": 58.16,
+      "generationAttempts": 232
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 136,
+      "activeCells": 100,
+      "score": 1.36,
+      "generationAttempts": 884
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 22676,
+      "activeCells": 100,
+      "score": 226.76,
+      "generationAttempts": 1066
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 1123,
+      "activeCells": 100,
+      "score": 11.23,
+      "generationAttempts": 1395
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 7332,
+      "activeCells": 100,
+      "score": 73.32,
+      "generationAttempts": 228
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 40642,
+      "activeCells": 100,
+      "score": 406.42,
+      "generationAttempts": 224
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 2760,
+      "activeCells": 100,
+      "score": 27.6,
+      "generationAttempts": 720
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 1145,
+      "activeCells": 100,
+      "score": 11.45,
+      "generationAttempts": 176
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 856,
+      "activeCells": 100,
+      "score": 8.56,
+      "generationAttempts": 828
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 20988,
+      "activeCells": 100,
+      "score": 209.88,
+      "generationAttempts": 363
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 1593,
+      "activeCells": 100,
+      "score": 15.93,
+      "generationAttempts": 482
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 11036,
+      "activeCells": 100,
+      "score": 110.36,
+      "generationAttempts": 361
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 6119,
+      "activeCells": 100,
+      "score": 61.19,
+      "generationAttempts": 155
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 29055,
+      "activeCells": 100,
+      "score": 290.55,
+      "generationAttempts": 300
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 1500,
+      "activeCells": 100,
+      "score": 15,
+      "generationAttempts": 174
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 398,
+      "activeCells": 100,
+      "score": 3.98,
+      "generationAttempts": 878
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 2283,
+      "activeCells": 100,
+      "score": 22.83,
+      "generationAttempts": 15
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 480,
+      "activeCells": 100,
+      "score": 4.8,
+      "generationAttempts": 624
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 16010,
+      "activeCells": 100,
+      "score": 160.1,
+      "generationAttempts": 459
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 6129,
+      "activeCells": 100,
+      "score": 61.29,
+      "generationAttempts": 195
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 10418,
+      "activeCells": 100,
+      "score": 104.18,
+      "generationAttempts": 101
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 814,
+      "activeCells": 100,
+      "score": 8.14,
+      "generationAttempts": 338
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 13633,
+      "activeCells": 100,
+      "score": 136.33,
+      "generationAttempts": 5
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 5258,
+      "activeCells": 100,
+      "score": 52.58,
+      "generationAttempts": 935
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 2535,
+      "activeCells": 100,
+      "score": 25.35,
+      "generationAttempts": 1258
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 1156,
+      "activeCells": 100,
+      "score": 11.56,
+      "generationAttempts": 990
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 24383,
+      "activeCells": 100,
+      "score": 243.83,
+      "generationAttempts": 312
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 3797,
+      "activeCells": 100,
+      "score": 37.97,
+      "generationAttempts": 629
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 2873,
+      "activeCells": 100,
+      "score": 28.73,
+      "generationAttempts": 1121
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 308,
+      "activeCells": 100,
+      "score": 3.08,
+      "generationAttempts": 275
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 386,
+      "activeCells": 100,
+      "score": 3.86,
+      "generationAttempts": 385
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 1978,
+      "activeCells": 100,
+      "score": 19.78,
+      "generationAttempts": 199
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 6851,
+      "activeCells": 100,
+      "score": 68.51,
+      "generationAttempts": 236
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 3896,
+      "activeCells": 100,
+      "score": 38.96,
+      "generationAttempts": 97
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 11116,
+      "activeCells": 100,
+      "score": 111.16,
+      "generationAttempts": 284
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 1337,
+      "activeCells": 100,
+      "score": 13.37,
+      "generationAttempts": 913
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 626,
+      "activeCells": 100,
+      "score": 6.26,
+      "generationAttempts": 108
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 6301,
+      "activeCells": 100,
+      "score": 63.01,
+      "generationAttempts": 322
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 9305,
+      "activeCells": 100,
+      "score": 93.05,
+      "generationAttempts": 937
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 10381,
+      "activeCells": 100,
+      "score": 103.81,
+      "generationAttempts": 294
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 1139,
+      "activeCells": 100,
+      "score": 11.39,
+      "generationAttempts": 450
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 2872,
+      "activeCells": 100,
+      "score": 28.72,
+      "generationAttempts": 279
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 6876,
+      "activeCells": 100,
+      "score": 68.76,
+      "generationAttempts": 64
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 4125,
+      "activeCells": 100,
+      "score": 41.25,
+      "generationAttempts": 542
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 14610,
+      "activeCells": 100,
+      "score": 146.1,
+      "generationAttempts": 60
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 5029,
+      "activeCells": 100,
+      "score": 50.29,
+      "generationAttempts": 100
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 385,
+      "activeCells": 100,
+      "score": 3.85,
+      "generationAttempts": 33
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 20862,
+      "activeCells": 100,
+      "score": 208.62,
+      "generationAttempts": 135
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 4928,
+      "activeCells": 100,
+      "score": 49.28,
+      "generationAttempts": 229
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 33973,
+      "activeCells": 100,
+      "score": 339.73,
+      "generationAttempts": 1035
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 30222,
+      "activeCells": 100,
+      "score": 302.22,
+      "generationAttempts": 199
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 1195,
+      "activeCells": 100,
+      "score": 11.95,
+      "generationAttempts": 235
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 10847,
+      "activeCells": 100,
+      "score": 108.47,
+      "generationAttempts": 123
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 757,
+      "activeCells": 100,
+      "score": 7.57,
+      "generationAttempts": 39
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 9030,
+      "activeCells": 100,
+      "score": 90.3,
+      "generationAttempts": 157
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 7582,
+      "activeCells": 100,
+      "score": 75.82,
+      "generationAttempts": 508
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 510,
+      "activeCells": 100,
+      "score": 5.1,
+      "generationAttempts": 506
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 1291,
+      "activeCells": 100,
+      "score": 12.91,
+      "generationAttempts": 213
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 2827,
+      "activeCells": 100,
+      "score": 28.27,
+      "generationAttempts": 1868
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 4029,
+      "activeCells": 100,
+      "score": 40.29,
+      "generationAttempts": 1523
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 31037,
+      "activeCells": 100,
+      "score": 310.37,
+      "generationAttempts": 1167
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 109,
+      "activeCells": 100,
+      "score": 1.09,
+      "generationAttempts": 86
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 19754,
+      "activeCells": 100,
+      "score": 197.54,
+      "generationAttempts": 316
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 8568,
+      "activeCells": 100,
+      "score": 85.68,
+      "generationAttempts": 556
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 1819,
+      "activeCells": 100,
+      "score": 18.19,
+      "generationAttempts": 354
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 2006,
+      "activeCells": 100,
+      "score": 20.06,
+      "generationAttempts": 512
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 7303,
+      "activeCells": 100,
+      "score": 73.03,
+      "generationAttempts": 282
+    },
+    {
+      "size": 10,
+      "shape": "square",
+      "nodesExplored": 1361,
+      "activeCells": 100,
+      "score": 13.61,
+      "generationAttempts": 899
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 65,
+      "activeCells": 32,
+      "score": 2.03125,
+      "generationAttempts": 3
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 29,
+      "activeCells": 32,
+      "score": 0.90625,
+      "generationAttempts": 8
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 41,
+      "activeCells": 32,
+      "score": 1.28125,
+      "generationAttempts": 6
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 32,
+      "activeCells": 32,
+      "score": 1,
+      "generationAttempts": 15
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 33,
+      "activeCells": 32,
+      "score": 1.03125,
+      "generationAttempts": 7
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 44,
+      "activeCells": 32,
+      "score": 1.375,
+      "generationAttempts": 58
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 102,
+      "activeCells": 32,
+      "score": 3.1875,
+      "generationAttempts": 3
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 82,
+      "activeCells": 32,
+      "score": 2.5625,
+      "generationAttempts": 4
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 66,
+      "activeCells": 32,
+      "score": 2.0625,
+      "generationAttempts": 6
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 48,
+      "activeCells": 32,
+      "score": 1.5,
+      "generationAttempts": 12
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 98,
+      "activeCells": 32,
+      "score": 3.0625,
+      "generationAttempts": 24
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 50,
+      "activeCells": 32,
+      "score": 1.5625,
+      "generationAttempts": 10
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 16,
+      "activeCells": 32,
+      "score": 0.5,
+      "generationAttempts": 7
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 29,
+      "activeCells": 32,
+      "score": 0.90625,
+      "generationAttempts": 8
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 91,
+      "activeCells": 32,
+      "score": 2.84375,
+      "generationAttempts": 7
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 21,
+      "activeCells": 32,
+      "score": 0.65625,
+      "generationAttempts": 2
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 37,
+      "activeCells": 32,
+      "score": 1.15625,
+      "generationAttempts": 6
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 73,
+      "activeCells": 32,
+      "score": 2.28125,
+      "generationAttempts": 34
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 84,
+      "activeCells": 32,
+      "score": 2.625,
+      "generationAttempts": 31
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 26,
+      "activeCells": 32,
+      "score": 0.8125,
+      "generationAttempts": 40
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 78,
+      "activeCells": 32,
+      "score": 2.4375,
+      "generationAttempts": 14
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 24,
+      "activeCells": 32,
+      "score": 0.75,
+      "generationAttempts": 37
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 49,
+      "activeCells": 32,
+      "score": 1.53125,
+      "generationAttempts": 6
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 97,
+      "activeCells": 32,
+      "score": 3.03125,
+      "generationAttempts": 30
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 106,
+      "activeCells": 32,
+      "score": 3.3125,
+      "generationAttempts": 11
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 42,
+      "activeCells": 32,
+      "score": 1.3125,
+      "generationAttempts": 10
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 21,
+      "activeCells": 32,
+      "score": 0.65625,
+      "generationAttempts": 18
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 37,
+      "activeCells": 32,
+      "score": 1.15625,
+      "generationAttempts": 4
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 30,
+      "activeCells": 32,
+      "score": 0.9375,
+      "generationAttempts": 3
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 70,
+      "activeCells": 32,
+      "score": 2.1875,
+      "generationAttempts": 7
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 32,
+      "activeCells": 32,
+      "score": 1,
+      "generationAttempts": 11
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 94,
+      "activeCells": 32,
+      "score": 2.9375,
+      "generationAttempts": 4
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 66,
+      "activeCells": 32,
+      "score": 2.0625,
+      "generationAttempts": 1
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 108,
+      "activeCells": 32,
+      "score": 3.375,
+      "generationAttempts": 5
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 31,
+      "activeCells": 32,
+      "score": 0.96875,
+      "generationAttempts": 9
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 40,
+      "activeCells": 32,
+      "score": 1.25,
+      "generationAttempts": 18
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 35,
+      "activeCells": 32,
+      "score": 1.09375,
+      "generationAttempts": 7
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 45,
+      "activeCells": 32,
+      "score": 1.40625,
+      "generationAttempts": 5
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 25,
+      "activeCells": 32,
+      "score": 0.78125,
+      "generationAttempts": 13
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 71,
+      "activeCells": 32,
+      "score": 2.21875,
+      "generationAttempts": 4
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 48,
+      "activeCells": 32,
+      "score": 1.5,
+      "generationAttempts": 12
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 98,
+      "activeCells": 32,
+      "score": 3.0625,
+      "generationAttempts": 41
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 125,
+      "activeCells": 32,
+      "score": 3.90625,
+      "generationAttempts": 35
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 26,
+      "activeCells": 32,
+      "score": 0.8125,
+      "generationAttempts": 4
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 71,
+      "activeCells": 32,
+      "score": 2.21875,
+      "generationAttempts": 4
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 65,
+      "activeCells": 32,
+      "score": 2.03125,
+      "generationAttempts": 13
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 43,
+      "activeCells": 32,
+      "score": 1.34375,
+      "generationAttempts": 7
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 51,
+      "activeCells": 32,
+      "score": 1.59375,
+      "generationAttempts": 7
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 69,
+      "activeCells": 32,
+      "score": 2.15625,
+      "generationAttempts": 4
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 84,
+      "activeCells": 32,
+      "score": 2.625,
+      "generationAttempts": 24
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 23,
+      "activeCells": 32,
+      "score": 0.71875,
+      "generationAttempts": 2
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 53,
+      "activeCells": 32,
+      "score": 1.65625,
+      "generationAttempts": 6
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 25,
+      "activeCells": 32,
+      "score": 0.78125,
+      "generationAttempts": 15
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 42,
+      "activeCells": 32,
+      "score": 1.3125,
+      "generationAttempts": 1
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 133,
+      "activeCells": 32,
+      "score": 4.15625,
+      "generationAttempts": 15
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 55,
+      "activeCells": 32,
+      "score": 1.71875,
+      "generationAttempts": 12
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 67,
+      "activeCells": 32,
+      "score": 2.09375,
+      "generationAttempts": 6
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 28,
+      "activeCells": 32,
+      "score": 0.875,
+      "generationAttempts": 2
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 15,
+      "activeCells": 32,
+      "score": 0.46875,
+      "generationAttempts": 19
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 67,
+      "activeCells": 32,
+      "score": 2.09375,
+      "generationAttempts": 16
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 33,
+      "activeCells": 32,
+      "score": 1.03125,
+      "generationAttempts": 8
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 51,
+      "activeCells": 32,
+      "score": 1.59375,
+      "generationAttempts": 4
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 65,
+      "activeCells": 32,
+      "score": 2.03125,
+      "generationAttempts": 4
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 21,
+      "activeCells": 32,
+      "score": 0.65625,
+      "generationAttempts": 6
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 66,
+      "activeCells": 32,
+      "score": 2.0625,
+      "generationAttempts": 4
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 84,
+      "activeCells": 32,
+      "score": 2.625,
+      "generationAttempts": 17
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 68,
+      "activeCells": 32,
+      "score": 2.125,
+      "generationAttempts": 3
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 45,
+      "activeCells": 32,
+      "score": 1.40625,
+      "generationAttempts": 1
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 26,
+      "activeCells": 32,
+      "score": 0.8125,
+      "generationAttempts": 28
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 40,
+      "activeCells": 32,
+      "score": 1.25,
+      "generationAttempts": 39
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 69,
+      "activeCells": 32,
+      "score": 2.15625,
+      "generationAttempts": 10
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 42,
+      "activeCells": 32,
+      "score": 1.3125,
+      "generationAttempts": 14
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 40,
+      "activeCells": 32,
+      "score": 1.25,
+      "generationAttempts": 5
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 140,
+      "activeCells": 32,
+      "score": 4.375,
+      "generationAttempts": 2
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 111,
+      "activeCells": 32,
+      "score": 3.46875,
+      "generationAttempts": 1
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 56,
+      "activeCells": 32,
+      "score": 1.75,
+      "generationAttempts": 17
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 50,
+      "activeCells": 32,
+      "score": 1.5625,
+      "generationAttempts": 50
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 46,
+      "activeCells": 32,
+      "score": 1.4375,
+      "generationAttempts": 9
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 63,
+      "activeCells": 32,
+      "score": 1.96875,
+      "generationAttempts": 17
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 42,
+      "activeCells": 32,
+      "score": 1.3125,
+      "generationAttempts": 26
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 89,
+      "activeCells": 32,
+      "score": 2.78125,
+      "generationAttempts": 6
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 24,
+      "activeCells": 32,
+      "score": 0.75,
+      "generationAttempts": 31
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 51,
+      "activeCells": 32,
+      "score": 1.59375,
+      "generationAttempts": 18
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 93,
+      "activeCells": 32,
+      "score": 2.90625,
+      "generationAttempts": 2
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 62,
+      "activeCells": 32,
+      "score": 1.9375,
+      "generationAttempts": 6
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 54,
+      "activeCells": 32,
+      "score": 1.6875,
+      "generationAttempts": 13
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 21,
+      "activeCells": 32,
+      "score": 0.65625,
+      "generationAttempts": 2
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 80,
+      "activeCells": 32,
+      "score": 2.5,
+      "generationAttempts": 8
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 18,
+      "activeCells": 32,
+      "score": 0.5625,
+      "generationAttempts": 5
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 19,
+      "activeCells": 32,
+      "score": 0.59375,
+      "generationAttempts": 3
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 84,
+      "activeCells": 32,
+      "score": 2.625,
+      "generationAttempts": 24
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 72,
+      "activeCells": 32,
+      "score": 2.25,
+      "generationAttempts": 2
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 39,
+      "activeCells": 32,
+      "score": 1.21875,
+      "generationAttempts": 5
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 90,
+      "activeCells": 32,
+      "score": 2.8125,
+      "generationAttempts": 16
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 46,
+      "activeCells": 32,
+      "score": 1.4375,
+      "generationAttempts": 4
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 34,
+      "activeCells": 32,
+      "score": 1.0625,
+      "generationAttempts": 21
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 19,
+      "activeCells": 32,
+      "score": 0.59375,
+      "generationAttempts": 16
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 25,
+      "activeCells": 32,
+      "score": 0.78125,
+      "generationAttempts": 4
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 59,
+      "activeCells": 32,
+      "score": 1.84375,
+      "generationAttempts": 18
+    },
+    {
+      "size": 6,
+      "shape": "circle",
+      "nodesExplored": 57,
+      "activeCells": 32,
+      "score": 1.78125,
+      "generationAttempts": 4
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 414,
+      "activeCells": 52,
+      "score": 7.961538461538462,
+      "generationAttempts": 4
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 604,
+      "activeCells": 52,
+      "score": 11.615384615384615,
+      "generationAttempts": 16
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 623,
+      "activeCells": 52,
+      "score": 11.98076923076923,
+      "generationAttempts": 18
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 331,
+      "activeCells": 52,
+      "score": 6.365384615384615,
+      "generationAttempts": 33
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 342,
+      "activeCells": 52,
+      "score": 6.576923076923077,
+      "generationAttempts": 16
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 145,
+      "activeCells": 52,
+      "score": 2.7884615384615383,
+      "generationAttempts": 36
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 403,
+      "activeCells": 52,
+      "score": 7.75,
+      "generationAttempts": 1
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 311,
+      "activeCells": 52,
+      "score": 5.980769230769231,
+      "generationAttempts": 39
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 148,
+      "activeCells": 52,
+      "score": 2.8461538461538463,
+      "generationAttempts": 11
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 185,
+      "activeCells": 52,
+      "score": 3.5576923076923075,
+      "generationAttempts": 12
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 606,
+      "activeCells": 52,
+      "score": 11.653846153846153,
+      "generationAttempts": 33
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 53,
+      "activeCells": 52,
+      "score": 1.0192307692307692,
+      "generationAttempts": 3
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 450,
+      "activeCells": 52,
+      "score": 8.653846153846153,
+      "generationAttempts": 36
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 510,
+      "activeCells": 52,
+      "score": 9.807692307692308,
+      "generationAttempts": 74
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 186,
+      "activeCells": 52,
+      "score": 3.576923076923077,
+      "generationAttempts": 17
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 71,
+      "activeCells": 52,
+      "score": 1.3653846153846154,
+      "generationAttempts": 33
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 155,
+      "activeCells": 52,
+      "score": 2.980769230769231,
+      "generationAttempts": 11
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 49,
+      "activeCells": 52,
+      "score": 0.9423076923076923,
+      "generationAttempts": 99
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 174,
+      "activeCells": 52,
+      "score": 3.3461538461538463,
+      "generationAttempts": 66
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 265,
+      "activeCells": 52,
+      "score": 5.096153846153846,
+      "generationAttempts": 52
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 207,
+      "activeCells": 52,
+      "score": 3.980769230769231,
+      "generationAttempts": 16
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 173,
+      "activeCells": 52,
+      "score": 3.326923076923077,
+      "generationAttempts": 16
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 449,
+      "activeCells": 52,
+      "score": 8.634615384615385,
+      "generationAttempts": 3
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 96,
+      "activeCells": 52,
+      "score": 1.8461538461538463,
+      "generationAttempts": 2
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 227,
+      "activeCells": 52,
+      "score": 4.365384615384615,
+      "generationAttempts": 35
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 214,
+      "activeCells": 52,
+      "score": 4.115384615384615,
+      "generationAttempts": 44
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 427,
+      "activeCells": 52,
+      "score": 8.211538461538462,
+      "generationAttempts": 66
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 162,
+      "activeCells": 52,
+      "score": 3.1153846153846154,
+      "generationAttempts": 10
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 613,
+      "activeCells": 52,
+      "score": 11.788461538461538,
+      "generationAttempts": 4
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 109,
+      "activeCells": 52,
+      "score": 2.0961538461538463,
+      "generationAttempts": 21
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 437,
+      "activeCells": 52,
+      "score": 8.403846153846153,
+      "generationAttempts": 11
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 760,
+      "activeCells": 52,
+      "score": 14.615384615384615,
+      "generationAttempts": 15
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 336,
+      "activeCells": 52,
+      "score": 6.461538461538462,
+      "generationAttempts": 33
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 99,
+      "activeCells": 52,
+      "score": 1.9038461538461537,
+      "generationAttempts": 7
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 304,
+      "activeCells": 52,
+      "score": 5.846153846153846,
+      "generationAttempts": 12
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 768,
+      "activeCells": 52,
+      "score": 14.76923076923077,
+      "generationAttempts": 51
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 276,
+      "activeCells": 52,
+      "score": 5.3076923076923075,
+      "generationAttempts": 1
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 791,
+      "activeCells": 52,
+      "score": 15.211538461538462,
+      "generationAttempts": 13
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 346,
+      "activeCells": 52,
+      "score": 6.653846153846154,
+      "generationAttempts": 69
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 86,
+      "activeCells": 52,
+      "score": 1.6538461538461537,
+      "generationAttempts": 35
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 233,
+      "activeCells": 52,
+      "score": 4.480769230769231,
+      "generationAttempts": 4
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 463,
+      "activeCells": 52,
+      "score": 8.903846153846153,
+      "generationAttempts": 70
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 75,
+      "activeCells": 52,
+      "score": 1.4423076923076923,
+      "generationAttempts": 20
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 700,
+      "activeCells": 52,
+      "score": 13.461538461538462,
+      "generationAttempts": 43
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 75,
+      "activeCells": 52,
+      "score": 1.4423076923076923,
+      "generationAttempts": 132
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 68,
+      "activeCells": 52,
+      "score": 1.3076923076923077,
+      "generationAttempts": 6
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 268,
+      "activeCells": 52,
+      "score": 5.153846153846154,
+      "generationAttempts": 54
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 519,
+      "activeCells": 52,
+      "score": 9.98076923076923,
+      "generationAttempts": 18
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 301,
+      "activeCells": 52,
+      "score": 5.788461538461538,
+      "generationAttempts": 8
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 82,
+      "activeCells": 52,
+      "score": 1.5769230769230769,
+      "generationAttempts": 1
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 580,
+      "activeCells": 52,
+      "score": 11.153846153846153,
+      "generationAttempts": 5
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 702,
+      "activeCells": 52,
+      "score": 13.5,
+      "generationAttempts": 21
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 141,
+      "activeCells": 52,
+      "score": 2.7115384615384617,
+      "generationAttempts": 20
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 824,
+      "activeCells": 52,
+      "score": 15.846153846153847,
+      "generationAttempts": 49
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 459,
+      "activeCells": 52,
+      "score": 8.826923076923077,
+      "generationAttempts": 10
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 271,
+      "activeCells": 52,
+      "score": 5.211538461538462,
+      "generationAttempts": 3
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 140,
+      "activeCells": 52,
+      "score": 2.6923076923076925,
+      "generationAttempts": 1
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 55,
+      "activeCells": 52,
+      "score": 1.0576923076923077,
+      "generationAttempts": 20
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 894,
+      "activeCells": 52,
+      "score": 17.192307692307693,
+      "generationAttempts": 28
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 1170,
+      "activeCells": 52,
+      "score": 22.5,
+      "generationAttempts": 32
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 328,
+      "activeCells": 52,
+      "score": 6.3076923076923075,
+      "generationAttempts": 1
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 63,
+      "activeCells": 52,
+      "score": 1.2115384615384615,
+      "generationAttempts": 14
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 115,
+      "activeCells": 52,
+      "score": 2.2115384615384617,
+      "generationAttempts": 55
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 123,
+      "activeCells": 52,
+      "score": 2.3653846153846154,
+      "generationAttempts": 34
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 360,
+      "activeCells": 52,
+      "score": 6.923076923076923,
+      "generationAttempts": 12
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 260,
+      "activeCells": 52,
+      "score": 5,
+      "generationAttempts": 9
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 121,
+      "activeCells": 52,
+      "score": 2.326923076923077,
+      "generationAttempts": 20
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 154,
+      "activeCells": 52,
+      "score": 2.9615384615384617,
+      "generationAttempts": 1
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 658,
+      "activeCells": 52,
+      "score": 12.653846153846153,
+      "generationAttempts": 47
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 775,
+      "activeCells": 52,
+      "score": 14.903846153846153,
+      "generationAttempts": 53
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 95,
+      "activeCells": 52,
+      "score": 1.8269230769230769,
+      "generationAttempts": 59
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 370,
+      "activeCells": 52,
+      "score": 7.115384615384615,
+      "generationAttempts": 10
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 541,
+      "activeCells": 52,
+      "score": 10.403846153846153,
+      "generationAttempts": 103
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 768,
+      "activeCells": 52,
+      "score": 14.76923076923077,
+      "generationAttempts": 26
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 267,
+      "activeCells": 52,
+      "score": 5.134615384615385,
+      "generationAttempts": 6
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 85,
+      "activeCells": 52,
+      "score": 1.6346153846153846,
+      "generationAttempts": 17
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 81,
+      "activeCells": 52,
+      "score": 1.5576923076923077,
+      "generationAttempts": 20
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 91,
+      "activeCells": 52,
+      "score": 1.75,
+      "generationAttempts": 37
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 427,
+      "activeCells": 52,
+      "score": 8.211538461538462,
+      "generationAttempts": 31
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 740,
+      "activeCells": 52,
+      "score": 14.23076923076923,
+      "generationAttempts": 3
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 670,
+      "activeCells": 52,
+      "score": 12.884615384615385,
+      "generationAttempts": 215
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 76,
+      "activeCells": 52,
+      "score": 1.4615384615384615,
+      "generationAttempts": 13
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 68,
+      "activeCells": 52,
+      "score": 1.3076923076923077,
+      "generationAttempts": 2
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 64,
+      "activeCells": 52,
+      "score": 1.2307692307692308,
+      "generationAttempts": 54
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 218,
+      "activeCells": 52,
+      "score": 4.1923076923076925,
+      "generationAttempts": 5
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 279,
+      "activeCells": 52,
+      "score": 5.365384615384615,
+      "generationAttempts": 15
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 43,
+      "activeCells": 52,
+      "score": 0.8269230769230769,
+      "generationAttempts": 45
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 299,
+      "activeCells": 52,
+      "score": 5.75,
+      "generationAttempts": 7
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 261,
+      "activeCells": 52,
+      "score": 5.019230769230769,
+      "generationAttempts": 9
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 162,
+      "activeCells": 52,
+      "score": 3.1153846153846154,
+      "generationAttempts": 36
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 536,
+      "activeCells": 52,
+      "score": 10.307692307692308,
+      "generationAttempts": 50
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 62,
+      "activeCells": 52,
+      "score": 1.1923076923076923,
+      "generationAttempts": 1
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 85,
+      "activeCells": 52,
+      "score": 1.6346153846153846,
+      "generationAttempts": 2
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 241,
+      "activeCells": 52,
+      "score": 4.634615384615385,
+      "generationAttempts": 20
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 74,
+      "activeCells": 52,
+      "score": 1.4230769230769231,
+      "generationAttempts": 1
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 638,
+      "activeCells": 52,
+      "score": 12.26923076923077,
+      "generationAttempts": 14
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 291,
+      "activeCells": 52,
+      "score": 5.596153846153846,
+      "generationAttempts": 73
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 243,
+      "activeCells": 52,
+      "score": 4.673076923076923,
+      "generationAttempts": 31
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 112,
+      "activeCells": 52,
+      "score": 2.1538461538461537,
+      "generationAttempts": 79
+    },
+    {
+      "size": 8,
+      "shape": "circle",
+      "nodesExplored": 72,
+      "activeCells": 52,
+      "score": 1.3846153846153846,
+      "generationAttempts": 9
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 514,
+      "activeCells": 80,
+      "score": 6.425,
+      "generationAttempts": 198
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 1120,
+      "activeCells": 80,
+      "score": 14,
+      "generationAttempts": 378
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 571,
+      "activeCells": 80,
+      "score": 7.1375,
+      "generationAttempts": 155
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 1356,
+      "activeCells": 80,
+      "score": 16.95,
+      "generationAttempts": 135
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 235,
+      "activeCells": 80,
+      "score": 2.9375,
+      "generationAttempts": 134
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 6820,
+      "activeCells": 80,
+      "score": 85.25,
+      "generationAttempts": 68
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 674,
+      "activeCells": 80,
+      "score": 8.425,
+      "generationAttempts": 293
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 456,
+      "activeCells": 80,
+      "score": 5.7,
+      "generationAttempts": 100
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 4624,
+      "activeCells": 80,
+      "score": 57.8,
+      "generationAttempts": 42
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 818,
+      "activeCells": 80,
+      "score": 10.225,
+      "generationAttempts": 264
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 657,
+      "activeCells": 80,
+      "score": 8.2125,
+      "generationAttempts": 50
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 691,
+      "activeCells": 80,
+      "score": 8.6375,
+      "generationAttempts": 155
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 2530,
+      "activeCells": 80,
+      "score": 31.625,
+      "generationAttempts": 16
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 1041,
+      "activeCells": 80,
+      "score": 13.0125,
+      "generationAttempts": 126
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 888,
+      "activeCells": 80,
+      "score": 11.1,
+      "generationAttempts": 204
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 555,
+      "activeCells": 80,
+      "score": 6.9375,
+      "generationAttempts": 207
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 5550,
+      "activeCells": 80,
+      "score": 69.375,
+      "generationAttempts": 28
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 523,
+      "activeCells": 80,
+      "score": 6.5375,
+      "generationAttempts": 493
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 4732,
+      "activeCells": 80,
+      "score": 59.15,
+      "generationAttempts": 253
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 5431,
+      "activeCells": 80,
+      "score": 67.8875,
+      "generationAttempts": 166
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 2728,
+      "activeCells": 80,
+      "score": 34.1,
+      "generationAttempts": 533
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 3562,
+      "activeCells": 80,
+      "score": 44.525,
+      "generationAttempts": 31
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 1043,
+      "activeCells": 80,
+      "score": 13.0375,
+      "generationAttempts": 149
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 1009,
+      "activeCells": 80,
+      "score": 12.6125,
+      "generationAttempts": 211
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 1904,
+      "activeCells": 80,
+      "score": 23.8,
+      "generationAttempts": 159
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 331,
+      "activeCells": 80,
+      "score": 4.1375,
+      "generationAttempts": 328
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 3875,
+      "activeCells": 80,
+      "score": 48.4375,
+      "generationAttempts": 85
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 423,
+      "activeCells": 80,
+      "score": 5.2875,
+      "generationAttempts": 46
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 3849,
+      "activeCells": 80,
+      "score": 48.1125,
+      "generationAttempts": 602
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 2838,
+      "activeCells": 80,
+      "score": 35.475,
+      "generationAttempts": 622
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 2644,
+      "activeCells": 80,
+      "score": 33.05,
+      "generationAttempts": 79
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 1652,
+      "activeCells": 80,
+      "score": 20.65,
+      "generationAttempts": 414
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 3587,
+      "activeCells": 80,
+      "score": 44.8375,
+      "generationAttempts": 80
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 3910,
+      "activeCells": 80,
+      "score": 48.875,
+      "generationAttempts": 408
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 402,
+      "activeCells": 80,
+      "score": 5.025,
+      "generationAttempts": 54
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 900,
+      "activeCells": 80,
+      "score": 11.25,
+      "generationAttempts": 245
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 5570,
+      "activeCells": 80,
+      "score": 69.625,
+      "generationAttempts": 138
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 936,
+      "activeCells": 80,
+      "score": 11.7,
+      "generationAttempts": 264
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 4447,
+      "activeCells": 80,
+      "score": 55.5875,
+      "generationAttempts": 2
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 3404,
+      "activeCells": 80,
+      "score": 42.55,
+      "generationAttempts": 210
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 270,
+      "activeCells": 80,
+      "score": 3.375,
+      "generationAttempts": 27
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 1089,
+      "activeCells": 80,
+      "score": 13.6125,
+      "generationAttempts": 133
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 3088,
+      "activeCells": 80,
+      "score": 38.6,
+      "generationAttempts": 61
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 3894,
+      "activeCells": 80,
+      "score": 48.675,
+      "generationAttempts": 100
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 790,
+      "activeCells": 80,
+      "score": 9.875,
+      "generationAttempts": 225
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 599,
+      "activeCells": 80,
+      "score": 7.4875,
+      "generationAttempts": 138
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 16317,
+      "activeCells": 80,
+      "score": 203.9625,
+      "generationAttempts": 347
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 370,
+      "activeCells": 80,
+      "score": 4.625,
+      "generationAttempts": 24
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 1981,
+      "activeCells": 80,
+      "score": 24.7625,
+      "generationAttempts": 174
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 2316,
+      "activeCells": 80,
+      "score": 28.95,
+      "generationAttempts": 203
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 6867,
+      "activeCells": 80,
+      "score": 85.8375,
+      "generationAttempts": 26
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 776,
+      "activeCells": 80,
+      "score": 9.7,
+      "generationAttempts": 32
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 1328,
+      "activeCells": 80,
+      "score": 16.6,
+      "generationAttempts": 50
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 6356,
+      "activeCells": 80,
+      "score": 79.45,
+      "generationAttempts": 450
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 1862,
+      "activeCells": 80,
+      "score": 23.275,
+      "generationAttempts": 59
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 458,
+      "activeCells": 80,
+      "score": 5.725,
+      "generationAttempts": 1154
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 2363,
+      "activeCells": 80,
+      "score": 29.5375,
+      "generationAttempts": 183
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 1069,
+      "activeCells": 80,
+      "score": 13.3625,
+      "generationAttempts": 537
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 3861,
+      "activeCells": 80,
+      "score": 48.2625,
+      "generationAttempts": 10
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 6033,
+      "activeCells": 80,
+      "score": 75.4125,
+      "generationAttempts": 32
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 12175,
+      "activeCells": 80,
+      "score": 152.1875,
+      "generationAttempts": 13
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 2120,
+      "activeCells": 80,
+      "score": 26.5,
+      "generationAttempts": 224
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 13389,
+      "activeCells": 80,
+      "score": 167.3625,
+      "generationAttempts": 98
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 457,
+      "activeCells": 80,
+      "score": 5.7125,
+      "generationAttempts": 173
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 592,
+      "activeCells": 80,
+      "score": 7.4,
+      "generationAttempts": 144
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 307,
+      "activeCells": 80,
+      "score": 3.8375,
+      "generationAttempts": 283
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 3639,
+      "activeCells": 80,
+      "score": 45.4875,
+      "generationAttempts": 77
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 149,
+      "activeCells": 80,
+      "score": 1.8625,
+      "generationAttempts": 395
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 83,
+      "activeCells": 80,
+      "score": 1.0375,
+      "generationAttempts": 125
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 3678,
+      "activeCells": 80,
+      "score": 45.975,
+      "generationAttempts": 142
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 2159,
+      "activeCells": 80,
+      "score": 26.9875,
+      "generationAttempts": 114
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 3894,
+      "activeCells": 80,
+      "score": 48.675,
+      "generationAttempts": 243
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 8742,
+      "activeCells": 80,
+      "score": 109.275,
+      "generationAttempts": 282
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 451,
+      "activeCells": 80,
+      "score": 5.6375,
+      "generationAttempts": 151
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 35,
+      "activeCells": 80,
+      "score": 0.4375,
+      "generationAttempts": 162
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 2224,
+      "activeCells": 80,
+      "score": 27.8,
+      "generationAttempts": 399
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 12228,
+      "activeCells": 80,
+      "score": 152.85,
+      "generationAttempts": 155
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 3534,
+      "activeCells": 80,
+      "score": 44.175,
+      "generationAttempts": 535
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 1586,
+      "activeCells": 80,
+      "score": 19.825,
+      "generationAttempts": 34
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 6619,
+      "activeCells": 80,
+      "score": 82.7375,
+      "generationAttempts": 15
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 1025,
+      "activeCells": 80,
+      "score": 12.8125,
+      "generationAttempts": 200
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 423,
+      "activeCells": 80,
+      "score": 5.2875,
+      "generationAttempts": 236
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 11561,
+      "activeCells": 80,
+      "score": 144.5125,
+      "generationAttempts": 185
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 6636,
+      "activeCells": 80,
+      "score": 82.95,
+      "generationAttempts": 134
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 3549,
+      "activeCells": 80,
+      "score": 44.3625,
+      "generationAttempts": 137
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 199,
+      "activeCells": 80,
+      "score": 2.4875,
+      "generationAttempts": 20
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 537,
+      "activeCells": 80,
+      "score": 6.7125,
+      "generationAttempts": 20
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 15682,
+      "activeCells": 80,
+      "score": 196.025,
+      "generationAttempts": 432
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 1170,
+      "activeCells": 80,
+      "score": 14.625,
+      "generationAttempts": 138
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 5476,
+      "activeCells": 80,
+      "score": 68.45,
+      "generationAttempts": 419
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 489,
+      "activeCells": 80,
+      "score": 6.1125,
+      "generationAttempts": 543
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 1324,
+      "activeCells": 80,
+      "score": 16.55,
+      "generationAttempts": 28
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 209,
+      "activeCells": 80,
+      "score": 2.6125,
+      "generationAttempts": 32
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 619,
+      "activeCells": 80,
+      "score": 7.7375,
+      "generationAttempts": 702
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 97,
+      "activeCells": 80,
+      "score": 1.2125,
+      "generationAttempts": 20
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 7890,
+      "activeCells": 80,
+      "score": 98.625,
+      "generationAttempts": 124
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 1620,
+      "activeCells": 80,
+      "score": 20.25,
+      "generationAttempts": 71
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 345,
+      "activeCells": 80,
+      "score": 4.3125,
+      "generationAttempts": 110
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 2782,
+      "activeCells": 80,
+      "score": 34.775,
+      "generationAttempts": 205
+    },
+    {
+      "size": 10,
+      "shape": "circle",
+      "nodesExplored": 6187,
+      "activeCells": 80,
+      "score": 77.3375,
+      "generationAttempts": 11
+    }
+  ]
+}
