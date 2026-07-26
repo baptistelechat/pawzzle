@@ -5,12 +5,16 @@ import {
   sounds,
 } from "@/lib/sounds";
 
+export const GRID_SIZE_OPTIONS = [6, 8, 10] as const;
+export type GridSize = (typeof GRID_SIZE_OPTIONS)[number];
+
 export interface SettingsState {
   hapticsEnabled: boolean;
   sfxEnabled: boolean;
   sfxVolume: number;
   ambientEnabled: boolean;
   ambientVolume: number;
+  gridSize: GridSize;
 }
 
 const STORAGE_KEY = "pawzzle:settings";
@@ -21,6 +25,7 @@ const DEFAULT_SETTINGS: SettingsState = {
   sfxVolume: 0.5,
   ambientEnabled: true,
   ambientVolume: 0.5,
+  gridSize: 6,
 };
 
 const readStored = (): SettingsState => {
@@ -66,3 +71,4 @@ export const setAmbientEnabled = (value: boolean) =>
   update({ ambientEnabled: value });
 export const setAmbientVolume = (value: number) =>
   update({ ambientVolume: value });
+export const setGridSize = (value: GridSize) => update({ gridSize: value });

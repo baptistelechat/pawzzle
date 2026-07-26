@@ -1,6 +1,7 @@
 import { AmbientPlayer } from "@/components/AmbientPlayer";
 import { ConfettiBurst } from "@/components/ConfettiBurst";
 import { CELL_STAGGER_MS, CELL_TRANSITION_MS, Grid } from "@/components/Grid";
+import { GridSkeleton } from "@/components/GridSkeleton";
 import { HeartsRow } from "@/components/HeartsRow";
 import { WelcomeDialog } from "@/components/WelcomeDialog";
 import { InstallButton } from "@/components/InstallButton";
@@ -13,7 +14,7 @@ import { haptics } from "@/lib/haptics";
 import { EASE_OUT, SPRING_BOUNCE } from "@/lib/motion";
 import { sounds } from "@/lib/sounds";
 import { cn } from "@/lib/utils";
-import { Loader2, PawPrint, RotateCcw, Trash2 } from "lucide-react";
+import { PawPrint, RotateCcw, Trash2 } from "lucide-react";
 import { AnimatePresence, m, useReducedMotion } from "motion/react";
 import { useEffect, useState } from "react";
 
@@ -28,6 +29,7 @@ function App() {
     errors,
     maxErrors,
     status,
+    pendingSize,
     help,
     setHelp,
     togglePaw,
@@ -103,15 +105,9 @@ function App() {
 
           <AnimatePresence mode="wait" initial={false}>
             {!level ? (
-              <m.div
-                key="loading"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.15, ease: EASE_OUT }}
-              >
-                <Loader2 className="size-8 animate-spin text-muted-foreground" />
-              </m.div>
+              <div key="loading" className="w-full max-w-md">
+                <GridSkeleton size={pendingSize} />
+              </div>
             ) : (
               <m.div
                 key="level"
@@ -193,30 +189,36 @@ function App() {
                 </div>
                 <div className="w-full max-w-md">
                   <AnimatePresence mode="wait">
-                    <Grid
-                      key={levelId}
-                      grid={level.grid}
-                      placed={placed}
-                      markers={markers}
-                      help={help}
-                      errors={errors}
-                      disabled={status !== "playing"}
-                      showSolution={status === "lost"}
-                      solution={level.solution}
-                      onTogglePaw={togglePaw}
-                      onToggleMarker={toggleMarker}
-                      onSetMarker={setMarker}
-                    />
+                    {status === "loading" ? (
+                      <GridSkeleton key="skeleton" size={pendingSize} />
+                    ) : (
+                      <Grid
+                        key={levelId}
+                        grid={level.grid}
+                        placed={placed}
+                        markers={markers}
+                        help={help}
+                        errors={errors}
+                        disabled={status !== "playing"}
+                        showSolution={status === "lost"}
+                        solution={level.solution}
+                        onTogglePaw={togglePaw}
+                        onToggleMarker={toggleMarker}
+                        onSetMarker={setMarker}
+                      />
+                    )}
                   </AnimatePresence>
                 </div>
                 <div className="flex w-full max-w-md items-center gap-2">
                   <SettingsDialog
                     help={help}
                     onHelpChange={setHelp}
+                    onGridSizeChange={newLevel}
                     size="icon-xl"
                   />
                   <Button
                     className="h-12 flex-1 text-base"
+                    disabled={status === "loading"}
                     onClick={() => {
                       haptics.cancel();
                       haptics.trigger("light");

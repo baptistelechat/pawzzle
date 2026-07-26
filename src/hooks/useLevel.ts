@@ -2,9 +2,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { Vibration } from "web-haptics";
 import type { Level, Position } from "@/lib/engine/types";
 import { haptics } from "@/lib/haptics";
+import { getSettings } from "@/lib/settings";
 import { sounds } from "@/lib/sounds";
 
-const GRID_SIZE = 6;
 const MAX_ERRORS = 3; // ponytail: budget arbitraire, à ajuster après test interne (Phase 3)
 
 // Le preset "success" intégré (30ms+40ms) est perçu comme trop faible — pattern
@@ -44,6 +44,16 @@ export const useLevel = () => {
   const [errors, setErrors] = useState(0);
   const [status, setStatus] = useState<Status>("loading");
   const [help, setHelp] = useState(true);
+  // Taille demandée au worker, connue avant que la grille n'arrive : sert à
+  // dimensionner le squelette de chargement (10×10 sensiblement plus lent que
+  // 6×6/8×8 à générer, cf. MAX_ATTEMPTS dans generator.ts).
+  const [pendingSize, setPendingSize] = useState(() => getSettings().gridSize);
+
+  const requestLevel = useCallback((worker: Worker | null) => {
+    const size = getSettings().gridSize;
+    setPendingSize(size);
+    worker?.postMessage({ size });
+  }, []);
 
   // Seul point d'écriture du statut : met le ref et le state à jour d'un même
   // geste, pour qu'aucun futur appel ne puisse oublier le miroir — c'est
@@ -60,8 +70,8 @@ export const useLevel = () => {
     setErrors(0);
     errorsRef.current = 0;
     placedRef.current = [];
-    workerRef.current?.postMessage({ size: GRID_SIZE });
-  }, [updateStatus]);
+    requestLevel(workerRef.current);
+  }, [updateStatus, requestLevel]);
 
   useEffect(() => {
     const worker = new Worker(
@@ -75,7 +85,7 @@ export const useLevel = () => {
         // Grille sans solution unique trouvée (garde-fou anti-boucle infinie
         // du générateur) : on retente avec un nouveau seed au lieu de laisser
         // le spinner bloqué indéfiniment.
-        worker.postMessage({ size: GRID_SIZE });
+        requestLevel(worker);
         return;
       }
       setLevel(event.data.level);
@@ -83,9 +93,12 @@ export const useLevel = () => {
       setLevelId((id) => id + 1);
     };
     workerRef.current = worker;
-    worker.postMessage({ size: GRID_SIZE });
+    // Appel direct (pas requestLevel) : pendingSize est déjà initialisé à la
+    // même valeur via son useState paresseux, un setState ici serait redondant
+    // et déclenché en synchrone dans le corps de l'effet (react-hooks/set-state-in-effect).
+    worker.postMessage({ size: getSettings().gridSize });
     return () => worker.terminate();
-  }, [updateStatus]);
+  }, [updateStatus, requestLevel]);
 
   const togglePaw = useCallback(
     (candidate: Position) => {
@@ -176,6 +189,7 @@ export const useLevel = () => {
     errors,
     maxErrors: MAX_ERRORS,
     status,
+    pendingSize,
     help,
     setHelp,
     togglePaw,

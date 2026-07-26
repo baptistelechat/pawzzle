@@ -1,7 +1,11 @@
 import type { Grid, Level, Position } from "@/lib/engine/types";
 import { countSolutions } from "@/lib/engine/solver";
 
-const MAX_ATTEMPTS = 1000; // ponytail: garde-fou anti-boucle infinie, à revoir si des tailles réalistes finissent par l'atteindre
+// ponytail: garde-fou anti-boucle infinie. Mesuré empiriquement : le 10×10
+// nécessite jusqu'à ~2100 tentatives dans le pire cas observé (échantillon de
+// 50 générations) — 5000 laisse une marge confortable sans bloquer le worker
+// indéfiniment.
+const MAX_ATTEMPTS = 5000;
 
 const NEIGHBOR_OFFSETS = [
   { row: -1, col: 0 },

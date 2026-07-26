@@ -20,7 +20,9 @@ import { Switch } from "@/components/ui/switch";
 import { useSettings } from "@/hooks/useSettings";
 import { haptics } from "@/lib/haptics";
 import {
+  GRID_SIZE_OPTIONS,
   setAmbientEnabled,
+  setGridSize,
   setHapticsSetting,
   setSfxEnabled,
 } from "@/lib/settings";
@@ -63,6 +65,7 @@ const IconToggle = ({
 interface SettingsDialogProps {
   help: boolean;
   onHelpChange: (value: boolean) => void;
+  onGridSizeChange: () => void;
   size?: "icon" | "icon-lg" | "icon-xl";
   className?: string;
 }
@@ -70,6 +73,7 @@ interface SettingsDialogProps {
 export const SettingsDialog = ({
   help,
   onHelpChange,
+  onGridSizeChange,
   size = "icon",
   className,
 }: SettingsDialogProps) => {
@@ -119,6 +123,29 @@ export const SettingsDialog = ({
               active={settings.ambientEnabled}
               onToggle={setAmbientEnabled}
             />
+          </div>
+          <div className="flex items-center justify-between border-t border-border pt-4">
+            <span className="text-sm font-medium">Taille de grille</span>
+            <div className="flex gap-1.5">
+              {GRID_SIZE_OPTIONS.map((size) => (
+                <Button
+                  key={size}
+                  type="button"
+                  variant={settings.gridSize === size ? "default" : "outline"}
+                  size="sm"
+                  aria-pressed={settings.gridSize === size}
+                  onClick={() => {
+                    if (settings.gridSize === size) return;
+                    haptics.trigger("selection");
+                    sounds.play("ui_toggle");
+                    setGridSize(size);
+                    onGridSizeChange();
+                  }}
+                >
+                  {size}×{size}
+                </Button>
+              ))}
+            </div>
           </div>
           <div className="flex items-center justify-between border-t border-border pt-4">
             <span className="text-sm font-medium">Marquage des cases</span>

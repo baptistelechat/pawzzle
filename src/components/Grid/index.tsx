@@ -59,71 +59,79 @@ export const Grid = ({
     });
 
   return (
+    // Fondu simple au niveau du bloc entier quand la grille disparaît (retour
+    // au skeleton) : seule l'apparition (par case, en cascade) garde l'effet
+    // spectaculaire, pour ne pas le rejouer une seconde fois à la sortie.
     <m.div
-      className="grid touch-none gap-1"
-      style={{ gridTemplateColumns: `repeat(${grid.size}, minmax(0, 1fr))` }}
-      animate={shakeControls}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.15, ease: EASE_OUT }}
     >
-      {grid.regions.map((rowRegions, row) =>
-        rowRegions.map((region, col) => {
-          const pawn = getPawn(row, col);
-          // Uniquement les cases jamais tentées : celles déjà trouvées par le
-          // joueur gardent leur rendu normal (pas de bordure verte en trop).
-          const isSolutionCell = !pawn && showSolution && isSolution(row, col);
-          return (
-            <m.button
-              key={`${row}-${col}`}
-              type="button"
-              data-row={row}
-              data-col={col}
-              aria-label={`Case ligne ${row + 1}, colonne ${col + 1}`}
-              onPointerDown={(event) =>
-                handleCellPointerDown(row, col, !!pawn, event)
-              }
-              initial={
-                reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.85 }
-              }
-              animate={{ opacity: 1, scale: 1 }}
-              exit={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.85 }}
-              transition={{
-                duration: CELL_TRANSITION_MS / 1000,
-                ease: EASE_OUT,
-                delay: reduceMotion
-                  ? 0
-                  : ((row + col) * CELL_STAGGER_MS) / 1000,
-              }}
-              className={cn(
-                "relative flex aspect-square items-center justify-center rounded-[28%] border-2 transition-colors [corner-shape:squircle]",
-                pawn?.invalid
-                  ? "border-destructive"
-                  : isSolutionCell
-                    ? "border-emerald-600 dark:border-emerald-400"
-                    : "border-transparent",
-              )}
-              style={{
-                backgroundColor: REGION_COLORS[region % REGION_COLORS.length],
-              }}
-            >
-              <CellContent
-                pawn={pawn}
-                marked={isMarked(row, col)}
-                showSolution={isSolutionCell}
-                row={row}
-                col={col}
-                staggerDelay={((row + col) * CELL_STAGGER_MS) / 1000}
-                reduceMotion={!!reduceMotion}
-              />
-              {!reduceMotion && (
-                <AnimatePresence>
-                  {pressingCell?.row === row && pressingCell?.col === col && (
-                    <PressRing durationMs={RING_DURATION_MS} />
-                  )}
-                </AnimatePresence>
-              )}
-            </m.button>
-          );
-        }),
-      )}
+      <m.div
+        className="grid touch-none gap-1"
+        style={{ gridTemplateColumns: `repeat(${grid.size}, minmax(0, 1fr))` }}
+        animate={shakeControls}
+      >
+        {grid.regions.map((rowRegions, row) =>
+          rowRegions.map((region, col) => {
+            const pawn = getPawn(row, col);
+            // Uniquement les cases jamais tentées : celles déjà trouvées par
+            // le joueur gardent leur rendu normal (pas de bordure verte en trop).
+            const isSolutionCell =
+              !pawn && showSolution && isSolution(row, col);
+            return (
+              <m.button
+                key={`${row}-${col}`}
+                type="button"
+                data-row={row}
+                data-col={col}
+                aria-label={`Case ligne ${row + 1}, colonne ${col + 1}`}
+                onPointerDown={(event) =>
+                  handleCellPointerDown(row, col, !!pawn, event)
+                }
+                initial={
+                  reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.85 }
+                }
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{
+                  duration: CELL_TRANSITION_MS / 1000,
+                  ease: EASE_OUT,
+                  delay: reduceMotion
+                    ? 0
+                    : ((row + col) * CELL_STAGGER_MS) / 1000,
+                }}
+                className={cn(
+                  "relative flex aspect-square items-center justify-center rounded-[28%] border-2 transition-colors [corner-shape:squircle]",
+                  pawn?.invalid
+                    ? "border-destructive"
+                    : isSolutionCell
+                      ? "border-emerald-600 dark:border-emerald-400"
+                      : "border-transparent",
+                )}
+                style={{
+                  backgroundColor: REGION_COLORS[region % REGION_COLORS.length],
+                }}
+              >
+                <CellContent
+                  pawn={pawn}
+                  marked={isMarked(row, col)}
+                  showSolution={isSolutionCell}
+                  row={row}
+                  col={col}
+                  staggerDelay={((row + col) * CELL_STAGGER_MS) / 1000}
+                  reduceMotion={!!reduceMotion}
+                />
+                {!reduceMotion && (
+                  <AnimatePresence>
+                    {pressingCell?.row === row && pressingCell?.col === col && (
+                      <PressRing durationMs={RING_DURATION_MS} />
+                    )}
+                  </AnimatePresence>
+                )}
+              </m.button>
+            );
+          }),
+        )}
+      </m.div>
     </m.div>
   );
 };
