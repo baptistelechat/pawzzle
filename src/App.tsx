@@ -213,7 +213,6 @@ function App() {
                   <SettingsDialog
                     help={help}
                     onHelpChange={setHelp}
-                    onLevelSettingsChange={newLevel}
                     size="icon-xl"
                   />
                   <Button

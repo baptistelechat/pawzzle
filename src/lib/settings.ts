@@ -1,18 +1,9 @@
 import { setHapticsEnabled } from "@/lib/haptics";
-import type { GridShape } from "@/lib/engine/types";
 import {
   setAmbientMuted,
   setAmbientVolume as setSoundsAmbientVolume,
   sounds,
 } from "@/lib/sounds";
-
-export const GRID_SIZE_OPTIONS = [6, 8, 10] as const;
-export type GridSize = (typeof GRID_SIZE_OPTIONS)[number];
-
-export const GRID_SHAPE_OPTIONS: { value: GridShape; label: string }[] = [
-  { value: "square", label: "Carré" },
-  { value: "circle", label: "Rond" },
-];
 
 export interface SettingsState {
   hapticsEnabled: boolean;
@@ -20,8 +11,6 @@ export interface SettingsState {
   sfxVolume: number;
   ambientEnabled: boolean;
   ambientVolume: number;
-  gridSize: GridSize;
-  gridShape: GridShape;
 }
 
 const STORAGE_KEY = "pawzzle:settings";
@@ -32,8 +21,6 @@ const DEFAULT_SETTINGS: SettingsState = {
   sfxVolume: 0.5,
   ambientEnabled: true,
   ambientVolume: 0.5,
-  gridSize: 6,
-  gridShape: "square",
 };
 
 const readStored = (): SettingsState => {
@@ -79,5 +66,3 @@ export const setAmbientEnabled = (value: boolean) =>
   update({ ambientEnabled: value });
 export const setAmbientVolume = (value: number) =>
   update({ ambientVolume: value });
-export const setGridSize = (value: GridSize) => update({ gridSize: value });
-export const setGridShape = (value: GridShape) => update({ gridShape: value });

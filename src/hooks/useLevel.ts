@@ -1,11 +1,23 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Vibration } from "web-haptics";
-import type { Level, Position } from "@/lib/engine/types";
+import type { GridShape, Level, Position } from "@/lib/engine/types";
 import { haptics } from "@/lib/haptics";
-import { getSettings } from "@/lib/settings";
 import { sounds } from "@/lib/sounds";
 
 const MAX_ERRORS = 3; // ponytail: budget arbitraire, à ajuster après test interne (Phase 3)
+
+// Combinaison forme + taille tirée au sort à chaque partie : plus de réglage
+// manuel, chaque "nouvelle partie" est une combinaison différente.
+const GRID_SIZES = [6, 8, 10] as const;
+const GRID_SHAPES: GridShape[] = ["square", "circle"];
+
+const pickRandom = <T>(items: readonly T[]): T =>
+  items[Math.floor(Math.random() * items.length)];
+
+const pickLevelParams = () => ({
+  size: pickRandom(GRID_SIZES),
+  shape: pickRandom(GRID_SHAPES),
+});
 
 // Le preset "success" intégré (30ms+40ms) est perçu comme trop faible — pattern
 // custom plus long et plus intense, réutilisé pour toute pose correcte (pas
@@ -44,15 +56,20 @@ export const useLevel = () => {
   const [errors, setErrors] = useState(0);
   const [status, setStatus] = useState<Status>("loading");
   const [help, setHelp] = useState(true);
+  // Combinaison forme+taille du tout premier niveau, tirée une seule fois au
+  // montage : partagée entre l'init de `pendingSize` et le postMessage initial
+  // du worker (cf. effet de montage plus bas) pour que les deux restent
+  // cohérents plutôt que de tirer deux valeurs différentes séparément.
+  const [initialParams] = useState(() => pickLevelParams());
   // Taille demandée au worker, connue avant que la grille n'arrive : sert à
   // dimensionner le squelette de chargement (10×10 sensiblement plus lent que
   // 6×6/8×8 à générer, cf. MAX_ATTEMPTS dans generator.ts).
-  const [pendingSize, setPendingSize] = useState(() => getSettings().gridSize);
+  const [pendingSize, setPendingSize] = useState(() => initialParams.size);
 
   const requestLevel = useCallback((worker: Worker | null) => {
-    const { gridSize: size, gridShape: shape } = getSettings();
-    setPendingSize(size);
-    worker?.postMessage({ size, shape });
+    const params = pickLevelParams();
+    setPendingSize(params.size);
+    worker?.postMessage(params);
   }, []);
 
   // Seul point d'écriture du statut : met le ref et le state à jour d'un même
@@ -93,13 +110,12 @@ export const useLevel = () => {
       setLevelId((id) => id + 1);
     };
     workerRef.current = worker;
-    // Appel direct (pas requestLevel) : pendingSize est déjà initialisé à la
-    // même valeur via son useState paresseux, un setState ici serait redondant
-    // et déclenché en synchrone dans le corps de l'effet (react-hooks/set-state-in-effect).
-    const { gridSize: size, gridShape: shape } = getSettings();
-    worker.postMessage({ size, shape });
+    // Appel direct (pas requestLevel) : réutilise le tirage déjà fait pour
+    // pendingSize (initialParams) plutôt que d'en retirer un nouveau, sinon
+    // le squelette affiché ne correspondrait plus à la grille demandée.
+    worker.postMessage(initialParams);
     return () => worker.terminate();
-  }, [updateStatus, requestLevel]);
+  }, [updateStatus, requestLevel, initialParams]);
 
   const togglePaw = useCallback(
     (candidate: Position) => {
