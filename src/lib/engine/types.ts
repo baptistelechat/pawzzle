@@ -1,6 +1,6 @@
 export type GridShape = "square" | "circle";
 
-export type Difficulty = "easy" | "medium" | "hard" | "extreme";
+export type Difficulty = "easy" | "medium" | "hard";
 
 export interface Position {
   row: number;

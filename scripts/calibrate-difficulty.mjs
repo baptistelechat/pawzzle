@@ -157,9 +157,8 @@ const summarize = (scores) => {
   return {
     n: sorted.length,
     min: sorted[0],
-    p25: percentile(sorted, 0.25),
-    median: percentile(sorted, 0.5),
-    p75: percentile(sorted, 0.75),
+    p33: percentile(sorted, 1 / 3),
+    p67: percentile(sorted, 2 / 3),
     max: sorted[sorted.length - 1],
     mean: Number(mean.toFixed(3)),
   };
@@ -207,6 +206,10 @@ console.log(`\nDonnées brutes écrites : ${OUTPUT_PATH}`);
 
 console.log("\n=== Résumé (score = nodesExplored / activeCells) ===");
 console.log("Pooled:", summarize(records.map((r) => r.score)));
+for (const size of GRID_SIZES) {
+  const scores = records.filter((r) => r.size === size).map((r) => r.score);
+  console.log(`toutes formes ${size}x${size}:`, summarize(scores));
+}
 for (const shape of GRID_SHAPES) {
   for (const size of GRID_SIZES) {
     const scores = records

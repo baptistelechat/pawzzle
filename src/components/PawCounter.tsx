@@ -12,7 +12,7 @@ export function PawCounter({ found, total }: PawCounterProps) {
 
   return (
     <div
-      className="flex items-center gap-1 text-sm font-medium text-muted-foreground"
+      className="flex w-[calc(1rem+0.25rem+5ch)] items-center justify-center gap-1 text-sm font-medium text-muted-foreground"
       aria-label={`Pattes trouvées : ${found} / ${total}`}
     >
       <AnimatePresence initial mode="wait">
@@ -30,7 +30,7 @@ export function PawCounter({ found, total }: PawCounterProps) {
           <PawPrint className="size-4" />
         </m.span>
       </AnimatePresence>
-      <span>
+      <span className="tabular-nums">
         <AnimatePresence initial mode="wait">
           <m.span
             key={found}
