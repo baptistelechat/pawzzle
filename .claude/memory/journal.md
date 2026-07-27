@@ -613,6 +613,23 @@ Rituel `/memory-close` : `BLK-002` (rituel mémoire, résolu la session précéd
 - [BDR-065](decisions/BDR-065.md) — difficulté réduite à 3 niveaux, seuils recalibrés en terciles
 - [BDR-066](decisions/BDR-066.md) — badge remplacé par 3 icônes Flame fill/outline
 - [BDR-067](decisions/BDR-067.md) — largeur réservée sur le groupe icône+compteur, pas le texte seul
-- [BLK-044](blockers/BLK-044.md) — layout ligne difficulté/pattes/vies, 3 itérations (résolu)
-- [BLK-045](blockers/BLK-045.md) — animation des flammes ne rejouait pas en groupe, récidive (résolu)
+- [ZBLK-044](archive/blockers/ZBLK-044.md) — layout ligne difficulté/pattes/vies, 3 itérations (résolu)
+- [ZBLK-045](archive/blockers/ZBLK-045.md) — animation des flammes ne rejouait pas en groupe, récidive (résolu)
 - [LRN-044](learnings/LRN-044.md) — réserver une largeur variable sans casser un gap interne fixe
+
+---
+
+Nouvelle session sur un signalement de Baptiste : des niveaux marqués "difficile" se ressentaient faciles et inversement — le score de difficulté ([BDR-062](decisions/BDR-062.md)) semblait mal calibré. Diagnostic : `nodesExplored` (`solver.ts::countSolutions`) compte tous les appels récursifs du backtracking pendant la vérification d'unicité — comme `generateLevel` appelle `countSolutions(grid, 2)` et ne garde que les grilles à solution unique, le cap=2 n'est jamais atteint pour un niveau retenu, donc le score mesure la taille de l'arbre de _preuve d'unicité_, pas le chemin vers la solution qu'un joueur emprunterait.
+
+Sur validation de Baptiste, test empirique d'une hypothèse de correction : compter `nodesToFirstSolution` (nœuds jusqu'à la 1ère solution) plutôt que le total. Implémenté (`solver.ts`, `scripts/calibrate-difficulty.mjs` étendu pour comparer les deux métriques), recalibré sur 600 générations fraîches — résultat invalidant : biais carré/cercle et facteur d'échelle 6×6→10×10 quasi identiques à l'original, parfois légèrement pires ([LRN-20260727224809-2](learnings/LRN-20260727224809-2.md)). Changement annulé proprement (`git checkout`), code de prod jamais impacté.
+
+Sur décision explicite de Baptiste ("des résultats plausibles même coûteux vaudront toujours mieux qu'un badge faux"), escalade vers un moteur de déduction logique : `src/lib/engine/deduction.ts` implémente une propagation de contraintes (cascade d'élimination après chaque placement, singles forcés par unité, réduction "pointing" région→ligne/colonne), classifiant directement en easy/medium/hard selon la technique nécessaire — plus aucun seuil numérique/percentile ([LRN-20260727224809-3](learnings/LRN-20260727224809-3.md)). Ancienne infra retirée (`difficulty.ts`, `calibrate-difficulty.mjs` + son JSON), remplacée par `scripts/measure-difficulty-distribution.mjs` (`pnpm difficulty:measure`) — contrôle de non-dégénérescence, pas une calibration. Mesuré sur 600 générations : répartition easy=26%/medium=25%/hard=50% globale, aucun tier vide sur les 6 combinaisons taille×forme. `docs/DIFFICULTY_RATING.md` réécrit avec l'historique complet (score solveur → variante testée-invalidée → moteur de déduction). `pnpm lint`/`pnpm build` verts après chaque étape ; playtest manuel laissé à Baptiste (agent-browser bloqué par mkcert en headless, cf. GLRN-251/BDR-059) — confirmé après coup ("ça me semble beaucoup mieux").
+
+Rituel `/memory-close` : basculement en mode multi-user en cours de rituel — Baptiste a créé `.claude/memory/.multi-user` après l'étape 2 (archivage des blockers résolus déjà fait en numérotation séquentielle classique, non retouché puisqu'il s'agissait de ré-archiver des entrées déjà existantes). Les 4 nouvelles entrées proposées cette session ont été re-numérotées en IDs timestamp (`-20260727224809-N`) avant écriture.
+
+**Entrées clés :**
+
+- [BDR-20260727224809-1](decisions/BDR-20260727224809-1.md) — difficulté recalculée via moteur de déduction logique
+- [BLK-20260727224809-4](blockers/BLK-20260727224809-4.md) — 1ère hypothèse de correction invalidée avant la bonne
+- [LRN-20260727224809-2](learnings/LRN-20260727224809-2.md) — métrique corrélée n'a pas corrigé le biais
+- [LRN-20260727224809-3](learnings/LRN-20260727224809-3.md) — classification par technique évite le seuillage calibré
