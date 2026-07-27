@@ -12,7 +12,7 @@
     "preview": "vite preview --host",
     "generate-pwa-assets": "pwa-assets-generator",
     "sounds:normalize": "node scripts/normalize-sounds.mjs",
-    "difficulty:calibrate": "node scripts/calibrate-difficulty.mjs"
+    "difficulty:measure": "node scripts/measure-difficulty-distribution.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",

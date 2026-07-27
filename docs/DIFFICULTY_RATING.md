@@ -1,76 +1,48 @@
 # Notation de difficulté — Phase 4.1
 
-Badge cosmétique Facile / Intermédiaire / Difficile affiché après génération d'un niveau. **Affichage pur, aucun pilotage de la génération** (décision produit — voir "Hors scope" plus bas).
+Badge cosmétique Facile / Intermédiaire / Difficile affiché après génération d'un niveau. **Affichage pur, aucun pilotage de la génération.**
 
-## Le métrique
+## L'approche : classification par techniques de déduction
+
+`src/lib/engine/deduction.ts::classifyDifficulty(grid)` rejoue la grille avec un solveur à **propagation de contraintes** qui imite le raisonnement humain (élimination directe, jamais de backtracking), et classe selon la technique la plus avancée nécessaire pour la résoudre entièrement :
+
+- **Facile** : résolu par élimination de base seule — cascade d'élimination (une reine placée élimine sa ligne/colonne/région/voisinage immédiat) + singles forcés (une unité non résolue avec un seul candidat restant est forcée), répétés jusqu'à point fixe.
+- **Intermédiaire** : l'élimination de base seule ne suffit pas, il faut en plus la réduction **"pointing"** : si tous les candidats restants d'une région tiennent sur une même ligne/colonne, cette ligne/colonne ne peut recevoir que la reine de cette région — les autres candidats de la ligne/colonne sont éliminés, ce qui débloque de nouveaux singles forcés.
+- **Difficile** : même avec les deux techniques, un point fixe est atteint sans que toutes les reines soient placées — un joueur devrait deviner/tâtonner pour terminer.
+
+**Aucun seuil numérique ni calibration** : la classification est une propriété structurelle du puzzle (quelle technique de raisonnement le résout), pas un score continu normalisé à comparer par percentile. Ça élimine par construction les deux biais qui affectaient l'ancienne approche (voir "Historique" plus bas).
+
+**Auto-vérification** : si la logique déclare le puzzle résolu (Facile/Intermédiaire), `classifyDifficulty` vérifie que le placement déduit satisfait bien `rules.isSolved` — sinon `throw` (bug de propagation, pas un cas légitime). Remplace l'infra de test retirée du projet (BDR-054).
+
+## Mesure de répartition (pas une calibration)
+
+`scripts/measure-difficulty-distribution.mjs` (réimplémentation JS autonome, indépendante de `src/`, même pattern que `normalize-sounds.mjs`) génère 100 niveaux par combinaison `{6,8,10} × {carré,cercle}` et affiche la répartition easy/medium/hard obtenue — un contrôle de non-dégénérescence, pas un calcul de seuils (il n'y en a plus). Lancer avec :
 
 ```
-score = nodesExplored / activeCells
+pnpm difficulty:measure
 ```
 
-- `nodesExplored` : nombre d'appels récursifs du solveur (`backtrack()` dans `src/lib/engine/solver.ts`) pendant la vérification d'unicité de solution — déjà calculé par `countSolutions` à chaque génération, coût additionnel nul.
-- `activeCells` : nombre de cases jouables de la grille (`grid.active` aplati), donné par le masque de forme (`src/lib/engine/shapes.ts`).
+Résultat mesuré (600 niveaux) :
 
-**Ce que ça mesure** : la taille de l'arbre de recherche qu'un solveur brute-force doit explorer pour trouver l'unique solution. C'est un proxy de complexité combinatoire, pas une mesure de difficulté humaine — il n'y a pas de moteur de déduction logique (pas de "naked/hidden single" façon Sudoku). Un score élevé veut dire "dur à trouver par force brute", ce qui corrèle avec la difficulté perçue sans lui être identique.
+| Combo        | Facile | Intermédiaire | Difficile |
+| ------------ | ------ | ------------- | --------- |
+| carré 6×6    | 33%    | 24%           | 43%       |
+| carré 8×8    | 19%    | 34%           | 47%       |
+| carré 10×10  | 9%     | 25%           | 66%       |
+| cercle 6×6   | 44%    | 11%           | 45%       |
+| cercle 8×8   | 31%    | 26%           | 43%       |
+| cercle 10×10 | 20%    | 27%           | 53%       |
+| **Global**   | 26%    | 25%           | 50%       |
 
-## Calibration
-
-Script autonome `scripts/calibrate-difficulty.mjs` (réimplémentation JS du moteur, indépendante de `src/` — même pattern que la calibration de `MAX_ATTEMPTS`, voir BDR-053 et LRN-040). Lancer avec :
-
-```
-pnpm difficulty:calibrate
-```
-
-Génère 100 niveaux à solution unique pour chacune des 6 combinaisons `{6,8,10} × {carré,cercle}` (600 au total), écrit les enregistrements bruts dans `scripts/output/difficulty-calibration.json` (non committé, régénérable) et affiche un résumé statistique (min/p33/p67/max) par combinaison.
-
-**À relancer si** : l'algorithme de génération de régions change, `GRID_SIZES`/`GRID_SHAPES` changent, ou le masque de forme change — les seuils ci-dessous ne sont valides que pour la version du moteur mesurée.
-
-## Découverte clé : la taille ne se normalise pas
-
-Diviser par `activeCells` ne rend PAS le score comparable entre tailles de grille. Médiane observée (carré+cercle mélangés) :
-
-| Taille | Médiane du score |
-| ------ | ---------------- |
-| 6×6    | 1,75             |
-| 8×8    | 5,42             |
-| 10×10  | 26,74            |
-
-×15 entre le 6×6 et le 10×10, après normalisation. **Un jeu de seuils unique poolant toutes les tailles réétiquetterait juste la taille de la grille** ("Facile" = petit, "Difficile" = grand), ce qui n'apporte aucune information utile — voir la première critique de l'approche naïve ("la taille = la difficulté") pendant la session `/rodin` qui a précédé cette mesure. **Décision : un jeu de seuils par taille, jamais poolés entre tailles.**
-
-## Décision : seuils poolés par forme, à l'intérieur de chaque taille
-
-Contrairement à la taille, la forme (carré/cercle) est poolée dans les seuils finaux — **choix assumé avec un biais mesuré**, pas un oubli.
-
-Biais mesuré (sur 100 grilles de chaque forme, tous seuils pooled par taille) : avec des seuils mélangés carré+cercle, un carré a 42-44% de chances d'être étiqueté "Difficile" contre seulement 23-25% pour un cercle — l'idéal neutre serait 33%/33%. Le score des carrés est structurellement plus élevé (plus de cases actives à taille égale — voir BDR-057), donc le pool tiré vers le haut par les carrés sous-estime les cercles difficiles et surestime les carrés faciles. Effet stable sur les 3 tailles.
-
-Choix retenu quand même : le badge est purement cosmétique (pas de pilotage de génération), le joueur ne voit jamais deux grilles de tailles/formes différentes côte à côte pour comparer, et 3 jeux de seuils plutôt que 6 réduit la surface de constantes à maintenir. Si ce biais devient gênant un jour (ex. si le badge sert à autre chose que l'affichage), les seuils séparés par forme sont conservés ci-dessous pour reprise sans redemander une calibration.
-
-## Seuils retenus (production)
-
-3 niveaux (Facile / Intermédiaire / Difficile), coupures aux terciles (p33/p67) — voir décision d'abandon du 4ᵉ niveau "Extrême" plus bas.
-
-| Taille | Facile | Intermédiaire | Difficile |
-| ------ | ------ | ------------- | --------- |
-| 6×6    | ≤ 1,41 | 1,41 – 2,03   | > 2,03    |
-| 8×8    | ≤ 3,24 | 3,24 – 7,75   | > 7,75    |
-| 10×10  | ≤ 10,8 | 10,8 – 44,12  | > 44,12   |
-
-## Seuils alternatifs, séparés par forme (conservés pour référence, non utilisés)
-
-| Combo        | Facile  | Intermédiaire | Difficile |
-| ------------ | ------- | ------------- | --------- |
-| carré 6×6    | ≤ 1,69  | 1,69 – 2,36   | > 2,36    |
-| carré 8×8    | ≤ 4,88  | 4,88 – 9,95   | > 9,95    |
-| carré 10×10  | ≤ 17,43 | 17,43 – 54,83 | > 54,83   |
-| cercle 6×6   | ≤ 1,19  | 1,19 – 1,81   | > 1,81    |
-| cercle 8×8   | ≤ 2,73  | 2,73 – 6,62   | > 6,62    |
-| cercle 10×10 | ≤ 7,73  | 7,73 – 24,99  | > 24,99   |
-
-## Décision : abandon du 4ᵉ niveau "Extrême"
-
-Passage de 4 niveaux (quartiles p25/médiane/p75) à 3 niveaux (terciles p33/p67) — recalibré le 2026-07-27. Le niveau "Extrême" apportait peu de valeur perçue (jamais plus de 25% des grilles) pour une distinction supplémentaire à maintenir ; 3 niveaux (Facile/Intermédiaire/Difficile) suffisent au MVP.
+Aucun tier n'est vide ou quasi-vide sur aucune combinaison — pas de dégénérescence. Le glissement vers "Difficile" aux grandes tailles (66% en carré 10×10) est attendu et légitime ici : plus de cases actives veut dire plus de contraintes à faire interagir avant qu'un raisonnement pur suffise, contrairement à l'ancien score où le lien taille↔score était un artefact de normalisation (voir Historique).
 
 ## Hors scope (pour l'instant)
 
-- **Pilotage de la génération par difficulté cible** (ex. "génère-moi une grille Extrême") : nécessiterait de composer la condition d'acceptation de la boucle `MAX_ATTEMPTS` avec un filtre de score, ce qui multiplie mécaniquement le nombre d'essais nécessaires (~×4 pour viser un quart de la distribution) et dépasserait probablement la marge actuelle de `MAX_ATTEMPTS=5000` sur 10×10. Pas construit tant que le besoin reste hypothétique.
-- **Intégration dans `src/`** : le compteur `nodesExplored` n'est pas encore branché dans `solver.ts`/`generator.ts`/`types.ts` (`Level`). Les seuils ci-dessus sont prêts à coder dès que cette étape démarre.
+- **Pilotage de la génération par difficulté cible** : nécessiterait de composer la condition d'acceptation de la boucle `MAX_ATTEMPTS` avec un filtre de classification, ce qui multiplie mécaniquement le nombre d'essais nécessaires. Pas construit tant que le besoin reste hypothétique.
+- **Comptage de "guesses"** pour distinguer plusieurs niveaux de difficulté à l'intérieur du tier "Difficile" : le classifieur s'arrête à "il faut deviner", sans mesurer combien. À reconsidérer si un 4ᵉ niveau redevient utile.
+
+## Historique
+
+- **v1 (BDR-062/063)** : `score = nodesExplored / activeCells`, où `nodesExplored` comptait tous les appels récursifs du backtracking de `solver.ts` pendant la vérification d'unicité. Seuils calibrés empiriquement par percentile (terciles), poolés par taille et par forme. Deux biais mesurés et documentés : non-invariance d'échelle (médiane ×15 entre 6×6 et 10×10 même après normalisation par `activeCells` — LRN-042) et biais de poolage carré/cercle (un carré avait 2× plus de chances d'être étiqueté "Difficile" qu'un cercle à seuils égaux — LRN-043).
+- **v2 (testée, abandonnée)** : hypothèse que `nodesToFirstSolution` (nœuds explorés jusqu'à la 1ère solution, plutôt que le total de la recherche d'unicité) corrigerait ces biais. Testé empiriquement sur 600 générations fraîches : biais carré/cercle quasi identique (voire légèrement pire à 10×10), facteur d'échelle 6×6→10×10 quasi identique (×31 dans les deux cas). Les deux métriques sont trop corrélées (même structure combinatoire, même ordre de parcours fixe du backtracking) pour que l'une résolve ce que l'autre ne résout pas — changement testé puis intégralement annulé, code de prod jamais impacté.
+- **v3 (actuelle)** : moteur de déduction logique décrit ci-dessus. Remplace un proxy de complexité combinatoire du solveur (qui ne mesurait rien de la difficulté humaine) par une classification directe du raisonnement nécessaire.

@@ -11,3 +11,6 @@ stats.html
 # Obsidian vault
 **/.obsidian/
 .claude/memory/dashboard.md
+
+# Claude Memory
+.multi-user
