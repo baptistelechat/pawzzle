@@ -1,0 +1,244 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <style>
+        @font-face {
+          font-family: "Fredoka";
+          src: url("assets/fonts/Fredoka-SemiBold.woff2") format("woff2");
+          font-weight: 600;
+          font-style: normal;
+          font-display: block;
+        }
+
+        #root {
+          position: absolute;
+          inset: 0;
+          width: 1080px;
+          height: 1920px;
+          overflow: hidden;
+          background: #fff8f0;
+        }
+        .s12-world {
+          position: absolute;
+          inset: 0;
+          transform-origin: 50% 50%;
+          will-change: transform;
+        }
+        .s12-grid {
+          position: absolute;
+          left: 130px;
+          top: 460px;
+          width: 820px;
+          height: 820px;
+          display: grid;
+          grid-template-columns: repeat(6, 130px);
+          grid-template-rows: repeat(6, 130px);
+          gap: 8px;
+        }
+        .s12-cell {
+          background: #ffe8d6;
+          border-radius: 28%;
+          border: 2px solid rgba(74, 55, 40, 0.1);
+          box-shadow: 0 10px 22px rgba(74, 55, 40, 0.16);
+        }
+        @supports (corner-shape: squircle) {
+          .s12-cell {
+            corner-shape: squircle;
+            border-radius: 30%;
+          }
+        }
+        .s12-caption {
+          position: absolute;
+          left: 90px;
+          right: 90px;
+          top: 1390px;
+          text-align: center;
+          font-family: "Fredoka", sans-serif;
+          font-weight: 600;
+          font-size: 64px;
+          line-height: 1.25;
+          color: #4a3728;
+          opacity: 0;
+        }
+      </style>
+
+      <div
+        data-hf-id="hf-yytx"
+        id="root"
+        data-composition-id="scene12"
+        data-width="1080"
+        data-height="1920"
+        data-duration="7"
+      >
+        <div
+          data-hf-id="hf-bo8z"
+          class="s12-world"
+          id="s12-world"
+          data-layout-allow-overflow="true"
+        >
+          <div data-hf-id="hf-ny7i" class="s12-grid" id="s12-grid"></div>
+        </div>
+        <div
+          data-hf-id="hf-ps0o"
+          class="s12-caption"
+          id="s12-caption"
+          data-hidden=""
+        >
+          Dans ce village,
+        </div>
+      </div>
+
+      <script>
+        window.__timelines = window.__timelines || {};
+
+        // Real board from the game engine (src/lib/engine/generateLevel(6,"square")),
+        // frozen once — see project Notes for how it was produced.
+        const REGIONS = [
+          [2, 4, 1, 4, 4, 0],
+          [2, 4, 4, 4, 4, 0],
+          [2, 2, 4, 4, 0, 0],
+          [2, 5, 5, 0, 0, 0],
+          [2, 5, 5, 5, 3, 0],
+          [2, 2, 5, 5, 0, 0],
+        ];
+        const REGION_COLORS = [
+          "#ffb5a7",
+          "#e7cb80",
+          "#9ee1ab",
+          "#77e0f2",
+          "#b4cbff",
+          "#f4b6ed",
+        ];
+
+        const gridEl = document.getElementById("s12-grid");
+        const cells = [];
+        const regionCells = {};
+        for (let row = 0; row < 6; row++) {
+          cells[row] = [];
+          for (let col = 0; col < 6; col++) {
+            const cell = document.createElement("div");
+            cell.className = "s12-cell";
+            cell.id = "s12-cell-" + row + "-" + col;
+            gridEl.appendChild(cell);
+            cells[row][col] = cell;
+            const region = REGIONS[row][col];
+            (regionCells[region] = regionCells[region] || []).push(cell);
+          }
+        }
+
+        // Measure cell (0,0) synchronously (single-scene composition — DOM
+        // measurement at build time is allowed per the animation rules
+        // contract) to derive the punched-in camera opening.
+        const targetCell = cells[0][0];
+        const rect = targetCell.getBoundingClientRect();
+        const viewportCenterX = 1080 / 2;
+        const viewportCenterY = 1920 / 2;
+        const offsetX = rect.left + rect.width / 2 - viewportCenterX;
+        const offsetY = rect.top + rect.height / 2 - viewportCenterY;
+
+        // viewport-change (rules-index.md): single .world wrapper, single-element
+        // composite transform translate(x,y) scale(S). S0 lowered to 5 (from an
+        // earlier 9) so the squircle's rounded corner, border and shadow are
+        // still legible while punched in — a flatter, more recognizable macro
+        // shot, not an abstract color field.
+        const world = document.getElementById("s12-world");
+        const S0 = 5;
+        const cam = { scale: S0, x: -offsetX * S0, y: -offsetY * S0 };
+        function applyCamera() {
+          world.style.transform =
+            "translate(" +
+            cam.x +
+            "px, " +
+            cam.y +
+            "px) scale(" +
+            cam.scale +
+            ")";
+        }
+        applyCamera(); // seed frame 0 — punched in on cell (0,0).
+
+        const tl = gsap.timeline({ paused: true });
+
+        // sine-wave-loop (rules-index.md), onUpdate form on cam.scale: bounded
+        // breathing while the camera holds punched-in, before the pull-back —
+        // this IS the "macro, ambiguous" beat, now continuous with the reveal
+        // that follows (no hard cut into scene 2 — it's the same sub-composition
+        // and the same .world wrapper for the whole shot).
+        const breathePhase = { p: 0 };
+        tl.to(
+          breathePhase,
+          {
+            p: Math.PI * 2 * 1.5,
+            duration: 1.3,
+            ease: "none",
+            onUpdate: function () {
+              const s = Math.sin(breathePhase.p);
+              cam.scale = S0 + s * 0.12;
+              cam.x = -offsetX * cam.scale;
+              cam.y = -offsetY * cam.scale;
+              applyCamera();
+            },
+          },
+          0,
+        );
+
+        // viewport-change (rules-index.md), extreme-range pull-back: continuous
+        // zoom-out from the punched-in macro framing to the full 1x grid layout.
+        tl.to(
+          cam,
+          {
+            scale: 1,
+            x: 0,
+            y: 0,
+            duration: 1.8,
+            ease: "power3.inOut",
+            onUpdate: applyCamera,
+          },
+          1.3,
+        );
+
+        // Regions wash in one blob at a time (grid-card-assemble-adjacent
+        // reveal, Compose posture) as the pull-back settles — real flood-fill
+        // regions now, not columns.
+        const regionIds = Object.keys(regionCells).sort(
+          (a, b) => Number(a) - Number(b),
+        );
+        regionIds.forEach(function (regionId, i) {
+          const startAt = 2.2 + i * 0.25;
+          regionCells[regionId].forEach(function (cell) {
+            tl.to(
+              cell,
+              {
+                backgroundColor: REGION_COLORS[regionId],
+                duration: 0.5,
+                ease: "power2.out",
+              },
+              startAt,
+            );
+          });
+        });
+
+        // spring-pop-entrance (rules-index.md), calm settle: caption fades in
+        // once the village has finished revealing itself, holds long enough to
+        // read comfortably, then exits (fade + slight upward drift) rather than
+        // cutting instantly.
+        tl.fromTo(
+          "#s12-caption",
+          { opacity: 0, y: 10, scale: 0.96 },
+          { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "power3.out" },
+          4.0,
+        );
+        tl.to(
+          "#s12-caption",
+          { opacity: 0, y: -12, scale: 0.98, duration: 0.4, ease: "power2.in" },
+          6.4,
+        );
+
+        window.__timelines["scene12"] = tl;
+      </script>
+    </template>
+  </body>
+</html>

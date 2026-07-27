@@ -1,0 +1,55 @@
+[INFO] [Render] Pipeline started {"renderJobId":"f8306d12-6ccc-40cf-ad90-ceb623c981ab","platform":"win32","arch":"x64","nodeVersion":"v24.18.0","fps":{"num":30,"den":1},"format":"mp4","quality":"high","browserGpuMode":"auto","forceScreenshot":false,"protocolTimeout":300000,"browserTimeout":120000,"pageNavigationTimeout":60000,"playerReadyTimeout":45000}
+[INFO] [Render:trace] {"renderJobId":"f8306d12-6ccc-40cf-ad90-ceb623c981ab","phase":"pipeline","status":"checkpoint","elapsedMs":11,"message":"started","format":"mp4","quality":"high","browserGpuMode":"auto","forceScreenshot":false,"protocolTimeoutMs":300000,"pageNavigationTimeoutMs":60000,"playerReadyTimeoutMs":45000,"requestedWorkers":"auto"}
+[INFO] [Render:trace] {"renderJobId":"f8306d12-6ccc-40cf-ad90-ceb623c981ab","phase":"compile","status":"start","elapsedMs":15,"needsAlpha":false}
+[INFO] [Compiler] Inlined CDN script: https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js
+[INFO] [Compiler] Embedded local font file: assets/fonts/Fredoka-SemiBold.woff2 (16 KB → data URI)
+[INFO] Compiled composition metadata {"renderJobId":"f8306d12-6ccc-40cf-ad90-ceb623c981ab","entryFile":"index.html","staticDuration":31.6,"width":1080,"height":1920,"videoCount":0,"audioCount":7,"renderModeHints":{"recommendScreenshot":false,"reasons":[]}}
+[INFO] [Render:trace] {"renderJobId":"f8306d12-6ccc-40cf-ad90-ceb623c981ab","phase":"compile","status":"end","elapsedMs":628,"durationMs":612,"needsAlpha":false}
+[INFO] [Render:trace] {"renderJobId":"f8306d12-6ccc-40cf-ad90-ceb623c981ab","phase":"compile","status":"checkpoint","elapsedMs":635,"message":"composition metadata resolved","width":1080,"height":1920,"videoCount":0,"audioCount":7,"imageCount":1,"deviceScaleFactor":1,"forceScreenshot":false,"compositionHash":"ffcac7c7ba24de2e"}
+[INFO] [Render] Low-memory render profile active — screenshot capture, auto-worker calibration skipped, pinned to 1 worker. Override with --no-low-memory-mode or PRODUCER_LOW_MEMORY_MODE=false. {"renderJobId":"f8306d12-6ccc-40cf-ad90-ceb623c981ab","totalMemMb":8063,"thresholdMb":8192}
+[INFO] [Render:trace] {"renderJobId":"f8306d12-6ccc-40cf-ad90-ceb623c981ab","phase":"browser_probe","status":"start","elapsedMs":638,"forceScreenshot":true,"stagePhase":"calibrating"}
+[INFO] Launching browser for composition probe... {"renderJobId":"f8306d12-6ccc-40cf-ad90-ceb623c981ab","reasons":["scripted audio volume"]}
+[INFO] Creating capture session... {"renderJobId":"f8306d12-6ccc-40cf-ad90-ceb623c981ab","attempt":1,"maxAttempts":2}
+[hyperframes] browserGpuMode auto → hardware (WebGL renderer vendor="Google Inc. (Intel)" renderer="ANGLE (Intel, Intel(R) UHD Graphics 630 (0x00003E9B) Direct3D11 vs_5_0 ps_5_0, D3D11)")
+[INFO] Waiting for composition to initialize... {"renderJobId":"f8306d12-6ccc-40cf-ad90-ceb623c981ab","attempt":1}
+[FileServer] 404 Not Found: /assets/paw_correct.mp3
+[FileServer] 404 Not Found: /assets/paw_correct.mp3
+[FileServer] 404 Not Found: /assets/paw_correct.mp3
+[FileServer] 404 Not Found: /assets/paw_correct.mp3
+[FileServer] 404 Not Found: /assets/paw_correct.mp3
+[FileServer] 404 Not Found: /assets/paw_correct.mp3
+[FileServer] 404 Not Found: /assets/paw_correct.mp3
+[FileServer] 404 Not Found: /assets/paw_correct.mp3
+[FileServer] 404 Not Found: /assets/paw_correct.mp3
+[FileServer] 404 Not Found: /assets/paw_correct.mp3
+[FileServer] 404 Not Found: /assets/paw_correct.mp3
+[FileServer] 404 Not Found: /assets/paw_correct.mp3
+[INFO] Composition ready {"renderJobId":"f8306d12-6ccc-40cf-ad90-ceb623c981ab","attempt":1,"initMs":19577}
+[INFO] Using static duration from data-duration attribute {"renderJobId":"f8306d12-6ccc-40cf-ad90-ceb623c981ab","duration":31.6}
+[INFO] Discovering media assets from browser DOM... {"renderJobId":"f8306d12-6ccc-40cf-ad90-ceb623c981ab"}
+[INFO] Discovering audio volume automation... {"renderJobId":"f8306d12-6ccc-40cf-ad90-ceb623c981ab","audioCount":7}
+[INFO] [Probe] Runtime audio volume automation: bgm {"renderJobId":"f8306d12-6ccc-40cf-ad90-ceb623c981ab","keyframeCount":106}
+[WARN] Browser encountered network failures during page load: {"renderJobId":"f8306d12-6ccc-40cf-ad90-ceb623c981ab","failures":["[Browser:HTTP404] GET http://localhost:53791/assets/paw_correct.mp3 resource=media Not Found","[non-blocking] Failed to load resource: the server responded with a status of 404 (Not Found)","[Browser:HTTP404] GET http://localhost:53791/assets/paw_correct.mp3 resource=media Not Found","[non-blocking] Failed to load resource: the server responded with a status of 404 (Not Found)","[Browser:HTTP404] GET http://localhost:53791/assets/paw_correct.mp3 resource=media Not Found","[non-blocking] Failed to load resource: the server responded with a status of 404 (Not Found)","[Browser:HTTP404] GET http://localhost:53791/assets/paw_correct.mp3 resource=media Not Found","[non-blocking] Failed to load resource: the server responded with a status of 404 (Not Found)","[Browser:HTTP404] GET http://localhost:53791/assets/paw_correct.mp3 resource=media Not Found","[non-blocking] Failed to load resource: the server responded with a status of 404 (Not Found)"]}
+[Render] Asset load failure: [Browser:HTTP404] GET http://localhost:53791/assets/paw_correct.mp3 resource=media Not Found
+[Render] Asset load failure: [non-blocking] Failed to load resource: the server responded with a status of 404 (Not Found)
+[Render] Asset load failure: [Browser:HTTP404] GET http://localhost:53791/assets/paw_correct.mp3 resource=media Not Found
+[Render] Asset load failure: [non-blocking] Failed to load resource: the server responded with a status of 404 (Not Found)
+[Render] Asset load failure: [Browser:HTTP404] GET http://localhost:53791/assets/paw_correct.mp3 resource=media Not Found
+[INFO] [Render:trace] {"renderJobId":"f8306d12-6ccc-40cf-ad90-ceb623c981ab","phase":"browser_probe","status":"end","elapsedMs":20307,"durationMs":19668,"forceScreenshot":true,"stagePhase":"calibrating"}
+[INFO] [Render:trace] {"renderJobId":"f8306d12-6ccc-40cf-ad90-ceb623c981ab","phase":"browser_probe","status":"checkpoint","elapsedMs":20312,"message":"duration resolved","durationSeconds":31.6,"totalFrames":948,"compositionHash":"ffcac7c7ba24de2e","beginFrameStalled":false}
+[INFO] [Render:trace] {"renderJobId":"f8306d12-6ccc-40cf-ad90-ceb623c981ab","phase":"video_extract","status":"start","elapsedMs":20313,"videoCount":0}
+[INFO] [Render:trace] {"renderJobId":"f8306d12-6ccc-40cf-ad90-ceb623c981ab","phase":"video_extract","status":"end","elapsedMs":20397,"durationMs":84,"videoCount":0}
+[INFO] [Render:trace] {"renderJobId":"f8306d12-6ccc-40cf-ad90-ceb623c981ab","phase":"video_extract","status":"checkpoint","elapsedMs":20417,"message":"frames resolved","videoCount":0,"extractedVideoCount":0,"totalFramesExtracted":0,"maxFramesPerVideo":0,"avgFramesPerExtractedVideo":null,"vfrPreflightCount":null,"vfrPreflightMs":null,"cacheHits":null,"cacheMisses":null,"transientRetries":null,"minVideoFrameCoverageRatio":null,"authoredTimedClipCount":13}
+[INFO] [Render] No HDR sources detected — rendering SDR {"renderJobId":"f8306d12-6ccc-40cf-ad90-ceb623c981ab"}
+[INFO] [Render:trace] {"renderJobId":"f8306d12-6ccc-40cf-ad90-ceb623c981ab","phase":"hdr_detection","status":"checkpoint","elapsedMs":20418,"message":"resolved","requestedHdrMode":"auto","effectiveHdr":"sdr","nativeHdrVideoCount":0,"nativeHdrImageCount":0}
+[INFO] [Render:trace] {"renderJobId":"f8306d12-6ccc-40cf-ad90-ceb623c981ab","phase":"audio_process","status":"start","elapsedMs":20418,"audioCount":7}
+[INFO] [Render:trace] {"renderJobId":"f8306d12-6ccc-40cf-ad90-ceb623c981ab","phase":"audio_process","status":"end","elapsedMs":20812,"durationMs":393,"audioCount":7}
+[WARN] Render completed capture with correctness warnings {"renderJobId":"f8306d12-6ccc-40cf-ad90-ceb623c981ab","strictness":"best-effort","warningCodes":["audio_processing_failed"],"warningReasons":["source_not_found"],"warningStages":["source"],"warningOwners":["user"],"warningRetryable":false}
+[INFO] [Render:trace] {"renderJobId":"f8306d12-6ccc-40cf-ad90-ceb623c981ab","phase":"Processing audio tracks","status":"error","elapsedMs":20816,"durationMs":0,"message":"Render blocked by 1 correctness warning: audio_processing_failed"}
+[INFO] [Render] Failure summary {"renderJobId":"f8306d12-6ccc-40cf-ad90-ceb623c981ab","failedStage":"Processing audio tracks","error":"Render blocked by 1 correctness warning: audio_processing_failed","elapsedMs":20817,"stageTimings":{"compileOnlyMs":597,"browserProbeMs":19660,"compileMs":20297,"videoExtractMs":83,"audioProcessMs":393},"isTimeout":false,"workers":"auto","protocolTimeout":300000,"observedFailedPhase":"Processing audio tracks","observedLastPhase":"Processing audio tracks","observedLastStatus":"error","browserDiagnostics":{"total":27,"errors":0,"pageErrors":0,"requestFailed":0,"httpErrors":12,"navigationStarts":1,"navigationFailures":0,"consoleErrors":0,"consoleWarnings":0},"extraction":{"videoCount":0,"extractedVideoCount":0,"totalFramesExtracted":0,"maxFramesPerVideo":0,"authoredTimedClipCount":13},"browserConsoleErrors":["[Browser:HTTP404] GET http://localhost:53791/assets/paw_correct.mp3 resource=media Not Found","[Browser:HTTP404] GET http://localhost:53791/assets/paw_correct.mp3 resource=media Not Found","[Browser:HTTP404] GET http://localhost:53791/assets/paw_correct.mp3 resource=media Not Found","[Browser:HTTP404] GET http://localhost:53791/assets/paw_correct.mp3 resource=media Not Found","[Browser:HTTP404] GET http://localhost:53791/assets/paw_correct.mp3 resource=media Not Found"]}
+
+✗  Render failed
+
+   Render blocked by 1 correctness warning: audio_processing_failed
+   Try --docker for containerized rendering
+

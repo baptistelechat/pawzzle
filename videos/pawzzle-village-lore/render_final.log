@@ -1,0 +1,39 @@
+
+◆  Rendering pawzzle-village-lore → C:\Users\bapti\Desktop\DEV\pawzzle\videos\pawzzle-village-lore\renders\pawzzle-village-lore_2026-07-27_23-18-12.mp4
+   30fps · high · auto workers (8 cores detected)
+   GPU: browser GPU (auto-detect)
+
+[?25l│
+◇  Browser: cache
+[?25h
+  ✗ [index.html] audio_src_not_found: <audio> element references file(s) not found in the project: assets/paw_correct.mp3. The rendered video will be silent.
+    Fix: Add the file "assets/paw_correct.mp3" to the project directory, or update the src attribute to point to an existing file.
+  Continuing render despite lint issues. Use --strict to block errors.
+
+  Trying the experimental parallel drawElement capture path for this install (disabled automatically if it ever needs to fall back; opt out anytime: HF_DE_PARALLEL_ROUTER=false)
+  █░░░░░░░░░░░░░░░░░░░░░░░░  5%  Compiling composition
+[BrowserManager] Browser launched (HeadlessChrome/152.0.7928.2, screenshot, gl=--use-gl=angle --use-angle=d3d11, headlessShell=true, platform=win32)
+[initSession:screenshot] page.goto start (1ms)
+[HyperFrames] render runtime fps [object Object]
+[initSession:screenshot] page.goto complete (749ms)
+[non-blocking] Failed to load resource: the server responded with a status of 404 (Not Found)
+[non-blocking] Failed to load resource: the server responded with a status of 404 (Not Found)
+[non-blocking] Failed to load resource: the server responded with a status of 404 (Not Found)
+[non-blocking] Failed to load resource: the server responded with a status of 404 (Not Found)
+[non-blocking] Failed to load resource: the server responded with a status of 404 (Not Found)
+[non-blocking] Failed to load resource: the server responded with a status of 404 (Not Found)
+[initSession:screenshot] GSAP proxy flush complete (791ms)
+[non-blocking] Failed to load resource: the server responded with a status of 404 (Not Found)
+[non-blocking] Failed to load resource: the server responded with a status of 404 (Not Found)
+[non-blocking] Failed to load resource: the server responded with a status of 404 (Not Found)
+[non-blocking] Failed to load resource: the server responded with a status of 404 (Not Found)
+[non-blocking] Failed to load resource: the server responded with a status of 404 (Not Found)
+[non-blocking] Failed to load resource: the server responded with a status of 404 (Not Found)
+[initSession:screenshot] pollHfReady complete (808ms)
+[initSession:screenshot] pollSubCompositionTimelines complete (ready) (820ms)
+[initSession:screenshot] applyVideoMetadataHints complete (821ms)
+[initSession:screenshot] media + fonts + tailwind ready (827ms)
+[initSession:screenshot] static-frame dedup: disabled (verification budget exhausted before frame 558; too much predicted-static material to fully verify — this is the safe fallback, not an error) (15858ms)
+  ██░░░░░░░░░░░░░░░░░░░░░░░  10%  Extracting video frames
+  █████░░░░░░░░░░░░░░░░░░░░  20%  Processing audio tracks
+  █████░░░░░░░░░░░░░░░░░░░░  20%  Failed: Render blocked by 1 correctness warning: audio_processing_failed

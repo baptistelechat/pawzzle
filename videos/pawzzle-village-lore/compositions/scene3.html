@@ -1,0 +1,175 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <style>
+        @font-face {
+          font-family: "Fredoka";
+          src: url("assets/fonts/Fredoka-SemiBold.woff2") format("woff2");
+          font-weight: 600;
+          font-style: normal;
+          font-display: block;
+        }
+
+        #root {
+          position: absolute;
+          inset: 0;
+          width: 1080px;
+          height: 1920px;
+          overflow: hidden;
+          background: #fff8f0;
+        }
+        .s3-grid {
+          position: absolute;
+          left: 130px;
+          top: 460px;
+          width: 820px;
+          height: 820px;
+          display: grid;
+          grid-template-columns: repeat(6, 130px);
+          grid-template-rows: repeat(6, 130px);
+          gap: 8px;
+        }
+        .s3-cell {
+          border-radius: 28%;
+          border: 2px solid rgba(74, 55, 40, 0.1);
+          box-shadow: 0 10px 22px rgba(74, 55, 40, 0.16);
+          position: relative;
+        }
+        @supports (corner-shape: squircle) {
+          .s3-cell {
+            corner-shape: squircle;
+            border-radius: 30%;
+          }
+        }
+        .s3-paw {
+          position: absolute;
+          inset: 0;
+          display: grid;
+          place-items: center;
+          opacity: 0;
+        }
+        .s3-paw svg {
+          width: 76px;
+          height: 76px;
+        }
+        .s3-caption {
+          position: absolute;
+          left: 90px;
+          right: 90px;
+          top: 1390px;
+          text-align: center;
+          font-family: "Fredoka", sans-serif;
+          font-weight: 600;
+          font-size: 58px;
+          line-height: 1.25;
+          color: #4a3728;
+          opacity: 0;
+        }
+      </style>
+
+      <div
+        data-hf-id="hf-bpqv"
+        id="root"
+        data-composition-id="scene3"
+        data-width="1080"
+        data-height="1920"
+        data-duration="5"
+      >
+        <div data-hf-id="hf-7et0" class="s3-grid" id="s3-grid"></div>
+        <div data-hf-id="hf-uquu" class="s3-caption" id="s3-caption">
+          chaque chat a son quartier préféré
+        </div>
+        <audio
+          data-hf-id="hf-ovpt"
+          id="s3-sfx-correct"
+          src="assets/paw_correct.mp3"
+          data-start="0.69"
+          data-track-index="11"
+        ></audio>
+      </div>
+
+      <script>
+        window.__timelines = window.__timelines || {};
+
+        // Real board from the game engine (generateLevel(6,"square")), frozen.
+        const REGIONS = [
+          [2, 4, 1, 4, 4, 0],
+          [2, 4, 4, 4, 4, 0],
+          [2, 2, 4, 4, 0, 0],
+          [2, 5, 5, 0, 0, 0],
+          [2, 5, 5, 5, 3, 0],
+          [2, 2, 5, 5, 0, 0],
+        ];
+        const REGION_COLORS = [
+          "#ffb5a7",
+          "#e7cb80",
+          "#9ee1ab",
+          "#77e0f2",
+          "#b4cbff",
+          "#f4b6ed",
+        ];
+
+        // lucide-react PawPrint (v1.25.0), exact icon node — reused as-is, not
+        // redrawn (see src/components/Grid/components/CellContent.tsx:41).
+        const PAW_SVG =
+          '<svg viewBox="0 0 24 24" fill="none" stroke="#4a3728" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+          '<circle cx="11" cy="4" r="2"/>' +
+          '<circle cx="18" cy="8" r="2"/>' +
+          '<circle cx="20" cy="16" r="2"/>' +
+          '<path d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"/>' +
+          "</svg>";
+
+        const gridEl = document.getElementById("s3-grid");
+        const cells = [];
+        for (let row = 0; row < 6; row++) {
+          cells[row] = [];
+          for (let col = 0; col < 6; col++) {
+            const cell = document.createElement("div");
+            cell.className = "s3-cell";
+            cell.style.background = REGION_COLORS[REGIONS[row][col]];
+            gridEl.appendChild(cell);
+            cells[row][col] = cell;
+          }
+        }
+
+        // First cat settles at the real solution's row-0 cell (0,2), yellow.
+        const pawWrap = document.createElement("div");
+        pawWrap.className = "s3-paw";
+        pawWrap.id = "s3-paw-0-2";
+        pawWrap.innerHTML = PAW_SVG;
+        cells[0][2].appendChild(pawWrap);
+
+        const tl = gsap.timeline({ paused: true });
+
+        // spring-pop-entrance (rules-index.md), firm-settle variant: power3.out,
+        // no overshoot, Y_RISE ~24-30px — a calm, un-bouncy landing.
+        tl.fromTo(
+          "#s3-paw-0-2",
+          { opacity: 0, y: -30, scale: 0.85 },
+          { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "power3.out" },
+          0.5,
+        );
+
+        // spring-pop-entrance, calm settle — comfortable read time (2.2s full
+        // hold), then a fade + slight upward exit rather than a hard cut.
+        tl.fromTo(
+          "#s3-caption",
+          { opacity: 0, y: 10, scale: 0.96 },
+          { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "power3.out" },
+          1.5,
+        );
+        tl.to(
+          "#s3-caption",
+          { opacity: 0, y: -12, scale: 0.98, duration: 0.4, ease: "power2.in" },
+          4.3,
+        );
+
+        window.__timelines["scene3"] = tl;
+      </script>
+    </template>
+  </body>
+</html>

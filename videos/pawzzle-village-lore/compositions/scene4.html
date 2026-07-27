@@ -1,0 +1,353 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <style>
+        @font-face {
+          font-family: "Fredoka";
+          src: url("assets/fonts/Fredoka-SemiBold.woff2") format("woff2");
+          font-weight: 600;
+          font-style: normal;
+          font-display: block;
+        }
+
+        #root {
+          position: absolute;
+          inset: 0;
+          width: 1080px;
+          height: 1920px;
+          overflow: hidden;
+          background: #fff8f0;
+        }
+        .s4-grid {
+          position: absolute;
+          left: 130px;
+          top: 460px;
+          width: 820px;
+          height: 820px;
+          display: grid;
+          grid-template-columns: repeat(6, 130px);
+          grid-template-rows: repeat(6, 130px);
+          gap: 8px;
+        }
+        .s4-cell {
+          position: relative;
+        }
+        .s4-glow {
+          position: absolute;
+          width: 182px;
+          height: 182px;
+          z-index: 5;
+          border-radius: 40%;
+          background: radial-gradient(
+            circle,
+            rgba(230, 150, 40, 0.9) 0%,
+            rgba(230, 150, 40, 0) 70%
+          );
+          opacity: 0;
+        }
+        .s4-forbidden {
+          position: absolute;
+          width: 130px;
+          height: 130px;
+          z-index: 6;
+          display: grid;
+          place-items: center;
+          opacity: 0;
+        }
+        .s4-forbidden svg {
+          width: 56px;
+          height: 56px;
+        }
+        .s4-face {
+          position: absolute;
+          inset: 0;
+          border-radius: 28%;
+          border: 2px solid rgba(74, 55, 40, 0.1);
+          box-shadow: 0 10px 22px rgba(74, 55, 40, 0.16);
+        }
+        @supports (corner-shape: squircle) {
+          .s4-face {
+            corner-shape: squircle;
+            border-radius: 30%;
+          }
+        }
+        .s4-paw-static {
+          position: absolute;
+          inset: 0;
+          z-index: 3;
+          display: grid;
+          place-items: center;
+        }
+        .s4-paw-static svg,
+        .s4-paw-moving svg {
+          width: 76px;
+          height: 76px;
+        }
+        .s4-paw-moving {
+          position: absolute;
+          width: 130px;
+          height: 130px;
+          z-index: 4;
+          display: grid;
+          place-items: center;
+          opacity: 0;
+        }
+        .s4-caption {
+          position: absolute;
+          left: 90px;
+          right: 90px;
+          top: 1390px;
+          text-align: center;
+          font-family: "Fredoka", sans-serif;
+          font-weight: 600;
+          font-size: 58px;
+          line-height: 1.25;
+          color: #4a3728;
+          opacity: 0;
+        }
+      </style>
+
+      <div
+        data-hf-id="hf-18gi"
+        id="root"
+        data-composition-id="scene4"
+        data-width="1080"
+        data-height="1920"
+        data-duration="6.5"
+      >
+        <div data-hf-id="hf-nxmq" class="s4-grid" id="s4-grid"></div>
+        <div data-hf-id="hf-axfv" class="s4-glow" id="s4-glow-0-3"></div>
+        <div data-hf-id="hf-21g7" class="s4-glow" id="s4-glow-1-2"></div>
+        <div
+          data-hf-id="hf-t3b1"
+          class="s4-forbidden"
+          id="s4-forbidden-0-3"
+        ></div>
+        <div
+          data-hf-id="hf-pzwh"
+          class="s4-forbidden"
+          id="s4-forbidden-1-2"
+        ></div>
+        <audio
+          data-hf-id="hf-w7st"
+          id="s4-sfx-correct"
+          src="assets/paw_correct.mp3"
+          data-start="1.85"
+          data-track-index="13"
+        ></audio>
+        <div
+          data-hf-id="hf-ypz0"
+          class="s4-paw-moving"
+          id="s4-paw-moving"
+        ></div>
+        <div data-hf-id="hf-32o5" class="s4-caption" id="s4-caption">
+          et déteste avoir un voisin trop collé.
+        </div>
+      </div>
+
+      <script>
+        window.__timelines = window.__timelines || {};
+
+        // Real board from the game engine (generateLevel(6,"square")), frozen.
+        const REGIONS = [
+          [2, 4, 1, 4, 4, 0],
+          [2, 4, 4, 4, 4, 0],
+          [2, 2, 4, 4, 0, 0],
+          [2, 5, 5, 0, 0, 0],
+          [2, 5, 5, 5, 3, 0],
+          [2, 2, 5, 5, 0, 0],
+        ];
+        const REGION_COLORS = [
+          "#ffb5a7",
+          "#e7cb80",
+          "#9ee1ab",
+          "#77e0f2",
+          "#b4cbff",
+          "#f4b6ed",
+        ];
+
+        // lucide-react PawPrint and X (v1.25.0), exact icon nodes — reused as-is
+        // (see src/components/Grid/components/CellContent.tsx:1,39,41). The X
+        // is recolored to a warm amber-brown (not the game's literal
+        // `text-destructive` red) — this beat is meant to read as a gentle
+        // "too close", not an alarm.
+        const PAW_SVG =
+          '<svg viewBox="0 0 24 24" fill="none" stroke="#4a3728" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+          '<circle cx="11" cy="4" r="2"/>' +
+          '<circle cx="18" cy="8" r="2"/>' +
+          '<circle cx="20" cy="16" r="2"/>' +
+          '<path d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"/>' +
+          "</svg>";
+        const X_SVG =
+          '<svg viewBox="0 0 24 24" fill="none" stroke="#c2703a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">' +
+          '<path d="M18 6 6 18"/>' +
+          '<path d="m6 6 12 12"/>' +
+          "</svg>";
+
+        const gridEl = document.getElementById("s4-grid");
+        const cells = [];
+        for (let row = 0; row < 6; row++) {
+          cells[row] = [];
+          for (let col = 0; col < 6; col++) {
+            const cell = document.createElement("div");
+            cell.className = "s4-cell";
+            cell.id = "s4-cell-" + row + "-" + col;
+
+            const face = document.createElement("div");
+            face.className = "s4-face";
+            face.style.background = REGION_COLORS[REGIONS[row][col]];
+            cell.appendChild(face);
+
+            gridEl.appendChild(cell);
+            cells[row][col] = cell;
+          }
+        }
+
+        // First cat, carried over from scene 3 at (0,2) — already resting, no
+        // entrance.
+        const paw0 = document.createElement("div");
+        paw0.className = "s4-paw-static";
+        paw0.innerHTML = PAW_SVG;
+        cells[0][2].appendChild(paw0);
+
+        // Decoy cells (0,3) and (1,2) are BOTH adjacent to the resting cat at
+        // (0,2) AND to each other — a single pair legibly reads as "too close".
+        // Glow + forbidden overlays are standalone root-level elements (not
+        // nested inside a cell) so they paint above neighboring cell faces
+        // instead of being clipped by them.
+        const CELL_STRIDE = 138; // 130px cell + 8px gap
+        const GRID_LEFT = 130;
+        const GRID_TOP = 460;
+        const GLOW_SIZE = 182;
+        function cellCenter(row, col) {
+          return {
+            x: GRID_LEFT + col * CELL_STRIDE + 65,
+            y: GRID_TOP + row * CELL_STRIDE + 65,
+          };
+        }
+        function positionGlow(id, row, col) {
+          const el = document.getElementById(id);
+          const c = cellCenter(row, col);
+          el.style.left = c.x - GLOW_SIZE / 2 + "px";
+          el.style.top = c.y - GLOW_SIZE / 2 + "px";
+        }
+        function positionForbidden(id, row, col) {
+          const el = document.getElementById(id);
+          el.innerHTML = X_SVG;
+          const c = cellCenter(row, col);
+          el.style.left = c.x - 65 + "px";
+          el.style.top = c.y - 65 + "px";
+        }
+        positionGlow("s4-glow-0-3", 0, 3);
+        positionGlow("s4-glow-1-2", 1, 2);
+        positionForbidden("s4-forbidden-0-3", 0, 3);
+        positionForbidden("s4-forbidden-1-2", 1, 2);
+
+        // Second cat starts hovering at the tempting (1,3) spot, then slides
+        // down to its real, non-adjacent solution cell at (2,3) — violet.
+        const pawMoving = document.getElementById("s4-paw-moving");
+        pawMoving.innerHTML = PAW_SVG;
+        pawMoving.style.left = GRID_LEFT + 3 * CELL_STRIDE + "px";
+        pawMoving.style.top = GRID_TOP + 1 * CELL_STRIDE + "px";
+
+        const tl = gsap.timeline({ paused: true });
+
+        // ambient-glow-bloom (rules-index.md), hero-bloom form: peak opacity
+        // capped at 0.30 (well under the 0.45 ceiling), warm amber — never red.
+        tl.fromTo(
+          "#s4-glow-0-3",
+          { opacity: 0, scale: 0.9 },
+          { opacity: 0.3, scale: 1, duration: 0.9, ease: "power2.out" },
+          0.2,
+        );
+        tl.fromTo(
+          "#s4-glow-1-2",
+          { opacity: 0, scale: 0.9 },
+          { opacity: 0.3, scale: 1, duration: 0.9, ease: "power2.out" },
+          0.35,
+        );
+
+        // spring-pop-entrance, calm settle: the real game's invalid-cell X
+        // appears with the glow, spelling out "forbidden" concretely instead
+        // of relying on the halo alone.
+        tl.fromTo(
+          "#s4-forbidden-0-3",
+          { opacity: 0, scale: 0.85 },
+          { opacity: 1, scale: 1, duration: 0.5, ease: "power3.out" },
+          0.3,
+        );
+        tl.fromTo(
+          "#s4-forbidden-1-2",
+          { opacity: 0, scale: 0.85 },
+          { opacity: 1, scale: 1, duration: 0.5, ease: "power3.out" },
+          0.45,
+        );
+
+        // spring-pop-entrance (rules-index.md), calm settle: the second cat
+        // appears hovering near the tempting spot.
+        tl.fromTo(
+          "#s4-paw-moving",
+          { opacity: 0, scale: 0.85 },
+          { opacity: 1, scale: 1, duration: 0.5, ease: "power3.out" },
+          0.9,
+        );
+
+        // nudge-curve (rules-index.md): slow-fast-slow three-phase slide, one
+        // cell straight down (138px), away from the glowing temptation.
+        tl.to(
+          "#s4-paw-moving",
+          { y: 15, duration: 0.1, ease: "power3.in" },
+          1.7,
+        );
+        tl.to("#s4-paw-moving", { y: 108, duration: 0.08, ease: "none" }, 1.8);
+        tl.to(
+          "#s4-paw-moving",
+          { y: 138, duration: 0.31, ease: "power4.out" },
+          1.9,
+        );
+
+        // The warning resolves once the cat has made its choice.
+        tl.to(
+          "#s4-glow-0-3",
+          { opacity: 0, duration: 0.5, ease: "power1.in" },
+          2.3,
+        );
+        tl.to(
+          "#s4-glow-1-2",
+          { opacity: 0, duration: 0.5, ease: "power1.in" },
+          2.3,
+        );
+        tl.to(
+          "#s4-forbidden-0-3",
+          { opacity: 0, duration: 0.5, ease: "power1.in" },
+          2.3,
+        );
+        tl.to(
+          "#s4-forbidden-1-2",
+          { opacity: 0, duration: 0.5, ease: "power1.in" },
+          2.3,
+        );
+
+        // spring-pop-entrance, calm settle — comfortable read time (2.2s full
+        // hold), then a fade + slight upward exit rather than a hard cut.
+        tl.fromTo(
+          "#s4-caption",
+          { opacity: 0, y: 10, scale: 0.96 },
+          { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "power3.out" },
+          3.0,
+        );
+        tl.to(
+          "#s4-caption",
+          { opacity: 0, y: -12, scale: 0.98, duration: 0.4, ease: "power2.in" },
+          5.8,
+        );
+
+        window.__timelines["scene4"] = tl;
+      </script>
+    </template>
+  </body>
+</html>

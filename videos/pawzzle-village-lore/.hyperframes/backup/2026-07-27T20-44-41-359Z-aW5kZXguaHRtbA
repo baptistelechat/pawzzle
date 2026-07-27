@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #fff8f0;
+      }
+
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #fff8f0;
+      }
+
+      /* Sub-comp slots stretch to fill the root frame. */
+      #root > div[data-composition-src] {
+        position: absolute;
+        inset: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      data-hf-id="hf-sbrt"
+      id="root"
+      data-composition-id="root"
+      data-start="0"
+      data-width="1080"
+      data-height="1920"
+      data-duration="31.6"
+    >
+      <!-- Plan 1-2 fusionnés (0-7s) : macro ambigu -> pull-back continu, un seul
+           mouvement de caméra, aucun cut entre les deux (une seule sous-comp) -->
+      <div
+        data-hf-id="hf-iz3b"
+        id="el-scene12"
+        class="clip"
+        data-composition-id="scene12"
+        data-composition-src="compositions/scene12.html"
+        data-start="0"
+        data-duration="7"
+        data-track-index="1"
+        data-width="1080"
+        data-height="1920"
+      ></div>
+
+      <!-- Plan 3 (7-12s) : première patte -->
+      <div
+        data-hf-id="hf-zfhg"
+        id="el-scene3"
+        class="clip"
+        data-composition-id="scene3"
+        data-composition-src="compositions/scene3.html"
+        data-start="7"
+        data-duration="5"
+        data-track-index="1"
+        data-width="1080"
+        data-height="1920"
+       data-hidden=""></div>
+
+      <!-- Plan 4 (12-18.5s) : glow + X interdit + déplacement -->
+      <div
+        data-hf-id="hf-p0yb"
+        id="el-scene4"
+        class="clip"
+        data-composition-id="scene4"
+        data-composition-src="compositions/scene4.html"
+        data-start="12"
+        data-duration="6.5"
+        data-track-index="1"
+        data-width="1080"
+        data-height="1920"
+       data-hidden=""></div>
+
+      <!-- Plan 5 (18.5-27.1s) : remplissage organique — durée allongée pour la
+           tenue du texte le plus long de la vidéo -->
+      <div
+        data-hf-id="hf-j2ro"
+        id="el-scene5"
+        class="clip"
+        data-composition-id="scene5"
+        data-composition-src="compositions/scene5.html"
+        data-start="18.5"
+        data-duration="8.6"
+        data-track-index="1"
+        data-width="1080"
+        data-height="1920"
+       data-hidden=""></div>
+
+      <!-- Plan 6 (27.1-31.6s) : lockup logo + mot final -->
+      <div
+        data-hf-id="hf-awrv"
+        id="el-scene6"
+        class="clip"
+        data-composition-id="scene6"
+        data-composition-src="compositions/scene6.html"
+        data-start="27.1"
+        data-duration="4.5"
+        data-track-index="1"
+        data-width="1080"
+        data-height="1920"
+      ></div>
+
+      <!-- Musique lofi réelle du jeu (public/sounds/ambient/), continue, fondus in/out -->
+      <audio
+        data-hf-id="hf-ktzi"
+        id="bgm"
+        src="assets/alex-morgan-calm-chillout-541036.mp3"
+        data-start="0"
+        data-duration="31.6"
+        data-track-index="10"
+        data-volume="0"
+      ></audio>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      // BGM: fade in over the opening beat, hold, fade out into the final card.
+      tl.to("#bgm", { volume: 0.75, duration: 1.5, ease: "power1.out" }, 0);
+      tl.to("#bgm", { volume: 0, duration: 2, ease: "power1.in" }, 29.6);
+
+      window.__timelines["root"] = tl;
+    </script>
+  </body>
+</html>

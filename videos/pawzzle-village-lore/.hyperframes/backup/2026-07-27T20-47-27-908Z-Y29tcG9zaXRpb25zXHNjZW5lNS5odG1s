@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+  </head>
+  <body>
+    <template>
+      <style>
+        @font-face {
+          font-family: "Fredoka";
+          src: url("assets/fonts/Fredoka-SemiBold.woff2") format("woff2");
+          font-weight: 600;
+          font-style: normal;
+          font-display: block;
+        }
+
+        #root {
+          position: absolute;
+          inset: 0;
+          width: 1080px;
+          height: 1920px;
+          overflow: hidden;
+          background: #fff8f0;
+        }
+        .s5-grid {
+          position: absolute;
+          left: 130px;
+          top: 320px;
+          width: 820px;
+          height: 820px;
+          display: grid;
+          grid-template-columns: repeat(6, 130px);
+          grid-template-rows: repeat(6, 130px);
+          gap: 8px;
+        }
+        .s5-cell {
+          border-radius: 28%;
+          border: 2px solid rgba(74, 55, 40, 0.1);
+          box-shadow: 0 10px 22px rgba(74, 55, 40, 0.16);
+          position: relative;
+        }
+        @supports (corner-shape: squircle) {
+          .s5-cell {
+            corner-shape: squircle;
+            border-radius: 30%;
+          }
+        }
+        .s5-paw {
+          position: absolute;
+          inset: 0;
+          display: grid;
+          place-items: center;
+        }
+        .s5-paw svg {
+          width: 76px;
+          height: 76px;
+        }
+        .s5-paw.s5-pending {
+          opacity: 0;
+        }
+        .s5-caption {
+          position: absolute;
+          left: 90px;
+          right: 90px;
+          top: 1200px;
+          text-align: center;
+          font-family: "Fredoka", sans-serif;
+          font-weight: 600;
+          color: #4a3728;
+        }
+        .s5-caption-line {
+          font-size: 50px;
+          line-height: 1.3;
+          opacity: 0;
+        }
+      </style>
+
+      <div data-hf-id="hf-2tbg" id="root" data-composition-id="scene5" data-width="1080" data-height="1920" data-duration="8.6">
+        <div data-hf-id="hf-kubk" class="s5-grid" id="s5-grid"></div>
+        <div data-hf-id="hf-20jt" class="s5-caption">
+          <div data-hf-id="hf-7gja" class="s5-caption-line" id="s5-line1">
+            Un chat par couleur, par ligne,par colonne.
+          </div>
+          <div data-hf-id="hf-9dxh" class="s5-caption-line" id="s5-line2">
+            Zéro contact, même du bout de la patte.
+          </div>
+        </div>
+        <audio data-hf-id="hf-lc6q" id="s5-sfx-correct-1" src="assets/paw_correct.mp3" data-start="0.54" data-track-index="14"></audio>
+        <audio data-hf-id="hf-657p" id="s5-sfx-correct-2" src="assets/paw_correct.mp3" data-start="1.34" data-track-index="15"></audio>
+        <audio data-hf-id="hf-kpk8" id="s5-sfx-correct-3" src="assets/paw_correct.mp3" data-start="2.14" data-track-index="16"></audio>
+        <audio data-hf-id="hf-1o0e" id="s5-sfx-correct-4" src="assets/paw_correct.mp3" data-start="2.94" data-track-index="17"></audio>
+      </div>
+
+      <script>
+        window.__timelines = window.__timelines || {};
+
+        // Real board from the game engine (generateLevel(6,"square")), frozen.
+        const REGIONS = [
+          [2, 4, 1, 4, 4, 0],
+          [2, 4, 4, 4, 4, 0],
+          [2, 2, 4, 4, 0, 0],
+          [2, 5, 5, 0, 0, 0],
+          [2, 5, 5, 5, 3, 0],
+          [2, 2, 5, 5, 0, 0],
+        ];
+        const REGION_COLORS = [
+          "#ffb5a7",
+          "#e7cb80",
+          "#9ee1ab",
+          "#77e0f2",
+          "#b4cbff",
+          "#f4b6ed",
+        ];
+
+        // lucide-react PawPrint (v1.25.0), exact icon node — reused as-is.
+        const PAW_SVG =
+          '<svg viewBox="0 0 24 24" fill="none" stroke="#4a3728" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+          '<circle cx="11" cy="4" r="2"/>' +
+          '<circle cx="18" cy="8" r="2"/>' +
+          '<circle cx="20" cy="16" r="2"/>' +
+          '<path d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"/>' +
+          "</svg>";
+
+        // Real solution — the game engine's actual output, verified
+        // adjacency-free (no two cats touch, including diagonally): (0,2),
+        // (1,5), (2,3), (3,1), (4,4), (5,0). (0,2) and (2,3) already settled
+        // in scenes 3-4.
+        const SOLUTION = [
+          { row: 0, col: 2 },
+          { row: 1, col: 5 },
+          { row: 2, col: 3 },
+          { row: 3, col: 1 },
+          { row: 4, col: 4 },
+          { row: 5, col: 0 },
+        ];
+        const SETTLED = { "0-2": true, "2-3": true };
+        const PENDING_ORDER = [
+          [1, 5],
+          [3, 1],
+          [4, 4],
+          [5, 0],
+        ];
+
+        const gridEl = document.getElementById("s5-grid");
+        const cells = [];
+        for (let row = 0; row < 6; row++) {
+          cells[row] = [];
+          for (let col = 0; col < 6; col++) {
+            const cell = document.createElement("div");
+            cell.className = "s5-cell";
+            cell.style.background = REGION_COLORS[REGIONS[row][col]];
+            gridEl.appendChild(cell);
+            cells[row][col] = cell;
+          }
+        }
+
+        SOLUTION.forEach(function (pos) {
+          const paw = document.createElement("div");
+          paw.className = "s5-paw";
+          paw.id = "s5-paw-" + pos.row + "-" + pos.col;
+          paw.innerHTML = PAW_SVG;
+          if (!SETTLED[pos.row + "-" + pos.col])
+            paw.classList.add("s5-pending");
+          cells[pos.row][pos.col].appendChild(paw);
+        });
+
+        const tl = gsap.timeline({ paused: true });
+
+        // spring-pop-entrance (rules-index.md), firm settle — deliberately
+        // spaced across the scene (Adapt: organic fill, not one grouped beat)
+        // rather than a single ≤0.5s staggered arrival.
+        const POP_TIMES = [0.4, 1.2, 2.0, 2.8];
+        PENDING_ORDER.forEach(function (rc, i) {
+          const sel = "#s5-paw-" + rc[0] + "-" + rc[1];
+          tl.fromTo(
+            sel,
+            { opacity: 0, y: -24, scale: 0.85 },
+            { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "power3.out" },
+            POP_TIMES[i],
+          );
+        });
+
+        // spring-pop-entrance, calm settle — both lines form one 2-line
+        // caption block. This is the longest text in the video (2 full rule
+        // sentences), so it gets the longest hold: ~3.6-3.7s full-opacity
+        // (vs ~2.2s elsewhere) before a fade + slight upward exit.
+        tl.fromTo(
+          "#s5-line1",
+          { opacity: 0, y: 10, scale: 0.96 },
+          { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "power3.out" },
+          3.6,
+        );
+        tl.fromTo(
+          "#s5-line2",
+          { opacity: 0, y: 10, scale: 0.96 },
+          { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "power3.out" },
+          3.8,
+        );
+        tl.to(
+          "#s5-line1",
+          { opacity: 0, y: -12, scale: 0.98, duration: 0.4, ease: "power2.in" },
+          7.9,
+        );
+        tl.to(
+          "#s5-line2",
+          { opacity: 0, y: -12, scale: 0.98, duration: 0.4, ease: "power2.in" },
+          7.9,
+        );
+
+        window.__timelines["scene5"] = tl;
+      </script>
+    </template>
+  </body>
+</html>
