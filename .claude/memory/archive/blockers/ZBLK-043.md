@@ -1,11 +1,11 @@
 ---
-id: BLK-002
+id: ZBLK-043
 type: blocker
 date: 2026-07-26
 tags: [memory-ritual, claude-code, protocol, session-start, pawzzle]
 ---
 
-# BLK-002 — Rituel mémoire : fichiers tagués sautés avant de répondre
+# ZBLK-043 — Rituel mémoire : fichiers tagués sautés avant de répondre
 
 | Friction                                                                                                                                                                                                                                                                                                                                                                                                                                       | Cause réelle                                                                                                                                                                                                                    | Solution                                                                                                                                                                                                                                                                 | Statut |
 | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------ |
@@ -13,4 +13,8 @@ tags: [memory-ritual, claude-code, protocol, session-start, pawzzle]
 
 ## Références
 
-- [LRN-040](../learnings/LRN-040.md) — le fichier dont l'omission a eu le plus d'impact sur la réponse initiale
+- [LRN-040](../../learnings/LRN-040.md) — le fichier dont l'omission a eu le plus d'impact sur la réponse initiale
+
+## Note de renumérotation
+
+Archivé initialement sous l'ID `BLK-002` (actif) — renumérotée `ZBLK-043` lors de l'archivage car `ZBLK-002` désignait déjà un autre blocker (init shadcn, 2026-07-21). Anomalie de désynchronisation entre pool actif et pool archive à investiguer via `/memory-doctor`.

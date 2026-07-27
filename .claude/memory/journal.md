@@ -583,7 +583,7 @@ Réflexion documentée dans `docs/DIFFICULTY_RATING.md` (métrique, découvertes
 
 Intégration dans l'app : `solver.ts` (compteur `nodesExplored`), `difficulty.ts` (nouveau, seuils + `computeDifficulty`), `types.ts` (`Difficulty` + champ sur `Level`), `generator.ts` (câblage), `DifficultyBadge.tsx` (nouveau, réutilise le composant `Badge` shadcn existant sans nouvelle couleur), `App.tsx` (badge inséré dans la rangée `PawCounter`/`HeartsRow`, donc visible seulement en `status === "playing"` — choix silencieux signalé après coup, [BDR-064](decisions/BDR-064.md)). `pnpm lint`/`pnpm build` verts. Pas de vérif navigateur automatisée ([BDR-059](decisions/BDR-059.md) toujours en vigueur).
 
-Rituel `/memory-close` : en cours de session, Baptiste a signalé que les fichiers mémoire individuels tagués (pas seulement les index) n'avaient pas été chargés avant de répondre à la question initiale — corrigé en rechargeant les fichiers pertinents ([BLK-002](blockers/BLK-002.md)), généralisé en mémoire globale sous GLRN-253.
+Rituel `/memory-close` : en cours de session, Baptiste a signalé que les fichiers mémoire individuels tagués (pas seulement les index) n'avaient pas été chargés avant de répondre à la question initiale — corrigé en rechargeant les fichiers pertinents ([ZBLK-043](archive/blockers/ZBLK-043.md)), généralisé en mémoire globale sous GLRN-253.
 
 **Entrées clés :**
 
@@ -592,4 +592,27 @@ Rituel `/memory-close` : en cours de session, Baptiste a signalé que les fichie
 - [BDR-064](decisions/BDR-064.md) — badge visible seulement en status playing
 - [LRN-042](learnings/LRN-042.md) — diviser par une dimension ne garantit pas l'invariance d'échelle
 - [LRN-043](learnings/LRN-043.md) — pooler des sous-groupes dans un seuillage crée un biais mesurable
-- [BLK-002](blockers/BLK-002.md) — rituel mémoire, fichiers tagués sautés (résolu)
+- [ZBLK-043](archive/blockers/ZBLK-043.md) — rituel mémoire, fichiers tagués sautés (résolu)
+
+## 2026-07-27
+
+Suite directe de la session précédente sur la difficulté : Baptiste a demandé de retirer le niveau "Extrême" et de recalibrer sur 3 niveaux (Facile/Intermédiaire/Difficile). Le script `scripts/calibrate-difficulty.mjs` a été modifié pour sortir des terciles (p33/p67) au lieu de quartiles, puis relancé sur 600 générations fraîches ; les seuils de `difficulty.ts`, le type `Difficulty` (types.ts) et `docs/DIFFICULTY_RATING.md` mis à jour en conséquence ([BDR-065](decisions/BDR-065.md)).
+
+Baptiste a ensuite demandé de remplacer le badge de difficulté par 3 icônes `Flame` (lucide-react) à côté du compteur de vies, même principe fill/outline que les cœurs — `DifficultyBadge` supprimé, `DifficultyFire` créé ([BDR-066](decisions/BDR-066.md)).
+
+Un bug de layout a suivi, signalé par Baptiste via capture d'écran : la ligne difficulté/pattes/vies se décalait entre une partie à 6/8 chats (1 chiffre) et une à 10 (2 chiffres), le compteur de pattes changeant de largeur. 3 itérations ont été nécessaires avant la bonne solution : une largeur réservée sur le texte seul aligné à gauche a supprimé le décalage mais transformé la rangée en disposition "edge-pinned" (`justify-between` sur toute la largeur) — rejetée par Baptiste qui voulait un groupe centré ; le retour à un groupe centré avec texte centré dans sa réserve a résolu le centrage mais laissé un trou visible avant les cœurs (entouré en rouge par Baptiste) ; la solution finale réserve la largeur sur le GROUPE icône+texte entier (`PawCounter` racine en largeur fixe + `justify-center`), gardant un gap icône-texte constant sans espace mort ([BDR-067](decisions/BDR-067.md), [BLK-044](blockers/BLK-044.md), généralisé en [LRN-044](learnings/LRN-044.md)).
+
+Baptiste a aussi demandé de reprendre l'animation des cœurs (`AnimatePresence` par icône, spring scale/rotate) pour les flammes — implémenté en un passage, mais Baptiste a signalé que seules les flammes changeant réellement d'état s'animaient à "Nouvelle partie", pas le groupe entier : "même problème déjà rencontré avec les cœurs". Cause : `DifficultyFire` n'avait pas reçu le `key={`difficulty-${levelId}`}` que `PawCounter`/`HeartsRow` reçoivent déjà de `App.tsx` pour forcer un remount complet — pattern déjà documenté 2 fois sur ce projet ([BDR-015](decisions/BDR-015.md), [BDR-024](decisions/BDR-024.md)) mais non vérifié sur ce nouveau composant. Fix en une ligne, généralisé en mémoire globale sous GLRN-254 ([BLK-045](blockers/BLK-045.md)).
+
+`pnpm lint`/`pnpm build` vérifiés verts après chaque changement. Vérification visuelle faite via `agent-browser` à la demande implicite (captures d'écran comparatives entre tailles de grille), `node_modules` cassé (liens symboliques manquants, sans rapport avec la session) réparé via `pnpm install --force` en cours de route.
+
+Rituel `/memory-close` : `BLK-002` (rituel mémoire, résolu la session précédente) archivé — collision de numéro évitée avec `ZBLK-002` déjà existant (init shadcn), archivé sous `ZBLK-043` à la place, même contournement déjà appliqué historiquement sur ce projet (cf. `ZBLK-016`-`ZBLK-019`). Sur choix explicite de Baptiste, LRN-044 (layout) gardé 🏠 local, LRN-045 (animation/remount) promu 🌍 global sous GLRN-254.
+
+**Entrées clés :**
+
+- [BDR-065](decisions/BDR-065.md) — difficulté réduite à 3 niveaux, seuils recalibrés en terciles
+- [BDR-066](decisions/BDR-066.md) — badge remplacé par 3 icônes Flame fill/outline
+- [BDR-067](decisions/BDR-067.md) — largeur réservée sur le groupe icône+compteur, pas le texte seul
+- [BLK-044](blockers/BLK-044.md) — layout ligne difficulté/pattes/vies, 3 itérations (résolu)
+- [BLK-045](blockers/BLK-045.md) — animation des flammes ne rejouait pas en groupe, récidive (résolu)
+- [LRN-044](learnings/LRN-044.md) — réserver une largeur variable sans casser un gap interne fixe
