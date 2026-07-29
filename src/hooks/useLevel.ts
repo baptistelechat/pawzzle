@@ -34,10 +34,26 @@ export interface PlacedPawn extends Position {
   invalid: boolean;
 }
 
+export interface UseLevelOptions {
+  // Budget d'erreurs avant qu'un niveau ne passe seul en "lost". Les modes
+  // run (Chrono/Endurance) passent Infinity : le niveau ne perd jamais tout
+  // seul, c'est useGameRun qui gère la fin de partie via son propre pool de
+  // vies partagé sur toute la run.
+  maxErrors?: number;
+  // Pose invalide/valide : permet à useGameRun de décrémenter son pool de
+  // vies ou d'ajouter du temps sans dupliquer la logique de pose ci-dessous.
+  onInvalidPlacement?: () => void;
+  onValidPlacement?: () => void;
+}
+
 const samePosition = (a: Position, b: Position) =>
   a.row === b.row && a.col === b.col;
 
-export const useLevel = () => {
+export const useLevel = ({
+  maxErrors = MAX_ERRORS,
+  onInvalidPlacement,
+  onValidPlacement,
+}: UseLevelOptions = {}) => {
   const workerRef = useRef<Worker | null>(null);
   // Miroirs synchrones de `errors`/`placed`/`status` : évitent de lire une
   // valeur figée par closure si deux poses se déclenchent avant que React ait
@@ -134,7 +150,7 @@ export const useLevel = () => {
       const willWin =
         !invalid &&
         next.filter((p) => !p.invalid).length === level.solution.length;
-      const willLose = invalid && errorsRef.current + 1 >= MAX_ERRORS;
+      const willLose = invalid && errorsRef.current + 1 >= maxErrors;
 
       haptics.cancel();
       haptics.trigger(
@@ -151,16 +167,18 @@ export const useLevel = () => {
       );
 
       if (invalid) {
-        // Borné à MAX_ERRORS : au-delà, HeartsRow annoncerait « Erreurs : 4 / 3 »
+        onInvalidPlacement?.();
+        // Borné à maxErrors : au-delà, HeartsRow annoncerait « Erreurs : 4 / 3 »
         // et `isLastHeart` (maxErrors - errors === 1) ne matcherait plus jamais.
-        errorsRef.current = Math.min(errorsRef.current + 1, MAX_ERRORS);
+        errorsRef.current = Math.min(errorsRef.current + 1, maxErrors);
         setErrors(errorsRef.current);
         if (willLose) updateStatus("lost");
-      } else if (willWin) {
-        updateStatus("won");
+      } else {
+        onValidPlacement?.();
+        if (willWin) updateStatus("won");
       }
     },
-    [level, updateStatus],
+    [level, updateStatus, maxErrors, onInvalidPlacement, onValidPlacement],
   );
 
   const toggleMarker = useCallback(
@@ -204,7 +222,7 @@ export const useLevel = () => {
     placed,
     markers,
     errors,
-    maxErrors: MAX_ERRORS,
+    maxErrors,
     status,
     pendingSize,
     help,
