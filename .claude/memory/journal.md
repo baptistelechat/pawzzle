@@ -630,6 +630,28 @@ Rituel `/memory-close` : basculement en mode multi-user en cours de rituel — B
 **Entrées clés :**
 
 - [BDR-20260727224809-1](decisions/BDR-20260727224809-1.md) — difficulté recalculée via moteur de déduction logique
-- [BLK-20260727224809-4](blockers/BLK-20260727224809-4.md) — 1ère hypothèse de correction invalidée avant la bonne
+- [ZBLK-20260727224809-4](archive/blockers/ZBLK-20260727224809-4.md) — 1ère hypothèse de correction invalidée avant la bonne
 - [LRN-20260727224809-2](learnings/LRN-20260727224809-2.md) — métrique corrélée n'a pas corrigé le biais
 - [LRN-20260727224809-3](learnings/LRN-20260727224809-3.md) — classification par technique évite le seuillage calibré
+
+## 2026-07-29
+
+Ajout de 2 nouveaux modes de jeu sur demande de Baptiste : Chrono (course contre la montre) et Endurance (pool de vies), en plus du mode Classique existant reformalisé comme 3ᵉ mode. Session passée intégralement en mode plan avant code (`EnterPlanMode`), avec plusieurs allers-retours de clarification via `AskUserQuestion` sur l'architecture des vies (pool partagé sur toute la run vs par niveau) et les chiffres exacts (Chrono : 60s + 5s/chat + 10s/niveau + 20s/5 niveaux ; Endurance : 3 vies + 1/5 niveaux, plafond 3).
+
+Implémentation : `src/lib/gameModes.ts` (config déclarative des 3 modes), `useLevel.ts` rendu configurable (`maxErrors`, `onInvalidPlacement`, `onValidPlacement`), et surtout `useGameRun.ts` — un hook UNIQUE pour les 3 modes plutôt que de brancher entre `useLevel()` nu et un hook de run selon `mode`, choix dicté par les règles de hooks React qui interdisent l'appel conditionnel même si le composant remonte à chaque changement de mode ([BDR-20260729171633-1](decisions/BDR-20260729171633-1.md), [LRN-20260729171633-6](learnings/LRN-20260729171633-6.md)). `App.tsx` (264 lignes, au-dessus du seuil du projet) éclaté en `GameScreen/` (index + `RunHeader`/`GameOverPanel`) suivant le pattern déjà établi par `Grid/`.
+
+Après premier livrable, tour de feedback de Baptiste en une seule salve : bug de débordement de texte dans `ModeSelect` (`whitespace-nowrap` hérité de la classe de base `Button`, jamais désactivé), absence de tout moyen de revenir à l'accueil depuis une partie en cours (notamment en Classique, qui n'a "pas vraiment de fin"), et surtout le bouton "Nouvelle partie" qui, en Chrono, relançait silencieusement une grille sans avertir que toute la run (niveaux/vies/temps) serait perdue. Ce dernier point a révélé un pattern plus général : un libellé de bouton sans conséquence en Classique devenait dangereusement ambigu une fois une portée plus large (la run) introduite au-dessus de la même action ([LRN-20260729171633-5](learnings/LRN-20260729171633-5.md)). Fix : composant `alert-dialog` shadcn ajouté, bouton Accueil + "Nouvelle partie" tous deux protégés par une confirmation quand une run Chrono/Endurance est active, reset par remount (`runKey` bumped dans `App.tsx`) plutôt qu'une fonction `resetRun()` dédiée ([BDR-20260729171633-3](decisions/BDR-20260729171633-3.md)). Baptiste a aussi demandé un indicateur "+xx" transitoire à côté du chrono à chaque gain de temps (bonus par chat/niveau/palier additionnés en un seul flash pour ne jamais s'écraser mutuellement) et un compteur de niveaux complétés dans l'entête pour les 2 modes run, absent en Classique — tous deux implémentés dans `useGameRun`/`RunHeader`. Exigence transverse répétée : aucun texte ni son "agressif" en fin de run (pas de "Game Over"/"Perdu"), copy positive centrée sur l'accompli ; les noms de mode restent génériques pour l'instant, deux packs de noms "lore" proposés n'ayant pas convaincu Baptiste — nommage différé à une session dédiée ([BDR-20260729171633-4](decisions/BDR-20260729171633-4.md)).
+
+Incident en cours de route : l'ajout du composant `alert-dialog` via le CLI shadcn a déclenché un prompt d'écrasement sur `button.tsx` (fichier sans rapport direct), confirmé par erreur via un `y` pipé — la variante custom `icon-xl` de `buttonVariants` (utilisée dans tout le projet) a été écrasée puis immédiatement restaurée via `git diff`/`git checkout` avant tout autre changement ([BLK-20260729171633-7](blockers/BLK-20260729171633-7.md)). `pnpm lint`/`pnpm build` vérifiés verts après le premier livrable et après la salve de feedback ; serveur de dev laissé actif pour la vérification visuelle de Baptiste (BDR-059).
+
+Rituel `/memory-close` : sur consigne explicite de Baptiste ("full local"), le learning initialement classé 🌍 global (hook config-driven vs hooks conditionnels) a été gardé en 🏠 local — cohérent avec la préférence "full local" déjà actée à plusieurs reprises sur ce projet.
+
+**Entrées clés :**
+
+- [BDR-20260729171633-1](decisions/BDR-20260729171633-1.md) — hook unique `useGameRun` pour les 3 modes
+- [BDR-20260729171633-2](decisions/BDR-20260729171633-2.md) — pool de vies de run partagé, chiffres Chrono/Endurance
+- [BDR-20260729171633-3](decisions/BDR-20260729171633-3.md) — confirmation avant d'abandonner une run, reset par remount
+- [BDR-20260729171633-4](decisions/BDR-20260729171633-4.md) — ton non-agressif en fin de run, noms génériques différés
+- [LRN-20260729171633-5](learnings/LRN-20260729171633-5.md) — libellé de bouton ambigu à portée élargie
+- [LRN-20260729171633-6](learnings/LRN-20260729171633-6.md) — hook config-driven unique > hooks conditionnels
+- [BLK-20260729171633-7](blockers/BLK-20260729171633-7.md) — shadcn CLI a écrasé `button.tsx` (résolu)
