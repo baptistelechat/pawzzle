@@ -18,17 +18,35 @@ export interface TimeBonus {
 // (config.hasRun === false), tout le mécanisme de run est un no-op : le
 // comportement reste identique à useLevel() nu (maxErrors=3, pas de pool de
 // vies/temps).
-export const useGameRun = (mode: GameMode) => {
+interface UseGameRunOptions {
+  // Gèle le décompte du chrono (ex: pendant l'AlertDialog de confirmation
+  // d'abandon de run) sans toucher au reste de l'état de la run.
+  paused?: boolean;
+}
+
+export const useGameRun = (
+  mode: GameMode,
+  { paused = false }: UseGameRunOptions = {},
+) => {
   const config = GAME_MODES[mode];
   const [lives, setLives] = useState(config.startLives ?? 0);
   const [timeLeft, setTimeLeft] = useState(config.startTime);
   const [levelsCompleted, setLevelsCompleted] = useState(0);
   const [runStatus, setRunStatus] = useState<RunStatus>("active");
   const [timeBonus, setTimeBonus] = useState<TimeBonus | null>(null);
+  const [totalPawsPlaced, setTotalPawsPlaced] = useState(0);
+  // Temps réel écoulé depuis le début de la run (récap de fin de run) —
+  // distinct de `timeLeft`, qui suit le budget Chrono et ses bonus.
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
+  // `useState(() => ...)` plutôt que `useRef(Date.now())` : le lazy
+  // initializer est le seul appel impur toléré au rendu par
+  // `react-hooks/purity` (cf. GLRN-227).
+  const [startedAt] = useState(() => Date.now());
   // Miroir synchrone : `endRun` peut être appelé depuis un updater `setLives`
   // fonctionnel, avant que le prochain rendu n'ait vu `runStatus` changer.
   const runStatusRef = useRef<RunStatus>("active");
   const bonusKeyRef = useRef(0);
+  const levelsCompletedRef = useRef(0);
 
   // Regroupe l'ajout de temps et le flash "+X" affiché à côté du Timer, pour
   // qu'un bonus par chat et un bonus de fin de niveau ne s'écrasent jamais
@@ -51,10 +69,11 @@ export const useGameRun = (mode: GameMode) => {
     if (runStatusRef.current === "gameOver") return;
     runStatusRef.current = "gameOver";
     setRunStatus("gameOver");
+    setElapsedSeconds(Math.round((Date.now() - startedAt) / 1000));
     haptics.cancel();
     haptics.trigger("error");
     sounds.play("game_over");
-  }, []);
+  }, [startedAt]);
 
   const handleInvalidPlacement = useCallback(() => {
     if (!config.hasRun) return;
@@ -66,9 +85,10 @@ export const useGameRun = (mode: GameMode) => {
   }, [config.hasRun, endRun]);
 
   const handleValidPlacement = useCallback(() => {
+    if (!config.hasRun) return;
+    setTotalPawsPlaced((prev) => prev + 1);
     const bonus = config.timeBonusPerPawn;
-    if (!config.hasRun || !bonus) return;
-    addTime(bonus);
+    if (bonus) addTime(bonus);
   }, [config.hasRun, config.timeBonusPerPawn, addTime]);
 
   const level = useLevel({
@@ -80,27 +100,33 @@ export const useGameRun = (mode: GameMode) => {
   // Applique les bonus de palier une seule fois par victoire de niveau (pas à
   // chaque rendu tant que le statut reste "won", en attendant que le joueur
   // enchaîne sur le niveau suivant).
+  //
+  // `next` est calculé via un ref (levelsCompletedRef) et `setLevelsCompleted`
+  // reçoit une valeur directe, pas un updater fonctionnel : un updater
+  // `(prev) => {...}` contenant des effets de bord (setLives/addTime) serait
+  // invoqué deux fois par React en StrictMode (vérif de pureté), doublant le
+  // gain de vie/temps à chaque palier — cf. GLRN-140, même classe de bug.
   const prevLevelStatus = useRef(level.status);
   useEffect(() => {
     if (level.status === "won" && prevLevelStatus.current !== "won") {
-      setLevelsCompleted((prev) => {
-        const next = prev + 1;
-        // Bonus de fin de niveau + palier additionnés avant un unique appel
-        // à addTime : sinon le second écraserait le flash "+X" du premier.
-        let levelBonus = 0;
-        if (config.timeBonusPerWin) levelBonus += config.timeBonusPerWin;
-        if (
-          config.timeBonusMilestone &&
-          next % config.timeBonusMilestone.every === 0
-        ) {
-          levelBonus += config.timeBonusMilestone.bonus;
-        }
-        if (levelBonus) addTime(levelBonus);
-        if (config.livesBonusEvery && next % config.livesBonusEvery === 0) {
-          setLives((l) => Math.min(config.maxLives ?? l, l + 1));
-        }
-        return next;
-      });
+      const next = levelsCompletedRef.current + 1;
+      levelsCompletedRef.current = next;
+      setLevelsCompleted(next);
+
+      // Bonus de fin de niveau + palier additionnés avant un unique appel à
+      // addTime : sinon le second écraserait le flash "+X" du premier.
+      let levelBonus = 0;
+      if (config.timeBonusPerWin) levelBonus += config.timeBonusPerWin;
+      if (
+        config.timeBonusMilestone &&
+        next % config.timeBonusMilestone.every === 0
+      ) {
+        levelBonus += config.timeBonusMilestone.bonus;
+      }
+      if (levelBonus) addTime(levelBonus);
+      if (config.livesBonusEvery && next % config.livesBonusEvery === 0) {
+        setLives((l) => Math.min(config.maxLives ?? l, l + 1));
+      }
     }
     prevLevelStatus.current = level.status;
   }, [level.status, config, addTime]);
@@ -112,7 +138,12 @@ export const useGameRun = (mode: GameMode) => {
   // sur une run de quelques minutes est imperceptible ici.
   const hasTimer = config.startTime !== undefined;
   useEffect(() => {
-    if (!hasTimer || runStatus !== "active" || level.status !== "playing")
+    if (
+      !hasTimer ||
+      runStatus !== "active" ||
+      level.status !== "playing" ||
+      paused
+    )
       return;
     const intervalId = window.setInterval(() => {
       setTimeLeft((prev) => {
@@ -126,7 +157,7 @@ export const useGameRun = (mode: GameMode) => {
       });
     }, 1000);
     return () => window.clearInterval(intervalId);
-  }, [hasTimer, runStatus, level.status, endRun]);
+  }, [hasTimer, runStatus, level.status, paused, endRun]);
 
   return {
     ...level,
@@ -135,6 +166,8 @@ export const useGameRun = (mode: GameMode) => {
     timeLeft,
     timeBonus,
     levelsCompleted,
+    totalPawsPlaced,
+    elapsedSeconds,
     runStatus,
   };
 };

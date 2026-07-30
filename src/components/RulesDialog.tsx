@@ -102,10 +102,15 @@ const SLIDES: RuleSlide[] = RULES.map((rule) => ({
 interface RulesDialogProps {
   size?: "icon" | "icon-lg" | "icon-xl";
   className?: string;
+  onOpenChange?: (open: boolean) => void;
 }
 
-export const RulesDialog = ({ size = "icon", className }: RulesDialogProps) => (
-  <Dialog>
+export const RulesDialog = ({
+  size = "icon",
+  className,
+  onOpenChange,
+}: RulesDialogProps) => (
+  <Dialog onOpenChange={onOpenChange}>
     <DialogTrigger
       render={
         <Button

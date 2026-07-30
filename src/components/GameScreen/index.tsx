@@ -1,5 +1,5 @@
 import { AnimatePresence, m, useReducedMotion } from "motion/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ConfettiBurst } from "@/components/ConfettiBurst";
 import { CELL_STAGGER_MS, CELL_TRANSITION_MS, Grid } from "@/components/Grid";
 import { GameActions } from "@/components/GameScreen/components/GameActions";
@@ -19,6 +19,15 @@ interface GameScreenProps {
 
 export function GameScreen({ mode, onReplay, onChangeMode }: GameScreenProps) {
   const config = GAME_MODES[mode];
+  // Gèle le chrono de la run tant qu'un panneau modal (confirmation
+  // d'abandon, réglages, règles) est ouvert par-dessus le jeu — perdre du
+  // temps pendant qu'on consulte un menu serait déloyal envers le joueur.
+  const [runPaused, setRunPaused] = useState(false);
+  // Fin de run (vies/temps épuisés) : la grille reste affichée avec la
+  // solution le temps que le joueur clique "Voir les résultats", plutôt que
+  // de basculer immédiatement sur le récap — cf. le comportement "lost" déjà
+  // en place pour le mode Classique.
+  const [recapConfirmed, setRecapConfirmed] = useState(false);
   const {
     level,
     levelId,
@@ -39,8 +48,10 @@ export function GameScreen({ mode, onReplay, onChangeMode }: GameScreenProps) {
     timeLeft,
     timeBonus,
     levelsCompleted,
+    totalPawsPlaced,
+    elapsedSeconds,
     runStatus,
-  } = useGameRun(mode);
+  } = useGameRun(mode, { paused: runPaused });
   const reduceMotion = useReducedMotion();
 
   // Une régénération repasse `status` à "loading" alors que `level` reste en
@@ -75,10 +86,12 @@ export function GameScreen({ mode, onReplay, onChangeMode }: GameScreenProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps -- déclenché uniquement par un changement de grille, pas par reduceMotion
   }, [levelId]);
 
-  if (runStatus === "gameOver") {
+  if (runStatus === "gameOver" && recapConfirmed) {
     return (
       <GameOverPanel
         levelsCompleted={levelsCompleted}
+        totalPawsPlaced={totalPawsPlaced}
+        elapsedSeconds={elapsedSeconds}
         onReplay={onReplay}
         onChangeMode={onChangeMode}
       />
@@ -136,8 +149,8 @@ export function GameScreen({ mode, onReplay, onChangeMode }: GameScreenProps) {
                   markers={markers}
                   help={help}
                   errors={errors}
-                  disabled={status !== "playing"}
-                  showSolution={status === "lost"}
+                  disabled={status !== "playing" || runStatus === "gameOver"}
+                  showSolution={status === "lost" || runStatus === "gameOver"}
                   solution={level.solution}
                   onTogglePaw={togglePaw}
                   onToggleMarker={toggleMarker}
@@ -148,13 +161,15 @@ export function GameScreen({ mode, onReplay, onChangeMode }: GameScreenProps) {
           </div>
           <GameActions
             isRunActive={isRunActive}
+            runEnded={runStatus === "gameOver"}
             status={status}
-            displayStatus={displayStatus}
             help={help}
             onHelpChange={setHelp}
             onNewLevel={newLevel}
             onReplayRun={onReplay}
             onChangeMode={onChangeMode}
+            onShowRecap={() => setRecapConfirmed(true)}
+            onRunPauseChange={setRunPaused}
           />
         </m.div>
       )}

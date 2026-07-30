@@ -18,18 +18,18 @@ export const GAME_MODES: Record<GameMode, GameModeConfig> = {
   classic: {
     id: "classic",
     label: "Classique",
-    description: "Jeu libre, sans limite de temps ni de vies.",
+    description: "Jeu libre, sans limite de temps.",
     hasRun: false,
   },
   timeAttack: {
     id: "timeAttack",
     label: "Chrono",
     description:
-      "Course contre la montre : chaque chat trouvé grignote un peu de temps.",
+      "Course contre la montre : chaque chat trouvé rajoute du temps.",
     hasRun: true,
     startLives: 3,
     maxLives: 3,
-    startTime: 60,
+    startTime: 180,
     timeBonusPerPawn: 5,
     timeBonusPerWin: 10,
     timeBonusMilestone: { every: 5, bonus: 20 },
@@ -38,11 +38,11 @@ export const GAME_MODES: Record<GameMode, GameModeConfig> = {
     id: "endurance",
     label: "Endurance",
     description:
-      "Un pool de vies pour toute la partie, regagnées en progressant.",
+      "3 vies pour toute la partie, regagnées en progressant.",
     hasRun: true,
     startLives: 3,
     maxLives: 3,
-    livesBonusEvery: 5,
+    livesBonusEvery: 3,
   },
 };
 
