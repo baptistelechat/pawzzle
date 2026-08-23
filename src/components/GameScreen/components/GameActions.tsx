@@ -13,7 +13,7 @@ type Status = "loading" | "playing" | "won" | "lost";
 
 interface GameActionsProps {
   isRunActive: boolean;
-  // Run Chrono/Endurance terminée (vies/temps épuisés) : la grille affiche
+  // Run Marathon terminée (vies/temps épuisés) : la grille affiche
   // encore la solution, le bouton principal devient "Voir les résultats"
   // avant de basculer sur le récap (GameOverPanel).
   runEnded: boolean;

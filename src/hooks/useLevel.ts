@@ -35,8 +35,8 @@ export interface PlacedPawn extends Position {
 }
 
 export interface UseLevelOptions {
-  // Budget d'erreurs avant qu'un niveau ne passe seul en "lost". Les modes
-  // run (Chrono/Endurance) passent Infinity : le niveau ne perd jamais tout
+  // Budget d'erreurs avant qu'un niveau ne passe seul en "lost". Le mode
+  // run (Marathon) passe Infinity : le niveau ne perd jamais tout
   // seul, c'est useGameRun qui gère la fin de partie via son propre pool de
   // vies partagé sur toute la run.
   maxErrors?: number;

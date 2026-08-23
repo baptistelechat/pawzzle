@@ -60,12 +60,12 @@ export function GameScreen({ mode, onReplay, onChangeMode }: GameScreenProps) {
   // qui doit bien bloquer la grille pendant la génération.
   const displayStatus = status === "loading" ? "playing" : status;
   // La ligne d'entête (HeartsRow) affiche le pool de vies de la run pour
-  // Chrono/Endurance, mais Grid garde les erreurs brutes du niveau (feedback
+  // Marathon, mais Grid garde les erreurs brutes du niveau (feedback
   // de secousse immédiat, indépendant du pool de vies partagé).
   const headerErrors = config.hasRun ? maxLives - lives : errors;
   const headerMaxErrors = config.hasRun ? maxLives : maxErrors;
   // Quitter ou relancer perd la progression de la run (niveaux/vies/temps) :
-  // guard de confirmation obligatoire pour Chrono/Endurance. Classique n'a
+  // guard de confirmation obligatoire pour Marathon. Classique n'a
   // pas de run à perdre (entraînement libre, niveaux indépendants).
   const isRunActive = config.hasRun && runStatus === "active";
 

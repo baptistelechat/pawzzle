@@ -20,7 +20,7 @@ interface ConfirmRunActionProps {
   onOpenChange?: (open: boolean) => void;
 }
 
-// Guard générique pour toute action qui abandonnerait une run Chrono/Endurance
+// Guard générique pour toute action qui abandonnerait une run Marathon
 // en cours (niveaux/vies/temps perdus) — cf. la règle "action irréversible =
 // confirmation obligatoire". `onOpenChange` remonte l'état d'ouverture pour
 // que GameScreen puisse mettre le chrono de la run en pause tant que le

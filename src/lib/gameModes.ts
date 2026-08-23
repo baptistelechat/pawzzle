@@ -1,4 +1,4 @@
-export type GameMode = "classic" | "timeAttack" | "endurance";
+export type GameMode = "classic" | "marathon";
 
 export interface GameModeConfig {
   id: GameMode;
@@ -21,28 +21,19 @@ export const GAME_MODES: Record<GameMode, GameModeConfig> = {
     description: "Jeu libre, sans limite de temps.",
     hasRun: false,
   },
-  timeAttack: {
-    id: "timeAttack",
-    label: "Chrono",
+  marathon: {
+    id: "marathon",
+    label: "Marathon",
     description:
-      "Course contre la montre : chaque chat trouvé rajoute du temps.",
-    hasRun: true,
-    startLives: 3,
-    maxLives: 3,
-    startTime: 180,
-    timeBonusPerPawn: 5,
-    timeBonusPerWin: 10,
-    timeBonusMilestone: { every: 5, bonus: 20 },
-  },
-  endurance: {
-    id: "endurance",
-    label: "Endurance",
-    description:
-      "3 vies pour toute la partie, regagnées en progressant.",
+      "3 vies et une course contre la montre : chaque chat rajoute du temps, progresse pour regagner des vies.",
     hasRun: true,
     startLives: 3,
     maxLives: 3,
     livesBonusEvery: 3,
+    startTime: 180,
+    timeBonusPerPawn: 5,
+    timeBonusPerWin: 10,
+    timeBonusMilestone: { every: 5, bonus: 20 },
   },
 };
 
