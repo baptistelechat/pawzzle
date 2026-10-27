@@ -26,7 +26,8 @@ minimumReleaseAgeExclude:
 #     le lockfile et déjà embarquées dans les builds.
 #
 # Échappatoire (préférée, ponctuelle, ne troue pas la politique) :
-#   pnpm add <paquet> --trust-policy=none
+#   pnpm add <paquet> --trust-policy=off
+#   (`none` est ignoré sans erreur, seul `off` désactive — vérifié 2026-10-27)
 # Exclusion permanente possible via `trustPolicyExclude:` — à éviter, chaque
 # entrée exempte le paquet pour de bon.
 trustPolicy: no-downgrade

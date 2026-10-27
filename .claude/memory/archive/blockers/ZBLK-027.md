@@ -2,14 +2,18 @@
 id: ZBLK-027
 type: blocker
 date: 2026-07-25
+summary: "`pnpm lint` cassé par un ESLint global 9.9.0 capté par rtk"
 tags: [eslint, rtk, npm-global, windows, tooling, misdiagnosis, pawzzle]
+status: résolu
 ---
 
 # ZBLK-027 — `pnpm lint` cassé par un ESLint global 9.9.0 capté par rtk
 
-| Friction                                                                                                                                                                           | Cause réelle                                                                                                                                                                                                                                                                                                                                                                                                            | Solution                                                                                                                                                                        | Statut |
-| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `pnpm lint` échoue avec `TypeError: Key "rules": Key "no-unassigned-vars": Could not find "no-unassigned-vars" in plugin "@"`, alors que le code est valide et que le build passe. | **Pas un bug du projet.** Le hook rtk réécrit `pnpm lint` (et `pnpm exec eslint …`) en `rtk lint`, qui résout eslint depuis le PATH global au lieu de `node_modules/.bin`. Un ESLint global 9.9.0 traînait dans `AppData\Roaming\npm\node_modules\eslint` ; la règle `no-unassigned-vars` du flat config n'existe qu'à partir d'ESLint 10 (le projet a bien 10.7.0 en local), d'où le crash au chargement de la config. | `npm uninstall -g eslint` (89 paquets retirés) → `pnpm lint` renvoie « No issues found », exit 0. Le global n'avait aucune utilité, chaque projet embarquant son propre eslint. | résolu |
+**Friction** : `pnpm lint` échoue avec `TypeError: Key "rules": Key "no-unassigned-vars": Could not find "no-unassigned-vars" in plugin "@"`, alors que le code est valide et que le build passe.
+
+**Cause réelle** : **Pas un bug du projet.** Le hook rtk réécrit `pnpm lint` (et `pnpm exec eslint …`) en `rtk lint`, qui résout eslint depuis le PATH global au lieu de `node_modules/.bin`. Un ESLint global 9.9.0 traînait dans `AppData\Roaming\npm\node_modules\eslint` ; la règle `no-unassigned-vars` du flat config n'existe qu'à partir d'ESLint 10 (le projet a bien 10.7.0 en local), d'où le crash au chargement de la config.
+
+**Solution** : `npm uninstall -g eslint` (89 paquets retirés) → `pnpm lint` renvoie « No issues found », exit 0. Le global n'avait aucune utilité, chaque projet embarquant son propre eslint.
 
 ## Notes
 

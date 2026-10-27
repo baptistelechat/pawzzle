@@ -11,6 +11,7 @@ import { AnimatePresence, m, useReducedMotion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { useAmbientPlayer } from "@/hooks/useAmbientPlayer";
 import { useSettings } from "@/hooks/useSettings";
+import { track } from "@/lib/analytics";
 import { haptics } from "@/lib/haptics";
 import { EASE_OUT } from "@/lib/motion";
 import { setAmbientEnabled } from "@/lib/settings";
@@ -117,6 +118,7 @@ export const AmbientPlayer = () => {
             onClick={() => {
               haptics.trigger("selection");
               sounds.play("ui_click");
+              track("ambient_track_skipped", { direction: "previous", title });
               previousAmbientTrack();
             }}
           >
@@ -130,6 +132,7 @@ export const AmbientPlayer = () => {
             onClick={() => {
               haptics.trigger("selection");
               sounds.play("ui_toggle");
+              track("ambient_playback_toggled", { playing: !isPlaying });
               toggleAmbientPlayback();
             }}
           >
@@ -147,6 +150,7 @@ export const AmbientPlayer = () => {
             onClick={() => {
               haptics.trigger("selection");
               sounds.play("ui_click");
+              track("ambient_track_skipped", { direction: "next", title });
               nextAmbientTrack();
             }}
           >

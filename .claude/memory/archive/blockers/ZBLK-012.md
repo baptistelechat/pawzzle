@@ -2,14 +2,18 @@
 id: ZBLK-012
 type: blocker
 date: 2026-07-22
+summary: "Musique d'ambiance jamais audible sur mobile"
 tags: [web-audio, ios-safari, ambient, autoplay, mobile, pointerup]
+status: résolu
 ---
 
 # ZBLK-012 — Musique d'ambiance jamais audible sur mobile
 
-| Friction                                                                                                                                                                    | Cause réelle                                                                                                                                                                                                                                                                 | Solution                                                        | Statut |
-| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- | ------ |
-| L'ambiance (`<audio loop>`) démarrait bien en test desktop (Chrome) au premier clic, mais restait totalement silencieuse sur mobile quel que soit le nombre d'interactions. | Le déverrouillage était attaché à `pointerdown`, que Safari/iOS n'accepte pas comme "user activation" valide pour débloquer l'audio — seul un événement de fin de geste (`pointerup`/`click`) est accepté. Chrome desktop est plus tolérant, ce qui masquait le bug en test. | Écouteur changé de `pointerdown` à `pointerup` dans `main.tsx`. | résolu |
+**Friction** : L'ambiance (`<audio loop>`) démarrait bien en test desktop (Chrome) au premier clic, mais restait totalement silencieuse sur mobile quel que soit le nombre d'interactions.
+
+**Cause réelle** : Le déverrouillage était attaché à `pointerdown`, que Safari/iOS n'accepte pas comme "user activation" valide pour débloquer l'audio — seul un événement de fin de geste (`pointerup`/`click`) est accepté. Chrome desktop est plus tolérant, ce qui masquait le bug en test.
+
+**Solution** : Écouteur changé de `pointerdown` à `pointerup` dans `main.tsx`.
 
 ## Références
 

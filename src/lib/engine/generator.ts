@@ -1,5 +1,5 @@
 import type { Grid, GridShape, Level, Position } from "@/lib/engine/types";
-import { computeDifficulty } from "@/lib/engine/difficulty";
+import { classifyDifficulty } from "@/lib/engine/deduction";
 import { countSolutions } from "@/lib/engine/solver";
 import { createShapeMask } from "@/lib/engine/shapes";
 
@@ -70,15 +70,14 @@ const generateRegions = (size: number, active: boolean[][]): number[][] => {
 
 export const generateLevel = (size: number, shape: GridShape): Level => {
   const active = createShapeMask(shape, size);
-  const activeCells = active.flat().filter(Boolean).length;
   for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
     const grid: Grid = { size, regions: generateRegions(size, active), active };
-    const { solutions, nodesExplored } = countSolutions(grid, 2);
+    const { solutions } = countSolutions(grid, 2);
     if (solutions.length === 1) {
       return {
         grid,
         solution: solutions[0],
-        difficulty: computeDifficulty(nodesExplored / activeCells, size),
+        difficulty: classifyDifficulty(grid),
       };
     }
   }

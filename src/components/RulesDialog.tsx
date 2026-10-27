@@ -11,6 +11,7 @@ import { Separator } from "@/components/ui/separator";
 import { RulesCarousel, type RuleSlide } from "@/components/RulesCarousel";
 import { TapInstructions } from "@/components/TapInstructions";
 import { REGION_COLORS } from "@/lib/regionColors";
+import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 import { BookOpen, PawPrint, X } from "lucide-react";
 
@@ -102,10 +103,20 @@ const SLIDES: RuleSlide[] = RULES.map((rule) => ({
 interface RulesDialogProps {
   size?: "icon" | "icon-lg" | "icon-xl";
   className?: string;
+  onOpenChange?: (open: boolean) => void;
 }
 
-export const RulesDialog = ({ size = "icon", className }: RulesDialogProps) => (
-  <Dialog>
+export const RulesDialog = ({
+  size = "icon",
+  className,
+  onOpenChange,
+}: RulesDialogProps) => (
+  <Dialog
+    onOpenChange={(open) => {
+      if (open) track("rules_opened");
+      onOpenChange?.(open);
+    }}
+  >
     <DialogTrigger
       render={
         <Button

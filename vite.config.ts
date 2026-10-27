@@ -19,7 +19,11 @@ export default defineConfig(({ mode }) => ({
       visualizer({ open: true, gzipSize: true, template: "treemap" }),
     VitePWA({
       registerType: "autoUpdate",
-      workbox: { globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2}"] },
+      workbox: {
+        // SFX courts (quelques kB) précachés pour jouer hors-ligne ; l'ambiance
+        // (sounds/ambient/, ~50 Mo) reste exclue — streamée à la demande.
+        globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2}", "sounds/*.mp3"],
+      },
       manifest: {
         name: "Pawzzle",
         short_name: "Pawzzle",
@@ -49,6 +53,9 @@ export default defineConfig(({ mode }) => ({
       },
     }),
   ],
+  define: {
+    __APP_VERSION__: JSON.stringify(process.env.npm_package_version),
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

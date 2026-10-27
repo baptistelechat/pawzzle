@@ -613,6 +613,90 @@ Rituel `/memory-close` : `BLK-002` (rituel mémoire, résolu la session précéd
 - [BDR-065](decisions/BDR-065.md) — difficulté réduite à 3 niveaux, seuils recalibrés en terciles
 - [BDR-066](decisions/BDR-066.md) — badge remplacé par 3 icônes Flame fill/outline
 - [BDR-067](decisions/BDR-067.md) — largeur réservée sur le groupe icône+compteur, pas le texte seul
-- [BLK-044](blockers/BLK-044.md) — layout ligne difficulté/pattes/vies, 3 itérations (résolu)
-- [BLK-045](blockers/BLK-045.md) — animation des flammes ne rejouait pas en groupe, récidive (résolu)
+- [ZBLK-044](archive/blockers/ZBLK-044.md) — layout ligne difficulté/pattes/vies, 3 itérations (résolu)
+- [ZBLK-045](archive/blockers/ZBLK-045.md) — animation des flammes ne rejouait pas en groupe, récidive (résolu)
 - [LRN-044](learnings/LRN-044.md) — réserver une largeur variable sans casser un gap interne fixe
+
+---
+
+Nouvelle session sur un signalement de Baptiste : des niveaux marqués "difficile" se ressentaient faciles et inversement — le score de difficulté ([BDR-062](decisions/BDR-062.md)) semblait mal calibré. Diagnostic : `nodesExplored` (`solver.ts::countSolutions`) compte tous les appels récursifs du backtracking pendant la vérification d'unicité — comme `generateLevel` appelle `countSolutions(grid, 2)` et ne garde que les grilles à solution unique, le cap=2 n'est jamais atteint pour un niveau retenu, donc le score mesure la taille de l'arbre de _preuve d'unicité_, pas le chemin vers la solution qu'un joueur emprunterait.
+
+Sur validation de Baptiste, test empirique d'une hypothèse de correction : compter `nodesToFirstSolution` (nœuds jusqu'à la 1ère solution) plutôt que le total. Implémenté (`solver.ts`, `scripts/calibrate-difficulty.mjs` étendu pour comparer les deux métriques), recalibré sur 600 générations fraîches — résultat invalidant : biais carré/cercle et facteur d'échelle 6×6→10×10 quasi identiques à l'original, parfois légèrement pires ([LRN-20260727224809-2](learnings/LRN-20260727224809-2.md)). Changement annulé proprement (`git checkout`), code de prod jamais impacté.
+
+Sur décision explicite de Baptiste ("des résultats plausibles même coûteux vaudront toujours mieux qu'un badge faux"), escalade vers un moteur de déduction logique : `src/lib/engine/deduction.ts` implémente une propagation de contraintes (cascade d'élimination après chaque placement, singles forcés par unité, réduction "pointing" région→ligne/colonne), classifiant directement en easy/medium/hard selon la technique nécessaire — plus aucun seuil numérique/percentile ([LRN-20260727224809-3](learnings/LRN-20260727224809-3.md)). Ancienne infra retirée (`difficulty.ts`, `calibrate-difficulty.mjs` + son JSON), remplacée par `scripts/measure-difficulty-distribution.mjs` (`pnpm difficulty:measure`) — contrôle de non-dégénérescence, pas une calibration. Mesuré sur 600 générations : répartition easy=26%/medium=25%/hard=50% globale, aucun tier vide sur les 6 combinaisons taille×forme. `docs/DIFFICULTY_RATING.md` réécrit avec l'historique complet (score solveur → variante testée-invalidée → moteur de déduction). `pnpm lint`/`pnpm build` verts après chaque étape ; playtest manuel laissé à Baptiste (agent-browser bloqué par mkcert en headless, cf. GLRN-251/BDR-059) — confirmé après coup ("ça me semble beaucoup mieux").
+
+Rituel `/memory-close` : basculement en mode multi-user en cours de rituel — Baptiste a créé `.claude/memory/.multi-user` après l'étape 2 (archivage des blockers résolus déjà fait en numérotation séquentielle classique, non retouché puisqu'il s'agissait de ré-archiver des entrées déjà existantes). Les 4 nouvelles entrées proposées cette session ont été re-numérotées en IDs timestamp (`-20260727224809-N`) avant écriture.
+
+**Entrées clés :**
+
+- [BDR-20260727224809-1](decisions/BDR-20260727224809-1.md) — difficulté recalculée via moteur de déduction logique
+- [ZBLK-20260727224809-4](archive/blockers/ZBLK-20260727224809-4.md) — 1ère hypothèse de correction invalidée avant la bonne
+- [LRN-20260727224809-2](learnings/LRN-20260727224809-2.md) — métrique corrélée n'a pas corrigé le biais
+- [LRN-20260727224809-3](learnings/LRN-20260727224809-3.md) — classification par technique évite le seuillage calibré
+
+## 2026-07-29
+
+Ajout de 2 nouveaux modes de jeu sur demande de Baptiste : Chrono (course contre la montre) et Endurance (pool de vies), en plus du mode Classique existant reformalisé comme 3ᵉ mode. Session passée intégralement en mode plan avant code (`EnterPlanMode`), avec plusieurs allers-retours de clarification via `AskUserQuestion` sur l'architecture des vies (pool partagé sur toute la run vs par niveau) et les chiffres exacts (Chrono : 60s + 5s/chat + 10s/niveau + 20s/5 niveaux ; Endurance : 3 vies + 1/5 niveaux, plafond 3).
+
+Implémentation : `src/lib/gameModes.ts` (config déclarative des 3 modes), `useLevel.ts` rendu configurable (`maxErrors`, `onInvalidPlacement`, `onValidPlacement`), et surtout `useGameRun.ts` — un hook UNIQUE pour les 3 modes plutôt que de brancher entre `useLevel()` nu et un hook de run selon `mode`, choix dicté par les règles de hooks React qui interdisent l'appel conditionnel même si le composant remonte à chaque changement de mode ([BDR-20260729171633-1](decisions/BDR-20260729171633-1.md), [LRN-20260729171633-6](learnings/LRN-20260729171633-6.md)). `App.tsx` (264 lignes, au-dessus du seuil du projet) éclaté en `GameScreen/` (index + `RunHeader`/`GameOverPanel`) suivant le pattern déjà établi par `Grid/`.
+
+Après premier livrable, tour de feedback de Baptiste en une seule salve : bug de débordement de texte dans `ModeSelect` (`whitespace-nowrap` hérité de la classe de base `Button`, jamais désactivé), absence de tout moyen de revenir à l'accueil depuis une partie en cours (notamment en Classique, qui n'a "pas vraiment de fin"), et surtout le bouton "Nouvelle partie" qui, en Chrono, relançait silencieusement une grille sans avertir que toute la run (niveaux/vies/temps) serait perdue. Ce dernier point a révélé un pattern plus général : un libellé de bouton sans conséquence en Classique devenait dangereusement ambigu une fois une portée plus large (la run) introduite au-dessus de la même action ([LRN-20260729171633-5](learnings/LRN-20260729171633-5.md)). Fix : composant `alert-dialog` shadcn ajouté, bouton Accueil + "Nouvelle partie" tous deux protégés par une confirmation quand une run Chrono/Endurance est active, reset par remount (`runKey` bumped dans `App.tsx`) plutôt qu'une fonction `resetRun()` dédiée ([BDR-20260729171633-3](decisions/BDR-20260729171633-3.md)). Baptiste a aussi demandé un indicateur "+xx" transitoire à côté du chrono à chaque gain de temps (bonus par chat/niveau/palier additionnés en un seul flash pour ne jamais s'écraser mutuellement) et un compteur de niveaux complétés dans l'entête pour les 2 modes run, absent en Classique — tous deux implémentés dans `useGameRun`/`RunHeader`. Exigence transverse répétée : aucun texte ni son "agressif" en fin de run (pas de "Game Over"/"Perdu"), copy positive centrée sur l'accompli ; les noms de mode restent génériques pour l'instant, deux packs de noms "lore" proposés n'ayant pas convaincu Baptiste — nommage différé à une session dédiée ([BDR-20260729171633-4](decisions/BDR-20260729171633-4.md)).
+
+Incident en cours de route : l'ajout du composant `alert-dialog` via le CLI shadcn a déclenché un prompt d'écrasement sur `button.tsx` (fichier sans rapport direct), confirmé par erreur via un `y` pipé — la variante custom `icon-xl` de `buttonVariants` (utilisée dans tout le projet) a été écrasée puis immédiatement restaurée via `git diff`/`git checkout` avant tout autre changement ([ZBLK-20260729171633-7](archive/blockers/ZBLK-20260729171633-7.md)). `pnpm lint`/`pnpm build` vérifiés verts après le premier livrable et après la salve de feedback ; serveur de dev laissé actif pour la vérification visuelle de Baptiste (BDR-059).
+
+Rituel `/memory-close` : sur consigne explicite de Baptiste ("full local"), le learning initialement classé 🌍 global (hook config-driven vs hooks conditionnels) a été gardé en 🏠 local — cohérent avec la préférence "full local" déjà actée à plusieurs reprises sur ce projet.
+
+**Entrées clés :**
+
+- [BDR-20260729171633-1](decisions/BDR-20260729171633-1.md) — hook unique `useGameRun` pour les 3 modes
+- [BDR-20260729171633-2](decisions/BDR-20260729171633-2.md) — pool de vies de run partagé, chiffres Chrono/Endurance
+- [BDR-20260729171633-3](decisions/BDR-20260729171633-3.md) — confirmation avant d'abandonner une run, reset par remount
+- [BDR-20260729171633-4](decisions/BDR-20260729171633-4.md) — ton non-agressif en fin de run, noms génériques différés
+- [LRN-20260729171633-5](learnings/LRN-20260729171633-5.md) — libellé de bouton ambigu à portée élargie
+- [LRN-20260729171633-6](learnings/LRN-20260729171633-6.md) — hook config-driven unique > hooks conditionnels
+- [ZBLK-20260729171633-7](archive/blockers/ZBLK-20260729171633-7.md) — shadcn CLI a écrasé `button.tsx` (résolu)
+
+## 2026-07-30
+
+Longue session de raffinement UX/UI sur l'écran d'accueil et l'écran de jeu des 3 modes, en petites itérations successives guidées par des captures d'écran de Baptiste. Écran d'accueil : `ModeSelect` est passé du style Card/Button original à un style icon-toggle compact (repris des Réglages), puis finalement à des cards pleine largeur avec une puce squircle teintée d'une couleur de `REGION_COLORS` par mode — pour ancrer visuellement le choix de mode au gameplay tout en laissant plus de place au titre/description ([BDR-20260730065326-5](decisions/BDR-20260730065326-5.md)). Les 3 toggles son/vibration/ambiance et le bouton Règles ont été dupliqués sur l'accueil (composants `IconToggle`/`SoundHapticsToggles` extraits pour être partagés avec `SettingsDialog`) ([BDR-20260730065326-4](decisions/BDR-20260730065326-4.md)).
+
+Écran de jeu : la pause du chrono (initialement limitée à l'AlertDialog de confirmation) a été étendue à Réglages/Règles ([BDR-20260730065326-3](decisions/BDR-20260730065326-3.md)). En fin de run Chrono/Endurance, la grille affiche désormais la solution avant de basculer sur le récap, via un bouton "Résultats" intermédiaire ([BDR-20260730065326-2](decisions/BDR-20260730065326-2.md)). Les libellés du bouton principal de `GameActions` ont fait plusieurs allers-retours (fusion en un seul "Rejouer", puis re-séparation) avant de se stabiliser sur : "Nouvelle partie" tant qu'on est en jeu (Classique ou run active), "Rejouer" réservé exclusivement au récap `GameOverPanel` ([BDR-20260730065326-1](decisions/BDR-20260730065326-1.md)). La disposition de la rangée de boutons a également fait un aller-retour (1 rangée → 2 rangées → 1 rangée), stabilisée sur icônes groupées à gauche + bouton principal `flex-1` à droite ([BDR-20260730065326-6](decisions/BDR-20260730065326-6.md)).
+
+Deux incidents notables. D'abord un bug de gain de vie/temps doublé en Chrono/Endurance ("gagne une vie au début du 3e niveau au lieu d'après le 3e") : la vraie cause était un updater fonctionnel de `setLevelsCompleted` contenant des effets de bord (`setLives`/`addTime`) — doublés par le garde-fou StrictMode de React sur les updaters impurs (même mécanisme que GLRN-140, déjà en mémoire globale) ([ZBLK-20260730065326-12](archive/blockers/ZBLK-20260730065326-12.md)). Ensuite une régression de largeur : après l'ajout d'un wrapper `motion.div` pour la transition accueil⇄partie, la grille semblait rétrécie sur mobile. 1er diagnostic erroné (attribué à la forme "cercle" du niveau), réfuté par Baptiste qui a insisté pour comparer via `git diff` — la vraie cause était le wrapper sans largeur explicite, cassant la résolution du `w-full` de `GameScreen` dans le flex `items-center` parent ; un 1er correctif de centrage (`justify-center` en row) était lui aussi incomplet avant le bon (`flex-col items-center`) ([ZBLK-20260730065326-11](archive/blockers/ZBLK-20260730065326-11.md)). Un 3e blocker plus mineur : l'écart visuel entre `PawCounter` et `HeartsRow` restait inégal après un premier correctif partiel, la vraie solution étant de réserver une largeur dynamique basée sur le nombre de chiffres réel du niveau plutôt qu'un pire cas global ([ZBLK-20260730065326-13](archive/blockers/ZBLK-20260730065326-13.md)).
+
+Rituel `/memory-close` : sur consigne explicite de Baptiste ("full local"), les 2 learnings initialement proposés en 🌍 global (wrapper flex sans largeur, indicateur transitoire hors flux) ont été gardés en 🏠 local — cohérent avec la préférence déjà actée sur ce projet.
+
+**Entrées clés :**
+
+- [BDR-20260730065326-1](decisions/BDR-20260730065326-1.md) — "Nouvelle partie" en jeu, "Rejouer" au récap seul
+- [BDR-20260730065326-2](decisions/BDR-20260730065326-2.md) — solution affichée avant le récap de fin de run
+- [BDR-20260730065326-5](decisions/BDR-20260730065326-5.md) — ModeSelect en cards pleine largeur + puce squircle
+- [ZBLK-20260730065326-11](archive/blockers/ZBLK-20260730065326-11.md) — régression largeur grille (wrapper sans largeur)
+- [ZBLK-20260730065326-12](archive/blockers/ZBLK-20260730065326-12.md) — gain de vie/temps doublé (updater impur + StrictMode)
+- [LRN-20260730065326-9](learnings/LRN-20260730065326-9.md) — wrapper flex sans largeur casse un `w-full` descendant
+
+## 2026-08-23
+
+Fusion des modes Chrono et Endurance en un unique mode "Marathon" sur demande explicite de Baptiste : `useGameRun`/`useLevel` géraient déjà les deux mécaniques (vies + temps) en parallèle pour Chrono, la fusion consistait donc surtout à supprimer `endurance` de `GAME_MODES` et renommer `timeAttack` en `marathon` avec `livesBonusEvery: 3` (repris d'Endurance) ajouté à la config Chrono existante. Nom "Marathon" choisi par Baptiste parmi 4 propositions soumises via AskUserQuestion ("Cœur Battant", "Souffle Court", "Sprint Félin" écartés) ([BDR-20260823183009-1](decisions/BDR-20260823183009-1.md)). Description de la card fusionnée réécrite pour garder les deux idées (vies + chrono) en restant courte, sur retour direct de Baptiste. Icône : aucune icône Lucide native ne fusionne chrono et vies, composition `TimerIcon` + badge `Heart` retenue dans `ModeSelect` — un premier essai avec le cœur en débordement du carré squircle (offsets négatifs) a été rejeté sur capture d'écran par Baptiste, repositionné à l'intérieur ([BDR-20260823183009-2](decisions/BDR-20260823183009-2.md)). `pnpm lint`/`pnpm build` vérifiés verts après chaque changement.
+
+Incident mineur hors-scope : sur demande explicite de Baptiste, le process Vite écoutant le port 5173 a été identifié (vérification de la ligne de commande avant tout kill, cf. GLRN-183) puis tué pour le laisser relancer le serveur lui-même. Un réflexe de vérification visuelle a fait relancer un serveur sur ce même port un peu plus tard dans la session, contredisant directement la demande — détecté par une notification système et corrigé immédiatement (nouveau kill, aucune relance depuis) ([LRN-20260823183009-3](learnings/LRN-20260823183009-3.md)).
+
+**Entrées clés :**
+
+- [BDR-20260823183009-1](decisions/BDR-20260823183009-1.md) — fusion Chrono+Endurance en mode "Marathon"
+- [BDR-20260823183009-2](decisions/BDR-20260823183009-2.md) — icône composée Timer+Heart
+- [LRN-20260823183009-3](learnings/LRN-20260823183009-3.md) — demande de libérer un port ≠ relance automatique
+
+## 2026-10-27
+
+État des lieux du projet puis préparation d'un soft launch bêta. Phases 0 à 4.1 terminées, lint et build verts ; décision de publier une `1.0.0-beta.1` sans attendre Supabase (4.2) ni la landing page (4.3). Relance de `brand-creator` en point d'entrée rapide (projet déjà brandé) : moodboard de 6 og:image ogimagecn, choix du template Logo avec le sous-titre « Chacun son quartier, zéro voisin collé. », rendu one-shot Satori + resvg et meta OG/Twitter sur `pawzzle-game.vercel.app`. Setup PWA vérifié (déjà complet, assets identiques après régénération) ; SFX ajoutés au précache, ambiance exclue. Crédits audio (Alex Morgan via Pixabay, Kenney CC0) ajoutés dans Réglages.
+
+PostHog branché avec la convention découverte par SQL dans le projet partagé (super-propriété `app`, pas de préfixe d'event), `persistence: memory`, compteurs locaux d'adoption et 19 events typés, dont un `level_ended` unique avec `outcome` émis depuis toutes les sorties (y compris le démontage). L'installation de `posthog-js` a buté sur `trustPolicy` : l'échappatoire `--trust-policy=none` documentée était fausse (ignorée), c'est `off` qui fonctionne — mémoire globale corrigée. La clé n'a pas pu être posée sur Vercel (MCP en 403 sur les variables Production, CLI absente) : action manuelle en attente avant le merge vers `main`.
+
+Clôture : CHANGELOG.md créé, commit `84d6797` poussé sur `phase-4.1`. `memory-close` bloqué par des registres à l'ancien format, migrés via `memory-doctor --migrate` (179 fichiers, format seul). Constaté au passage : la branche distante `hyperframes` porte 13 entrées mémoire (27-28/07) absentes de `phase-4.1`.
+
+**Entrées clés :**
+
+- [BDR-20261027165040-4](decisions/BDR-20261027165040-4.md) — Soft launch 1.0.0-beta.1 avant Supabase et la LP
+- [BDR-20261027165040-5](decisions/BDR-20261027165040-5.md) — Analytics PostHog `memory` + compteurs locaux
+- [BLK-20261027165040-8](blockers/BLK-20261027165040-8.md) — Clé PostHog à poser à la main sur Vercel
