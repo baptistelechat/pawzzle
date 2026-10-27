@@ -686,3 +686,17 @@ Incident mineur hors-scope : sur demande explicite de Baptiste, le process Vite 
 - [BDR-20260823183009-1](decisions/BDR-20260823183009-1.md) — fusion Chrono+Endurance en mode "Marathon"
 - [BDR-20260823183009-2](decisions/BDR-20260823183009-2.md) — icône composée Timer+Heart
 - [LRN-20260823183009-3](learnings/LRN-20260823183009-3.md) — demande de libérer un port ≠ relance automatique
+
+## 2026-10-27
+
+État des lieux du projet puis préparation d'un soft launch bêta. Phases 0 à 4.1 terminées, lint et build verts ; décision de publier une `1.0.0-beta.1` sans attendre Supabase (4.2) ni la landing page (4.3). Relance de `brand-creator` en point d'entrée rapide (projet déjà brandé) : moodboard de 6 og:image ogimagecn, choix du template Logo avec le sous-titre « Chacun son quartier, zéro voisin collé. », rendu one-shot Satori + resvg et meta OG/Twitter sur `pawzzle-game.vercel.app`. Setup PWA vérifié (déjà complet, assets identiques après régénération) ; SFX ajoutés au précache, ambiance exclue. Crédits audio (Alex Morgan via Pixabay, Kenney CC0) ajoutés dans Réglages.
+
+PostHog branché avec la convention découverte par SQL dans le projet partagé (super-propriété `app`, pas de préfixe d'event), `persistence: memory`, compteurs locaux d'adoption et 19 events typés, dont un `level_ended` unique avec `outcome` émis depuis toutes les sorties (y compris le démontage). L'installation de `posthog-js` a buté sur `trustPolicy` : l'échappatoire `--trust-policy=none` documentée était fausse (ignorée), c'est `off` qui fonctionne — mémoire globale corrigée. La clé n'a pas pu être posée sur Vercel (MCP en 403 sur les variables Production, CLI absente) : action manuelle en attente avant le merge vers `main`.
+
+Clôture : CHANGELOG.md créé, commit `84d6797` poussé sur `phase-4.1`. `memory-close` bloqué par des registres à l'ancien format, migrés via `memory-doctor --migrate` (179 fichiers, format seul). Constaté au passage : la branche distante `hyperframes` porte 13 entrées mémoire (27-28/07) absentes de `phase-4.1`.
+
+**Entrées clés :**
+
+- [BDR-20261027165040-4](decisions/BDR-20261027165040-4.md) — Soft launch 1.0.0-beta.1 avant Supabase et la LP
+- [BDR-20261027165040-5](decisions/BDR-20261027165040-5.md) — Analytics PostHog `memory` + compteurs locaux
+- [BLK-20261027165040-8](blockers/BLK-20261027165040-8.md) — Clé PostHog à poser à la main sur Vercel
