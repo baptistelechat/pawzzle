@@ -1,0 +1,24 @@
+---
+id: ZBLK-043
+type: blocker
+date: 2026-07-26
+summary: "Rituel mémoire : fichiers tagués sautés avant de répondre"
+tags: [memory-ritual, claude-code, protocol, session-start, pawzzle]
+status: résolu
+---
+
+# ZBLK-043 — Rituel mémoire : fichiers tagués sautés avant de répondre
+
+**Friction** : Les 3 index locaux avaient bien été lus au démarrage de session, mais la question posée par Baptiste (calcul de difficulté d'une grille) n'a pas déclenché le chargement des fichiers individuels dont les tags matchaient (LRN-040, BDR-053, BDR-057, BDR-061, LRN-002, LRN-003, BDR-004, BDR-060) avant de répondre — un agent d'exploration du code a été lancé à la place, redécouvrant dans `src/` ce qui était déjà consigné en mémoire.
+
+**Cause réelle** : Étape "identifier les tags pertinents dans les index → charger les fichiers individuels correspondants" du rituel de démarrage sautée, contournée sans s'en rendre compte par une exploration directe du code jugée suffisante.
+
+**Solution** : Signalé explicitement par Baptiste ("tu n'as pas lu les fichiers de mémoire"). Fichiers individuels pertinents chargés a posteriori, réponse enrichie avec le contenu déjà consigné (notamment LRN-040, dont l'incident concret confirmait l'argument donné de mémoire).
+
+## Références
+
+- [LRN-040](../../learnings/LRN-040.md) — le fichier dont l'omission a eu le plus d'impact sur la réponse initiale
+
+## Note de renumérotation
+
+Archivé initialement sous l'ID `BLK-002` (actif) — renumérotée `ZBLK-043` lors de l'archivage car `ZBLK-002` désignait déjà un autre blocker (init shadcn, 2026-07-21). Anomalie de désynchronisation entre pool actif et pool archive à investiguer via `/memory-doctor`.

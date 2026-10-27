@@ -1,12 +1,4 @@
-import type { LucideIcon } from "lucide-react";
-import {
-  Music2,
-  Settings,
-  Vibrate,
-  VibrateOff,
-  Volume2,
-  VolumeX,
-} from "lucide-react";
+import { Settings, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -17,47 +9,21 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Switch } from "@/components/ui/switch";
-import { useSettings } from "@/hooks/useSettings";
+import { SoundHapticsToggles } from "@/components/SoundHapticsToggles";
+import { track } from "@/lib/analytics";
 import { haptics } from "@/lib/haptics";
-import {
-  setAmbientEnabled,
-  setHapticsSetting,
-  setSfxEnabled,
-} from "@/lib/settings";
 import { sounds } from "@/lib/sounds";
-import { cn } from "@/lib/utils";
 
-interface IconToggleProps {
-  icon: LucideIcon;
-  label: string;
-  active: boolean;
-  onToggle: (value: boolean) => void;
-}
-
-const IconToggle = ({
-  icon: Icon,
-  label,
-  active,
-  onToggle,
-}: IconToggleProps) => (
-  <div className="flex flex-col items-center gap-1.5">
-    <Button
-      type="button"
-      variant={active ? "default" : "outline"}
-      size="icon-xl"
-      aria-pressed={active}
-      aria-label={label}
-      onClick={() => {
-        haptics.trigger("selection");
-        sounds.play("ui_toggle");
-        onToggle(!active);
-      }}
-      className={cn(!active && "text-muted-foreground")}
-    >
-      <Icon className="size-6" />
-    </Button>
-    <span className="text-xs text-muted-foreground">{label}</span>
-  </div>
+const CreditLink = ({ href, children }: { href: string; children: string }) => (
+  <a
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="underline underline-offset-2 hover:text-foreground"
+    onClick={() => track("credits_link_clicked", { credit: children })}
+  >
+    {children}
+  </a>
 );
 
 interface SettingsDialogProps {
@@ -65,6 +31,7 @@ interface SettingsDialogProps {
   onHelpChange: (value: boolean) => void;
   size?: "icon" | "icon-lg" | "icon-xl";
   className?: string;
+  onOpenChange?: (open: boolean) => void;
 }
 
 export const SettingsDialog = ({
@@ -72,11 +39,15 @@ export const SettingsDialog = ({
   onHelpChange,
   size = "icon",
   className,
+  onOpenChange,
 }: SettingsDialogProps) => {
-  const settings = useSettings();
-
   return (
-    <Dialog>
+    <Dialog
+      onOpenChange={(open) => {
+        if (open) track("settings_opened");
+        onOpenChange?.(open);
+      }}
+    >
       <DialogTrigger
         render={
           <Button
@@ -101,27 +72,13 @@ export const SettingsDialog = ({
         </DialogHeader>
         <div className="flex flex-col gap-4">
           <div className="grid grid-cols-3 gap-3">
-            <IconToggle
-              icon={settings.hapticsEnabled ? Vibrate : VibrateOff}
-              label="Vibrations"
-              active={settings.hapticsEnabled}
-              onToggle={setHapticsSetting}
-            />
-            <IconToggle
-              icon={settings.sfxEnabled ? Volume2 : VolumeX}
-              label="Sons"
-              active={settings.sfxEnabled}
-              onToggle={setSfxEnabled}
-            />
-            <IconToggle
-              icon={Music2}
-              label="Ambiance"
-              active={settings.ambientEnabled}
-              onToggle={setAmbientEnabled}
-            />
+            <SoundHapticsToggles />
           </div>
           <div className="flex items-center justify-between border-t border-border pt-4">
-            <span className="text-sm font-medium">Marquage des cases</span>
+            <span className="flex items-center gap-1.5 text-sm font-medium">
+              <X className="size-4" />
+              Marquage des cases
+            </span>
             <Switch
               checked={help}
               onCheckedChange={(checked) => {
@@ -132,6 +89,17 @@ export const SettingsDialog = ({
               }}
             />
           </div>
+          <p className="border-t border-border pt-4 text-xs leading-relaxed text-muted-foreground">
+            Musique :{" "}
+            <CreditLink href="https://pixabay.com/music/search/alex%20morgan/">
+              Alex Morgan
+            </CreditLink>{" "}
+            via Pixabay · Effets sonores :{" "}
+            <CreditLink href="https://kenney.nl/assets/interface-sounds">
+              Kenney
+            </CreditLink>{" "}
+            (CC0)
+          </p>
         </div>
       </DialogContent>
     </Dialog>

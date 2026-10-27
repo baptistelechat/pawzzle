@@ -10,12 +10,15 @@ import {
 import { AnimatePresence, m, useReducedMotion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { useAmbientPlayer } from "@/hooks/useAmbientPlayer";
+import { useSettings } from "@/hooks/useSettings";
+import { track } from "@/lib/analytics";
 import { haptics } from "@/lib/haptics";
 import { EASE_OUT } from "@/lib/motion";
+import { setAmbientEnabled } from "@/lib/settings";
 import {
   nextAmbientTrack,
   previousAmbientTrack,
-  toggleAmbientMute,
+  sounds,
   toggleAmbientPlayback,
 } from "@/lib/sounds";
 
@@ -31,8 +34,10 @@ const formatTime = (seconds: number) => {
 };
 
 export const AmbientPlayer = () => {
-  const { title, artist, isPlaying, isMuted, currentTime, duration } =
+  const { title, artist, isPlaying, currentTime, duration } =
     useAmbientPlayer();
+  const { ambientEnabled } = useSettings();
+  const isMuted = !ambientEnabled;
   const reduceMotion = useReducedMotion();
 
   const subtitle = [
@@ -112,6 +117,8 @@ export const AmbientPlayer = () => {
             aria-label="Piste précédente"
             onClick={() => {
               haptics.trigger("selection");
+              sounds.play("ui_click");
+              track("ambient_track_skipped", { direction: "previous", title });
               previousAmbientTrack();
             }}
           >
@@ -124,6 +131,8 @@ export const AmbientPlayer = () => {
             aria-label={isPlaying ? "Mettre en pause" : "Reprendre la lecture"}
             onClick={() => {
               haptics.trigger("selection");
+              sounds.play("ui_toggle");
+              track("ambient_playback_toggled", { playing: !isPlaying });
               toggleAmbientPlayback();
             }}
           >
@@ -140,6 +149,8 @@ export const AmbientPlayer = () => {
             aria-label="Piste suivante"
             onClick={() => {
               haptics.trigger("selection");
+              sounds.play("ui_click");
+              track("ambient_track_skipped", { direction: "next", title });
               nextAmbientTrack();
             }}
           >
@@ -152,7 +163,8 @@ export const AmbientPlayer = () => {
             aria-label={isMuted ? "Réactiver le son" : "Couper le son"}
             onClick={() => {
               haptics.trigger("selection");
-              toggleAmbientMute();
+              sounds.play("ui_toggle");
+              setAmbientEnabled(isMuted);
             }}
           >
             {isMuted ? (

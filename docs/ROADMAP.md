@@ -59,12 +59,11 @@ Scope figé par le brief (4.0) : **grille carrée classique uniquement**, aucune
 
 ### Phase 4.1 — Mécaniques différenciantes (brief 4.1)
 
-- [ ] Formes de grille non carrées (hexagone, cercle, triangle... en pixel art) — casse la lecture visuelle sans changer la logique de base
-- [ ] Contraintes inspirées des échecs (diagonale/L/ligne interdite) — nomenclature par mouvement décrit, jamais par nom de pièce
-- [ ] Niveau-tutoriel dédié pour introduire chaque nouvelle contrainte (pas de surlignage permanent en jeu — piège d'onboarding identifié en 4.1 du brief)
-- [ ] Combinaison forme + contrainte pour niveaux inédits
+- [x] Formes de grille non carrées (hexagone, cercle, triangle... en pixel art) — 6 formes testées, seuls carré et cercle jouables/concluants ; les autres cassaient trop la lisibilité des lignes/colonnes (rejetées, pas de nouvelle piste retenue pour l'instant)
+- [x] ~~Contraintes inspirées des échecs (diagonale/L/ligne interdite)~~ — abandonné, ajoute de la complexité à des règles simples d'entrée et brouille la lisibilité en partie (le joueur ne peut plus distinguer facilement une erreur de règle de base d'une erreur de contrainte échecs)
+- [x] Combinaison forme + taille tirée au sort à chaque nouvelle partie (remplace la combinaison forme + contrainte échecs, abandonnée ci-dessus) — retiré des réglages manuels (`SettingsDialog`), chaque partie propose désormais une combinaison différente
 
-**Sortie** : au moins une forme non carrée + une contrainte échecs jouables. Retest interne pour confirmer le gain d'engagement vs Queens (le test Phase 3 était encore trop proche du clone strict).
+**Sortie** : forme + taille combinées aléatoirement à chaque partie. Retest interne pour confirmer le gain d'engagement vs Queens (le test Phase 3 était encore trop proche du clone strict).
 
 ### Phase 4.2 — PWA installable + Supabase (brief 8, point 3)
 

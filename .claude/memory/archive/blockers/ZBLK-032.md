@@ -2,14 +2,18 @@
 id: ZBLK-032
 type: blocker
 date: 2026-07-25
+summary: "Scrollbar verticale sur mobile après l'épinglage du footer"
 tags: [layout, scroll, sticky, dvh, mobile, grid-sizing, pawzzle]
+status: résolu
 ---
 
 # ZBLK-032 — Scrollbar verticale sur mobile après l'épinglage du footer
 
-| Friction                                                                                                                                        | Cause réelle                                                                                                                                                                                                                                                                                                    | Solution                                                                                                                                                                                                                                                         | Statut |
-| ----------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| Une fois la pill rendue visible par le `sticky` ([BDR-038](../../decisions/BDR-038.md)), Baptiste a signalé une scrollbar verticale sur mobile. | Le `sticky` n'a jamais réduit la hauteur du document : l'élément reste dans le flux ([LRN-027](../../learnings/LRN-027.md)). Le débordement de quelques pixels diagnostiqué en [ZBLK-030](ZBLK-030.md) était donc toujours là — simplement rendu perceptible au lieu d'être masqué sous la ligne de flottaison. | Plafonner le bloc de niveau par un budget de hauteur dérivé de `100dvh`, pour que la grille rétrécisse au lieu de pousser la page ([BDR-039](../../decisions/BDR-039.md)). Le `sticky` est conservé en filet si le budget est sous-estimé sur un appareil donné. | résolu |
+**Friction** : Une fois la pill rendue visible par le `sticky` ([BDR-038](../../decisions/BDR-038.md)), Baptiste a signalé une scrollbar verticale sur mobile.
+
+**Cause réelle** : Le `sticky` n'a jamais réduit la hauteur du document : l'élément reste dans le flux ([LRN-027](../../learnings/LRN-027.md)). Le débordement de quelques pixels diagnostiqué en [ZBLK-030](ZBLK-030.md) était donc toujours là — simplement rendu perceptible au lieu d'être masqué sous la ligne de flottaison.
+
+**Solution** : Plafonner le bloc de niveau par un budget de hauteur dérivé de `100dvh`, pour que la grille rétrécisse au lieu de pousser la page ([BDR-039](../../decisions/BDR-039.md)). Le `sticky` est conservé en filet si le budget est sous-estimé sur un appareil donné.
 
 Statut ouvert : `pnpm lint` et `pnpm build` sont verts, mais le comportement n'est pas encore confirmé sur appareil. Deux points à vérifier — plus aucun scroll sur mobile barre d'URL déployée, et **grille inchangée sur desktop** (seul endroit où le budget de 19rem pourrait déborder).
 

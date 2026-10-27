@@ -1,7 +1,13 @@
-import type { Grid, Level, Position } from "@/lib/engine/types";
+import type { Grid, GridShape, Level, Position } from "@/lib/engine/types";
+import { classifyDifficulty } from "@/lib/engine/deduction";
 import { countSolutions } from "@/lib/engine/solver";
+import { createShapeMask } from "@/lib/engine/shapes";
 
-const MAX_ATTEMPTS = 1000; // ponytail: garde-fou anti-boucle infinie, à revoir si des tailles réalistes finissent par l'atteindre
+// ponytail: garde-fou anti-boucle infinie. Mesuré empiriquement : le 10×10
+// nécessite jusqu'à ~2100 tentatives dans le pire cas observé (échantillon de
+// 50 générations) — 5000 laisse une marge confortable sans bloquer le worker
+// indéfiniment.
+const MAX_ATTEMPTS = 5000;
 
 const NEIGHBOR_OFFSETS = [
   { row: -1, col: 0 },
@@ -19,19 +25,18 @@ const shuffle = <T>(items: T[]): T[] => {
   return result;
 };
 
-// Fait croître `size` régions contiguës par flood-fill aléatoire jusqu'à couvrir toute la grille
-const generateRegions = (size: number): number[][] => {
+// Fait croître `size` régions contiguës par flood-fill aléatoire jusqu'à couvrir toutes les cases actives
+const generateRegions = (size: number, active: boolean[][]): number[][] => {
   const regions: number[][] = Array.from({ length: size }, () =>
     Array(size).fill(-1),
   );
   const frontier: Position[] = [];
 
-  const seeds = shuffle(
-    Array.from({ length: size * size }, (_, i) => ({
-      row: Math.floor(i / size),
-      col: i % size,
-    })),
-  ).slice(0, size);
+  const activeCells = Array.from({ length: size * size }, (_, i) => ({
+    row: Math.floor(i / size),
+    col: i % size,
+  })).filter(({ row, col }) => active[row][col]);
+  const seeds = shuffle(activeCells).slice(0, size);
   seeds.forEach((seed, regionId) => {
     regions[seed.row][seed.col] = regionId;
     frontier.push(seed);
@@ -51,6 +56,7 @@ const generateRegions = (size: number): number[][] => {
         row >= size ||
         col < 0 ||
         col >= size ||
+        !active[row][col] ||
         regions[row][col] !== -1
       )
         continue;
@@ -62,11 +68,18 @@ const generateRegions = (size: number): number[][] => {
   return regions;
 };
 
-export const generateLevel = (size: number): Level => {
+export const generateLevel = (size: number, shape: GridShape): Level => {
+  const active = createShapeMask(shape, size);
   for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
-    const grid: Grid = { size, regions: generateRegions(size) };
-    const solutions = countSolutions(grid, 2);
-    if (solutions.length === 1) return { grid, solution: solutions[0] };
+    const grid: Grid = { size, regions: generateRegions(size, active), active };
+    const { solutions } = countSolutions(grid, 2);
+    if (solutions.length === 1) {
+      return {
+        grid,
+        solution: solutions[0],
+        difficulty: classifyDifficulty(grid),
+      };
+    }
   }
   throw new Error(
     `generateLevel: aucune grille à solution unique trouvée pour size=${size} après ${MAX_ATTEMPTS} tentatives`,

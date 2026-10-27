@@ -138,15 +138,24 @@
     retombe sur la taille du contenu, laissant un vide en bas d'écran. */
     height: 100%;
   }
-  html,
-  body {
+  #root {
+    /* Le clip vit ici, pas sur `html`/`body` : leur `overflow` se propage
+    au scroller racine du viewport (règle CSS de propagation html→body→
+    viewport), ce qui tue le pull-to-refresh natif de Chrome — même sans
+    `overscroll-behavior`. `#root` n'est ni `html` ni `body`, donc son
+    overflow reste local : le scroller racine existe toujours pour Chrome
+    (PTR fonctionnel), et `#root` étant verrouillé à 100% (ligne au-dessus),
+    aucun contenu ne peut pousser `body` plus haut que la fenêtre. */
     overflow: hidden;
-    overscroll-behavior: none;
   }
   body {
     @apply bg-background text-foreground;
   }
   html {
+    /* Bloque le pincer-zoomer sans toucher au panoramique (donc sans
+    casser le pull-to-refresh) : `pan-x pan-y` couvre le scroll, mais pas
+    `pinch-zoom` — contrairement à `manipulation`, qui l'autorise encore. */
+    touch-action: pan-x pan-y;
     @apply font-sans;
   }
   h1,

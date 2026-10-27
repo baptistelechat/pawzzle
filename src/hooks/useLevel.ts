@@ -1,11 +1,23 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Vibration } from "web-haptics";
-import type { Level, Position } from "@/lib/engine/types";
+import type { GridShape, Level, Position } from "@/lib/engine/types";
 import { haptics } from "@/lib/haptics";
 import { sounds } from "@/lib/sounds";
 
-const GRID_SIZE = 6;
 const MAX_ERRORS = 3; // ponytail: budget arbitraire, à ajuster après test interne (Phase 3)
+
+// Combinaison forme + taille tirée au sort à chaque partie : plus de réglage
+// manuel, chaque "nouvelle partie" est une combinaison différente.
+const GRID_SIZES = [6, 8, 10] as const;
+const GRID_SHAPES: GridShape[] = ["square", "circle"];
+
+const pickRandom = <T>(items: readonly T[]): T =>
+  items[Math.floor(Math.random() * items.length)];
+
+const pickLevelParams = () => ({
+  size: pickRandom(GRID_SIZES),
+  shape: pickRandom(GRID_SHAPES),
+});
 
 // Le preset "success" intégré (30ms+40ms) est perçu comme trop faible — pattern
 // custom plus long et plus intense, réutilisé pour toute pose correcte (pas
@@ -22,10 +34,26 @@ export interface PlacedPawn extends Position {
   invalid: boolean;
 }
 
+export interface UseLevelOptions {
+  // Budget d'erreurs avant qu'un niveau ne passe seul en "lost". Le mode
+  // run (Marathon) passe Infinity : le niveau ne perd jamais tout
+  // seul, c'est useGameRun qui gère la fin de partie via son propre pool de
+  // vies partagé sur toute la run.
+  maxErrors?: number;
+  // Pose invalide/valide : permet à useGameRun de décrémenter son pool de
+  // vies ou d'ajouter du temps sans dupliquer la logique de pose ci-dessous.
+  onInvalidPlacement?: () => void;
+  onValidPlacement?: () => void;
+}
+
 const samePosition = (a: Position, b: Position) =>
   a.row === b.row && a.col === b.col;
 
-export const useLevel = () => {
+export const useLevel = ({
+  maxErrors = MAX_ERRORS,
+  onInvalidPlacement,
+  onValidPlacement,
+}: UseLevelOptions = {}) => {
   const workerRef = useRef<Worker | null>(null);
   // Miroirs synchrones de `errors`/`placed`/`status` : évitent de lire une
   // valeur figée par closure si deux poses se déclenchent avant que React ait
@@ -44,6 +72,21 @@ export const useLevel = () => {
   const [errors, setErrors] = useState(0);
   const [status, setStatus] = useState<Status>("loading");
   const [help, setHelp] = useState(true);
+  // Combinaison forme+taille du tout premier niveau, tirée une seule fois au
+  // montage : partagée entre l'init de `pendingSize` et le postMessage initial
+  // du worker (cf. effet de montage plus bas) pour que les deux restent
+  // cohérents plutôt que de tirer deux valeurs différentes séparément.
+  const [initialParams] = useState(() => pickLevelParams());
+  // Taille demandée au worker, connue avant que la grille n'arrive : sert à
+  // dimensionner le squelette de chargement (10×10 sensiblement plus lent que
+  // 6×6/8×8 à générer, cf. MAX_ATTEMPTS dans generator.ts).
+  const [pendingSize, setPendingSize] = useState(() => initialParams.size);
+
+  const requestLevel = useCallback((worker: Worker | null) => {
+    const params = pickLevelParams();
+    setPendingSize(params.size);
+    worker?.postMessage(params);
+  }, []);
 
   // Seul point d'écriture du statut : met le ref et le state à jour d'un même
   // geste, pour qu'aucun futur appel ne puisse oublier le miroir — c'est
@@ -60,8 +103,8 @@ export const useLevel = () => {
     setErrors(0);
     errorsRef.current = 0;
     placedRef.current = [];
-    workerRef.current?.postMessage({ size: GRID_SIZE });
-  }, [updateStatus]);
+    requestLevel(workerRef.current);
+  }, [updateStatus, requestLevel]);
 
   useEffect(() => {
     const worker = new Worker(
@@ -75,7 +118,7 @@ export const useLevel = () => {
         // Grille sans solution unique trouvée (garde-fou anti-boucle infinie
         // du générateur) : on retente avec un nouveau seed au lieu de laisser
         // le spinner bloqué indéfiniment.
-        worker.postMessage({ size: GRID_SIZE });
+        requestLevel(worker);
         return;
       }
       setLevel(event.data.level);
@@ -83,9 +126,12 @@ export const useLevel = () => {
       setLevelId((id) => id + 1);
     };
     workerRef.current = worker;
-    worker.postMessage({ size: GRID_SIZE });
+    // Appel direct (pas requestLevel) : réutilise le tirage déjà fait pour
+    // pendingSize (initialParams) plutôt que d'en retirer un nouveau, sinon
+    // le squelette affiché ne correspondrait plus à la grille demandée.
+    worker.postMessage(initialParams);
     return () => worker.terminate();
-  }, [updateStatus]);
+  }, [updateStatus, requestLevel, initialParams]);
 
   const togglePaw = useCallback(
     (candidate: Position) => {
@@ -104,7 +150,7 @@ export const useLevel = () => {
       const willWin =
         !invalid &&
         next.filter((p) => !p.invalid).length === level.solution.length;
-      const willLose = invalid && errorsRef.current + 1 >= MAX_ERRORS;
+      const willLose = invalid && errorsRef.current + 1 >= maxErrors;
 
       haptics.cancel();
       haptics.trigger(
@@ -121,16 +167,18 @@ export const useLevel = () => {
       );
 
       if (invalid) {
-        // Borné à MAX_ERRORS : au-delà, HeartsRow annoncerait « Erreurs : 4 / 3 »
+        onInvalidPlacement?.();
+        // Borné à maxErrors : au-delà, HeartsRow annoncerait « Erreurs : 4 / 3 »
         // et `isLastHeart` (maxErrors - errors === 1) ne matcherait plus jamais.
-        errorsRef.current = Math.min(errorsRef.current + 1, MAX_ERRORS);
+        errorsRef.current = Math.min(errorsRef.current + 1, maxErrors);
         setErrors(errorsRef.current);
         if (willLose) updateStatus("lost");
-      } else if (willWin) {
-        updateStatus("won");
+      } else {
+        onValidPlacement?.();
+        if (willWin) updateStatus("won");
       }
     },
-    [level, updateStatus],
+    [level, updateStatus, maxErrors, onInvalidPlacement, onValidPlacement],
   );
 
   const toggleMarker = useCallback(
@@ -174,8 +222,9 @@ export const useLevel = () => {
     placed,
     markers,
     errors,
-    maxErrors: MAX_ERRORS,
+    maxErrors,
     status,
+    pendingSize,
     help,
     setHelp,
     togglePaw,

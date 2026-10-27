@@ -2,14 +2,18 @@
 id: ZBLK-031
 type: blocker
 date: 2026-07-25
+summary: "Build de preview injoignable depuis le mobile"
 tags: [vite, preview, host, lan, mobile-testing, misdiagnosis, pawzzle]
+status: résolu
 ---
 
 # ZBLK-031 — Build de preview injoignable depuis le mobile
 
-| Friction                                                                                                                                                                       | Cause réelle                                                                                                                                                                                                                                                                 | Solution                                                                                                                                          | Statut |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| Impossible de vérifier le correctif de [ZBLK-030](ZBLK-030.md) sur téléphone : `https://192.168.1.74:4173` répondait sur le PC, jamais sur le mobile du même réseau. | Le script `preview` du `package.json` est `vite preview`, sans `--host` — il ne bind que `localhost`. Le script `dev` porte le flag depuis toujours (`vite --host`), d'où l'illusion que le réseau est ouvert par défaut sur ce projet ([LRN-026](../../learnings/LRN-026.md)). | `pnpm preview --host`. Corrigé durablement par Baptiste dans le `package.json` : le script est désormais `vite preview --host`, aligné sur `dev`. | résolu |
+**Friction** : Impossible de vérifier le correctif de [ZBLK-030](ZBLK-030.md) sur téléphone : `https://192.168.1.74:4173` répondait sur le PC, jamais sur le mobile du même réseau.
+
+**Cause réelle** : Le script `preview` du `package.json` est `vite preview`, sans `--host` — il ne bind que `localhost`. Le script `dev` porte le flag depuis toujours (`vite --host`), d'où l'illusion que le réseau est ouvert par défaut sur ce projet ([LRN-026](../../learnings/LRN-026.md)).
+
+**Solution** : `pnpm preview --host`. Corrigé durablement par Baptiste dans le `package.json` : le script est désormais `vite preview --host`, aligné sur `dev`.
 
 ## Notes
 

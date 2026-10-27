@@ -8,8 +8,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
+import { RulesCarousel, type RuleSlide } from "@/components/RulesCarousel";
 import { TapInstructions } from "@/components/TapInstructions";
 import { REGION_COLORS } from "@/lib/regionColors";
+import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 import { BookOpen, PawPrint, X } from "lucide-react";
 
@@ -69,7 +71,7 @@ const RULES: { title: string; description: string; cells: RuleCell[] }[] = [
 ];
 
 const RuleGrid = ({ cells }: { cells: RuleCell[] }) => (
-  <div className="mx-auto grid w-32 grid-cols-3 gap-1" aria-hidden="true">
+  <div className="mx-auto grid w-36 grid-cols-3 gap-1" aria-hidden="true">
     {cells.map((cell, index) => (
       <div
         key={index}
@@ -92,13 +94,29 @@ const RuleGrid = ({ cells }: { cells: RuleCell[] }) => (
   </div>
 );
 
+const SLIDES: RuleSlide[] = RULES.map((rule) => ({
+  title: rule.title,
+  description: rule.description,
+  content: <RuleGrid cells={rule.cells} />,
+}));
+
 interface RulesDialogProps {
   size?: "icon" | "icon-lg" | "icon-xl";
   className?: string;
+  onOpenChange?: (open: boolean) => void;
 }
 
-export const RulesDialog = ({ size = "icon", className }: RulesDialogProps) => (
-  <Dialog>
+export const RulesDialog = ({
+  size = "icon",
+  className,
+  onOpenChange,
+}: RulesDialogProps) => (
+  <Dialog
+    onOpenChange={(open) => {
+      if (open) track("rules_opened");
+      onOpenChange?.(open);
+    }}
+  >
     <DialogTrigger
       render={
         <Button
@@ -130,19 +148,9 @@ export const RulesDialog = ({ size = "icon", className }: RulesDialogProps) => (
         <Separator className="mt-2" />
       </DialogHeader>
       <div className="min-h-0 flex-1 overflow-y-auto">
-        <div className="flex flex-col gap-6 pr-1">
-          {RULES.map((rule) => (
-            <section key={rule.title} className="flex flex-col gap-3">
-              <div>
-                <h3 className="text-sm font-semibold">{rule.title}</h3>
-                <p className="text-sm text-muted-foreground">
-                  {rule.description}
-                </p>
-              </div>
-              <RuleGrid cells={rule.cells} />
-            </section>
-          ))}
-          <section className="flex flex-col gap-3 border-t border-border pt-6">
+        <div className="flex flex-col gap-4 pr-1">
+          <RulesCarousel slides={SLIDES} />
+          <section className="flex flex-col gap-3 border-t border-border pt-4">
             <h3 className="text-sm font-semibold">Comment jouer ?</h3>
             <TapInstructions />
           </section>
