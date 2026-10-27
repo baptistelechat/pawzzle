@@ -1,7 +1,7 @@
 {
   "name": "pawzzle",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0-beta.1",
   "type": "module",
   "packageManager": "pnpm@10.30.3",
   "scripts": {
@@ -23,6 +23,7 @@
     "clsx": "^2.1.1",
     "lucide-react": "^1.25.0",
     "motion": "^12.42.2",
+    "posthog-js": "^1.438.12",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "shadcn": "^4.13.1",

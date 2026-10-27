@@ -1,3 +1,4 @@
+import { track } from "@/lib/analytics";
 import { setHapticsEnabled } from "@/lib/haptics";
 import {
   setAmbientMuted,
@@ -52,6 +53,8 @@ export const subscribeSettings = (listener: () => void) => {
 export const getSettings = () => state;
 
 const update = (partial: Partial<SettingsState>) => {
+  for (const [setting, value] of Object.entries(partial))
+    track("setting_changed", { setting, value });
   state = { ...state, ...partial };
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   applyToAudio();

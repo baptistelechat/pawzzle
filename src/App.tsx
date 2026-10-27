@@ -5,6 +5,7 @@ import { RulesDialog } from "@/components/RulesDialog";
 import { SoundHapticsToggles } from "@/components/SoundHapticsToggles";
 import { WelcomeDialog } from "@/components/WelcomeDialog";
 import { Button } from "@/components/ui/button";
+import { track } from "@/lib/analytics";
 import type { GameMode } from "@/lib/gameModes";
 import { EASE_OUT } from "@/lib/motion";
 import { Trash2 } from "lucide-react";
@@ -25,6 +26,7 @@ function App() {
   const reduceMotion = useReducedMotion();
 
   const handleSelectMode = (selected: GameMode) => {
+    track("mode_selected", { mode: selected });
     setMode(selected);
     setRunKey((k) => k + 1);
   };
@@ -53,7 +55,10 @@ function App() {
         open={showIntro}
         onOpenChange={(open) => {
           setShowIntro(open);
-          if (!open) localStorage.setItem(SEEN_INTRO_KEY, "1");
+          if (!open) {
+            localStorage.setItem(SEEN_INTRO_KEY, "1");
+            track("welcome_dismissed");
+          }
         }}
       />
       <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col p-4">

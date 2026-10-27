@@ -10,8 +10,21 @@ import {
 } from "@/components/ui/dialog";
 import { Switch } from "@/components/ui/switch";
 import { SoundHapticsToggles } from "@/components/SoundHapticsToggles";
+import { track } from "@/lib/analytics";
 import { haptics } from "@/lib/haptics";
 import { sounds } from "@/lib/sounds";
+
+const CreditLink = ({ href, children }: { href: string; children: string }) => (
+  <a
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="underline underline-offset-2 hover:text-foreground"
+    onClick={() => track("credits_link_clicked", { credit: children })}
+  >
+    {children}
+  </a>
+);
 
 interface SettingsDialogProps {
   help: boolean;
@@ -29,7 +42,12 @@ export const SettingsDialog = ({
   onOpenChange,
 }: SettingsDialogProps) => {
   return (
-    <Dialog onOpenChange={onOpenChange}>
+    <Dialog
+      onOpenChange={(open) => {
+        if (open) track("settings_opened");
+        onOpenChange?.(open);
+      }}
+    >
       <DialogTrigger
         render={
           <Button
@@ -71,6 +89,17 @@ export const SettingsDialog = ({
               }}
             />
           </div>
+          <p className="border-t border-border pt-4 text-xs leading-relaxed text-muted-foreground">
+            Musique :{" "}
+            <CreditLink href="https://pixabay.com/music/search/alex%20morgan/">
+              Alex Morgan
+            </CreditLink>{" "}
+            via Pixabay · Effets sonores :{" "}
+            <CreditLink href="https://kenney.nl/assets/interface-sounds">
+              Kenney
+            </CreditLink>{" "}
+            (CC0)
+          </p>
         </div>
       </DialogContent>
     </Dialog>

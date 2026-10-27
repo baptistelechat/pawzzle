@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Download, Share, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useInstallPrompt } from "@/hooks/useInstallPrompt";
+import { track } from "@/lib/analytics";
 
 interface InstallButtonProps {
   size?: "icon" | "icon-lg" | "icon-xl";
@@ -33,11 +34,13 @@ export const InstallButton = ({
   if (isStandalone || (!canInstall && !isIos)) return null;
 
   const handleClick = async () => {
+    track("pwa_install_clicked", { platform: isIos ? "ios" : "prompt" });
     if (isIos) {
       setShowHint((prev) => !prev);
       return;
     }
-    await install();
+    const accepted = await install();
+    track("pwa_install_prompt_result", { accepted });
   };
 
   return (

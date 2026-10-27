@@ -2,6 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { LazyMotion, domAnimation } from "motion/react";
 import App from "./App.tsx";
+import { initAnalytics } from "./lib/analytics.ts";
 import { playAmbient, sounds } from "./lib/sounds.ts";
 import "./index.css";
 
@@ -11,6 +12,7 @@ import "./index.css";
 // back/forward n'a donc pas lieu d'être ici.
 if ("scrollRestoration" in history) history.scrollRestoration = "manual";
 
+initAnalytics();
 void sounds.preload();
 // ponytail: "pointerup" (fin de geste), pas "pointerdown" — Safari/iOS
 // n'autorise le déblocage audio que sur un événement de fin de geste

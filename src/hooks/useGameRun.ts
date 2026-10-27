@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useLevel } from "@/hooks/useLevel";
+import { countLevelPlayed, track } from "@/lib/analytics";
 import { haptics } from "@/lib/haptics";
 import { GAME_MODES, type GameMode } from "@/lib/gameModes";
 import { sounds } from "@/lib/sounds";
@@ -47,6 +48,41 @@ export const useGameRun = (
   const runStatusRef = useRef<RunStatus>("active");
   const bonusKeyRef = useRef(0);
   const levelsCompletedRef = useRef(0);
+  const totalPawsRef = useRef(0);
+
+  // --- Analytics : instantané du niveau en cours, lu par les events de fin
+  // (endRun/abandon/démontage), mis à jour par effet — jamais pendant le rendu.
+  const liveLevelRef = useRef<{
+    props: Record<string, string | number | boolean>;
+    startedAt: number;
+    status: string;
+    found: number;
+    errors: number;
+    markers: number;
+    help: boolean;
+    ended: boolean;
+  } | null>(null);
+
+  // Un seul `level_ended` par niveau (`ended`), quelle que soit la sortie :
+  // won/lost, run terminée, niveau passé, ou partie quittée.
+  const endLevel = useCallback(
+    (outcome: "won" | "lost" | "run_over" | "skipped" | "abandoned") => {
+      const live = liveLevelRef.current;
+      if (!live || live.ended) return;
+      live.ended = true;
+      track("level_ended", {
+        ...live.props,
+        outcome,
+        duration_s: Math.round((Date.now() - live.startedAt) / 1000),
+        paws_found: live.found,
+        errors: live.errors,
+        markers_count: live.markers,
+        marking_help: live.help,
+        lifetime_levels: countLevelPlayed(),
+      });
+    },
+    [],
+  );
 
   // Regroupe l'ajout de temps et le flash "+X" affiché à côté du Timer, pour
   // qu'un bonus par chat et un bonus de fin de niveau ne s'écrasent jamais
@@ -65,28 +101,41 @@ export const useGameRun = (
     return () => window.clearTimeout(timeoutId);
   }, [timeBonus]);
 
-  const endRun = useCallback(() => {
-    if (runStatusRef.current === "gameOver") return;
-    runStatusRef.current = "gameOver";
-    setRunStatus("gameOver");
-    setElapsedSeconds(Math.round((Date.now() - startedAt) / 1000));
-    haptics.cancel();
-    haptics.trigger("error");
-    sounds.play("game_over");
-  }, [startedAt]);
+  const endRun = useCallback(
+    (reason: "lives" | "time") => {
+      if (runStatusRef.current === "gameOver") return;
+      runStatusRef.current = "gameOver";
+      setRunStatus("gameOver");
+      const duration = Math.round((Date.now() - startedAt) / 1000);
+      setElapsedSeconds(duration);
+      endLevel("run_over");
+      track("run_ended", {
+        mode,
+        reason,
+        levels_completed: levelsCompletedRef.current,
+        paws_placed: totalPawsRef.current,
+        duration_s: duration,
+      });
+      haptics.cancel();
+      haptics.trigger("error");
+      sounds.play("game_over");
+    },
+    [startedAt, endLevel, mode],
+  );
 
   const handleInvalidPlacement = useCallback(() => {
     if (!config.hasRun) return;
     setLives((prev) => {
       const next = Math.max(0, prev - 1);
-      if (next === 0) endRun();
+      if (next === 0) endRun("lives");
       return next;
     });
   }, [config.hasRun, endRun]);
 
   const handleValidPlacement = useCallback(() => {
     if (!config.hasRun) return;
-    setTotalPawsPlaced((prev) => prev + 1);
+    totalPawsRef.current += 1;
+    setTotalPawsPlaced(totalPawsRef.current);
     const bonus = config.timeBonusPerPawn;
     if (bonus) addTime(bonus);
   }, [config.hasRun, config.timeBonusPerPawn, addTime]);
@@ -131,6 +180,76 @@ export const useGameRun = (
     prevLevelStatus.current = level.status;
   }, [level.status, config, addTime]);
 
+  // --- Analytics : début/fin de niveau.
+  const { level: currentLevel, levelId, status: levelStatus } = level;
+  useEffect(() => {
+    if (!currentLevel) return;
+    const { grid } = currentLevel;
+    const props = {
+      mode,
+      shape: grid.active.flat().every(Boolean) ? "square" : "circle",
+      size: grid.size,
+      difficulty: currentLevel.difficulty,
+      level_number: levelId,
+      ...(config.hasRun && { run_level: levelsCompletedRef.current + 1 }),
+    };
+    liveLevelRef.current = {
+      props,
+      startedAt: Date.now(),
+      status: "playing",
+      found: 0,
+      errors: 0,
+      markers: 0,
+      help: true,
+      ended: false,
+    };
+    track("level_started", props);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- un event par nouvelle grille (levelId), pas à chaque rendu
+  }, [levelId]);
+
+  const found = level.placed.filter((p) => !p.invalid).length;
+  const invalidCount = level.placed.length - found;
+  const markersCount = level.markers.length;
+  const { help } = level;
+  useEffect(() => {
+    const live = liveLevelRef.current;
+    if (!live) return;
+    live.status = levelStatus;
+    live.found = found;
+    // En Marathon, `errors` du niveau est le nombre de poses fautives (le pool
+    // de vies est suivi à part dans run_ended).
+    live.errors = invalidCount;
+    live.markers = markersCount;
+    live.help = help;
+    if (levelStatus === "won" || levelStatus === "lost") endLevel(levelStatus);
+  }, [levelStatus, found, invalidCount, markersCount, help, endLevel]);
+
+  // Démontage (retour accueil / relance de run) en plein niveau.
+  useEffect(
+    () => () => {
+      if (liveLevelRef.current?.status === "playing") endLevel("abandoned");
+    },
+    [endLevel],
+  );
+
+  // "Nouvelle partie" pendant un niveau non terminé = niveau passé.
+  const { newLevel: requestNewLevel } = level;
+  const newLevel = useCallback(() => {
+    if (liveLevelRef.current?.status === "playing") endLevel("skipped");
+    requestNewLevel();
+  }, [requestNewLevel, endLevel]);
+
+  const abandonRun = useCallback(
+    (action: "restart" | "home") =>
+      track("run_abandoned", {
+        mode,
+        action,
+        levels_completed: levelsCompletedRef.current,
+        duration_s: Math.round((Date.now() - startedAt) / 1000),
+      }),
+    [mode, startedAt],
+  );
+
   // Chrono uniquement (config.startTime défini) : décompte actif seulement
   // pendant une partie jouable de la run (pause au chargement et sur l'écran
   // de victoire d'un niveau, le temps que le joueur enchaîne).
@@ -150,7 +269,7 @@ export const useGameRun = (
         if (prev === undefined) return prev;
         const next = prev - 1;
         if (next <= 0) {
-          endRun();
+          endRun("time");
           return 0;
         }
         return next;
@@ -161,6 +280,8 @@ export const useGameRun = (
 
   return {
     ...level,
+    newLevel,
+    abandonRun,
     lives,
     maxLives: config.maxLives ?? lives,
     timeLeft,

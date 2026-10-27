@@ -1,0 +1,719 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pawzzle — og:image moodboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --font-display: "Fredoka", sans-serif;
+        --font-body: "IBM Plex Sans", sans-serif;
+        --primary: #ff8a65;
+        --primary-light: #ff9c7c;
+        --primary-ink: #8c4c38; /* primary assombri 45 % — 6.9:1 sur --background */
+        --secondary: #ffe8d6;
+        --background: #fff8f0;
+        --foreground: #4a3728;
+        --muted-foreground: #7a6553;
+        --accent: #7fb894;
+        --border: #f0ddd0;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+      }
+      body {
+        background: #eceae6;
+        font-family: system-ui, sans-serif;
+        color: #222;
+        padding: 32px 16px 64px;
+      }
+      header {
+        max-width: 1260px;
+        margin: 0 auto 28px;
+      }
+      header h1 {
+        font-size: 22px;
+      }
+      header p {
+        color: #555;
+        margin-top: 6px;
+        font-size: 14px;
+      }
+      .grid {
+        max-width: 1260px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(600px, 1fr));
+        gap: 28px;
+      }
+      .card {
+        background: #fff;
+        border-radius: 14px;
+        padding: 14px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+      }
+      .card h2 {
+        font-size: 15px;
+        margin: 4px 4px 2px;
+      }
+      .card p {
+        font-size: 13px;
+        color: #666;
+        margin: 0 4px 12px;
+      }
+      .frame {
+        width: 600px;
+        height: 315px;
+        overflow: hidden;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+      }
+      .og {
+        width: 1200px;
+        height: 630px;
+        transform: scale(0.5);
+        transform-origin: 0 0;
+        position: relative;
+        display: flex;
+        overflow: hidden;
+        font-family: var(--font-body);
+        color: var(--foreground);
+        background: var(--background);
+      }
+      .display {
+        font-family: var(--font-display);
+      }
+      .logo-tile {
+        display: block;
+      }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        border-radius: 999px;
+        font-size: 26px;
+        font-weight: 600;
+        padding: 10px 22px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        background: var(--primary);
+      }
+
+      /* mini-grille 5×5 résolue (régions = couleurs de l'app) */
+      .puzzle {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 6px;
+        padding: 10px;
+        background: var(--card, #fff);
+        border-radius: 22px;
+        border: 2px solid var(--border);
+      }
+      .puzzle span {
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .rA {
+        background: oklch(0.85 0.1 30);
+      }
+      .rB {
+        background: oklch(0.85 0.1 90);
+      }
+      .rC {
+        background: oklch(0.85 0.1 150);
+      }
+      .rD {
+        background: oklch(0.85 0.1 210);
+      }
+      .rE {
+        background: oklch(0.85 0.1 270);
+      }
+      .puzzle svg {
+        width: 62%;
+        height: 62%;
+      }
+
+      /* 1 — Simple */
+      .simple {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 96px;
+        background-image: radial-gradient(
+          circle at 50% 0%,
+          rgba(255, 138, 101, 0.22),
+          transparent 55%
+        );
+      }
+      .simple .badge {
+        background: rgba(255, 138, 101, 0.12);
+        border: 1px solid rgba(255, 138, 101, 0.4);
+        color: var(--primary-ink);
+        font-size: 24px;
+      }
+      .simple .title {
+        font-size: 76px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        line-height: 1.05;
+        margin-top: 40px;
+        max-width: 900px;
+        text-align: center;
+      }
+      .simple .desc {
+        color: var(--muted-foreground);
+        font-size: 32px;
+        line-height: 1.4;
+        margin-top: 28px;
+        max-width: 760px;
+        text-align: center;
+      }
+      .simple .brand {
+        position: absolute;
+        bottom: 56px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 26px;
+        font-weight: 600;
+      }
+
+      /* 2 — Logo */
+      .logo {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-image:
+          radial-gradient(
+            circle at 50% 50%,
+            rgba(255, 138, 101, 0.28),
+            transparent 60%
+          ),
+          linear-gradient(180deg, var(--background), var(--secondary));
+      }
+      .logo .logo-tile {
+        filter: drop-shadow(0 24px 60px rgba(255, 138, 101, 0.45));
+      }
+      .logo .name {
+        font-size: 112px;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        margin-top: 40px;
+        line-height: 1;
+      }
+      .logo .tag {
+        color: var(--muted-foreground);
+        font-size: 34px;
+        margin-top: 18px;
+      }
+
+      /* 3 — Editorial */
+      .editorial {
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 80px;
+        background: var(--secondary);
+      }
+      .editorial .ghost {
+        position: absolute;
+        right: -20px;
+        bottom: -80px;
+        font-size: 420px;
+        font-weight: 700;
+        color: rgba(74, 55, 40, 0.06);
+        letter-spacing: -0.04em;
+        line-height: 1;
+      }
+      .editorial .badge {
+        align-self: flex-start;
+        background: rgba(140, 76, 56, 0.12);
+        color: var(--primary-ink);
+        font-weight: 700;
+        padding: 10px 24px;
+      }
+      .editorial .title {
+        font-size: 120px;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        line-height: 0.98;
+        max-width: 1000px;
+        position: relative;
+      }
+      .editorial .foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-top: 2px solid rgba(74, 55, 40, 0.15);
+        padding-top: 28px;
+        position: relative;
+      }
+      .editorial .foot .b {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 32px;
+        font-weight: 700;
+      }
+      .editorial .meta {
+        color: var(--muted-foreground);
+        font-size: 30px;
+      }
+
+      /* 4 — Grid */
+      .gridt .line {
+        position: absolute;
+        border-color: var(--primary);
+        opacity: 0.5;
+      }
+      .gridt .v {
+        top: 0;
+        bottom: 0;
+        width: 1px;
+        border-left: 2px dashed;
+      }
+      .gridt .h {
+        left: 0;
+        right: 0;
+        height: 1px;
+        border-top: 2px dashed;
+      }
+      .gridt .content {
+        position: absolute;
+        top: 128px;
+        bottom: 128px;
+        left: 128px;
+        width: 620px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .gridt .title {
+        font-size: 72px;
+        font-weight: 600;
+        letter-spacing: -0.03em;
+        line-height: 1.1;
+      }
+      .gridt .desc {
+        color: var(--muted-foreground);
+        font-size: 36px;
+        line-height: 1.45;
+        margin-top: 24px;
+        font-weight: 500;
+      }
+      .gridt .puzzle {
+        position: absolute;
+        right: 128px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 300px;
+        height: 300px;
+      }
+      .gridt .brand {
+        position: absolute;
+        right: 96px;
+        bottom: 96px;
+        display: none;
+      }
+      .gridt .brand-left {
+        position: absolute;
+        left: 128px;
+        bottom: 80px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        font-size: 30px;
+        font-weight: 600;
+      }
+
+      /* 5 — Showcase */
+      .showcase {
+        flex-direction: column;
+        align-items: center;
+        padding-top: 60px;
+        background-image: radial-gradient(
+          circle at 50% 0%,
+          rgba(255, 138, 101, 0.25),
+          transparent 55%
+        );
+      }
+      .showcase .title {
+        font-size: 64px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        text-align: center;
+      }
+      .showcase .sub {
+        color: var(--muted-foreground);
+        font-size: 28px;
+        margin-top: 14px;
+        max-width: 800px;
+        text-align: center;
+      }
+      .showcase .window {
+        margin-top: 44px;
+        width: 1000px;
+        height: 380px;
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 20px 20px 0 0;
+        box-shadow: 0 -10px 80px rgba(255, 138, 101, 0.3);
+        display: flex;
+        flex-direction: column;
+      }
+      .showcase .bar {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 18px 24px;
+        border-bottom: 1px solid var(--border);
+      }
+      .showcase .bar i {
+        width: 14px;
+        height: 14px;
+        border-radius: 999px;
+        display: block;
+      }
+      .showcase .url {
+        margin-left: 20px;
+        background: var(--background);
+        border-radius: 8px;
+        padding: 8px 20px;
+        font-size: 20px;
+        color: var(--muted-foreground);
+      }
+      .showcase .body {
+        flex: 1;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 56px;
+        padding-top: 30px;
+      }
+      .showcase .puzzle {
+        width: 290px;
+        height: 290px;
+      }
+      .showcase .side {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        padding-top: 20px;
+      }
+      .showcase .pill {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 26px;
+        font-weight: 600;
+        background: var(--background);
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        padding: 10px 22px;
+      }
+      .showcase .pill.on {
+        background: var(--primary);
+        border-color: var(--primary);
+      }
+
+      /* 6 — Shiori */
+      .shiori {
+        flex-direction: column;
+        padding: 60px;
+        background: var(--background);
+      }
+      .shiori .row {
+        position: absolute;
+        left: 60px;
+        right: 60px;
+        bottom: 60px;
+        display: flex;
+        justify-content: space-between;
+      }
+      .shiori .row div {
+        font-size: 64px;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        line-height: 1.25;
+      }
+      .shiori .brandc {
+        flex: 0.3;
+        color: var(--primary-ink);
+      }
+      .shiori .titlec {
+        flex: 0.62;
+        color: var(--foreground);
+      }
+      .shiori .pawtrail {
+        position: absolute;
+        right: 60px;
+        top: 60px;
+        display: flex;
+        gap: 18px;
+        opacity: 0.9;
+      }
+      .shiori .pawtrail svg {
+        width: 54px;
+        height: 54px;
+      }
+    </style>
+  </head>
+  <body>
+    <svg width="0" height="0" style="position: absolute">
+      <defs>
+        <linearGradient id="gradH" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#ff9c7c" />
+          <stop offset="100%" stop-color="#ff8a65" />
+        </linearGradient>
+        <symbol id="logo" viewBox="0 0 512 512">
+          <rect width="512" height="512" rx="108" fill="url(#gradH)" />
+          <g
+            transform="translate(106,106) scale(12.5)"
+            stroke="#ffffff"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            fill="none"
+          >
+            <path
+              d="M12 5c.67 0 1.35.09 2 .26 1.78-2 5.03-2.84 6.42-2.26 1.4.58-.42 7-.42 7 .57 1.07 1 2.24 1 3.44C21 17.9 16.97 21 12 21s-9-3-9-7.56c0-1.25.5-2.4 1-3.44 0 0-1.89-6.42-.5-7 1.39-.58 4.72.23 6.5 2.23A9.04 9.04 0 0 1 12 5Z"
+            />
+            <path d="M8 14v.5" />
+            <path d="M16 14v.5" />
+            <path d="M11.25 16.25h1.5L12 17l-.75-.75Z" />
+          </g>
+        </symbol>
+        <symbol id="cat" viewBox="0 0 24 24">
+          <g
+            stroke="#4a3728"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            fill="none"
+          >
+            <path
+              d="M12 5c.67 0 1.35.09 2 .26 1.78-2 5.03-2.84 6.42-2.26 1.4.58-.42 7-.42 7 .57 1.07 1 2.24 1 3.44C21 17.9 16.97 21 12 21s-9-3-9-7.56c0-1.25.5-2.4 1-3.44 0 0-1.89-6.42-.5-7 1.39-.58 4.72.23 6.5 2.23A9.04 9.04 0 0 1 12 5Z"
+            />
+            <path d="M8 14v.5" />
+            <path d="M16 14v.5" />
+          </g>
+        </symbol>
+      </defs>
+    </svg>
+
+    <header>
+      <h1>Pawzzle — 6 propositions d'og:image (1200×630, affichées à 50 %)</h1>
+      <p>
+        Palette « Atelier Feutrine » de l'app (fond #fff8f0, texte #4a3728,
+        primaire #ff8a65), Fredoka + IBM Plex Sans, logo actuel. Templates
+        ogimagecn adaptés. Contrastes texte ≥ 4.5:1 (texte sur primaire : brun
+        #4a3728, 5.2:1).
+      </p>
+    </header>
+
+    <main class="grid">
+      <!-- 1. Simple -->
+      <section class="card">
+        <h2>Simple</h2>
+        <p>Minimal centré : badge, accroche, description, marque en pied.</p>
+        <div class="frame">
+          <div class="og simple">
+            <span class="badge"><span class="dot"></span>Jeu de logique</span>
+            <div class="title display">
+              Un pion par ligne, colonne et région.
+            </div>
+            <div class="desc">
+              Et jamais deux chats qui se touchent. Un nouveau puzzle à chaque
+              partie.
+            </div>
+            <div class="brand display">
+              <svg class="logo-tile" width="34" height="34">
+                <use href="#logo" /></svg
+              >Pawzzle
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. Logo -->
+      <section class="card">
+        <h2>Logo</h2>
+        <p>Marque seule : tuile logo, wordmark, tagline sur dégradé doux.</p>
+        <div class="frame">
+          <div class="og logo">
+            <svg class="logo-tile" width="150" height="150">
+              <use href="#logo" />
+            </svg>
+            <div class="name display">Pawzzle</div>
+            <div class="tag">Le puzzle logique qui ronronne</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. Editorial -->
+      <section class="card">
+        <h2>Editorial</h2>
+        <p>Affiche : grand titre, mot fantôme « Paw » en filigrane.</p>
+        <div class="frame">
+          <div class="og editorial">
+            <div class="ghost display">Paw</div>
+            <span class="badge">Puzzle logique</span>
+            <div class="title display">Pas un chat ne se touche.</div>
+            <div class="foot">
+              <div class="b display">
+                <svg class="logo-tile" width="40" height="40">
+                  <use href="#logo" /></svg
+                >Pawzzle
+              </div>
+              <div class="meta">Gratuit · Hors-ligne · Sans compte</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. Grid -->
+      <section class="card">
+        <h2>Grid</h2>
+        <p>
+          Cadre technique en pointillés + vraie grille 5×5 résolue à droite.
+        </p>
+        <div class="frame">
+          <div class="og gridt">
+            <div class="line v" style="left: 64px"></div>
+            <div class="line v" style="right: 64px"></div>
+            <div class="line h" style="top: 64px"></div>
+            <div class="line h" style="bottom: 64px"></div>
+            <div class="content">
+              <div class="title display">
+                Un chat par ligne, colonne et couleur.
+              </div>
+              <div class="desc">
+                Grilles carrées ou rondes, générées à la volée.
+              </div>
+            </div>
+            <div class="puzzle">
+              <span class="rA"
+                ><svg><use href="#cat" /></svg></span
+              ><span class="rA"></span><span class="rB"></span
+              ><span class="rB"></span><span class="rB"></span>
+              <span class="rA"></span><span class="rC"></span
+              ><span class="rC"></span
+              ><span class="rB"
+                ><svg><use href="#cat" /></svg></span
+              ><span class="rD"></span> <span class="rA"></span
+              ><span class="rC"
+                ><svg><use href="#cat" /></svg></span
+              ><span class="rE"></span><span class="rD"></span
+              ><span class="rD"></span> <span class="rE"></span
+              ><span class="rE"></span><span class="rE"></span
+              ><span class="rD"></span
+              ><span class="rD"
+                ><svg><use href="#cat" /></svg
+              ></span>
+              <span class="rE"></span><span class="rE"></span
+              ><span class="rE"
+                ><svg><use href="#cat" /></svg></span
+              ><span class="rE"></span><span class="rD"></span>
+            </div>
+            <div class="brand-left display">
+              <svg class="logo-tile" width="48" height="48">
+                <use href="#logo" /></svg
+              >Pawzzle
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. Showcase -->
+      <section class="card">
+        <h2>Showcase</h2>
+        <p>
+          Fenêtre d'app : la grille de jeu remplace le dashboard du template.
+        </p>
+        <div class="frame">
+          <div class="og showcase">
+            <div class="title display">Pawzzle</div>
+            <div class="sub">
+              Place tes chats, une seule règle : qu'ils ne se touchent jamais.
+            </div>
+            <div class="window">
+              <div class="bar">
+                <i style="background: #ff8a65"></i
+                ><i style="background: #ffd27a"></i
+                ><i style="background: #7fb894"></i>
+                <span class="url">pawzzle.vercel.app</span>
+              </div>
+              <div class="body">
+                <div class="puzzle">
+                  <span class="rA"
+                    ><svg><use href="#cat" /></svg></span
+                  ><span class="rA"></span><span class="rB"></span
+                  ><span class="rB"></span><span class="rB"></span>
+                  <span class="rA"></span><span class="rC"></span
+                  ><span class="rC"></span
+                  ><span class="rB"
+                    ><svg><use href="#cat" /></svg></span
+                  ><span class="rD"></span> <span class="rA"></span
+                  ><span class="rC"
+                    ><svg><use href="#cat" /></svg></span
+                  ><span class="rE"></span><span class="rD"></span
+                  ><span class="rD"></span> <span class="rE"></span
+                  ><span class="rE"></span><span class="rE"></span
+                  ><span class="rD"></span><span class="rD"></span>
+                  <span class="rE"></span><span class="rE"></span
+                  ><span class="rE"></span><span class="rE"></span
+                  ><span class="rD"></span>
+                </div>
+                <div class="side">
+                  <div class="pill on display">Classique</div>
+                  <div class="pill display">Marathon</div>
+                  <div class="pill">❤️ ❤️ ❤️</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. Shiori -->
+      <section class="card">
+        <h2>Shiori</h2>
+        <p>Calme et éditorial : logo rond, marque à gauche, phrase à droite.</p>
+        <div class="frame">
+          <div class="og shiori">
+            <svg
+              class="logo-tile"
+              width="96"
+              height="96"
+              style="border-radius: 50%; overflow: hidden"
+            >
+              <use href="#logo" />
+            </svg>
+            <div class="pawtrail">
+              <svg><use href="#cat" /></svg><svg><use href="#cat" /></svg
+              ><svg><use href="#cat" /></svg>
+            </div>
+            <div class="row">
+              <div class="brandc display">Pawzzle</div>
+              <div class="titlec display">
+                Un puzzle logique, quelques minutes, zéro chat qui se touche.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

@@ -7,6 +7,7 @@ import { GameOverPanel } from "@/components/GameScreen/components/GameOverPanel"
 import { RunHeader } from "@/components/GameScreen/components/RunHeader";
 import { GridSkeleton } from "@/components/GridSkeleton";
 import { useGameRun } from "@/hooks/useGameRun";
+import { track } from "@/lib/analytics";
 import { GAME_MODES, type GameMode } from "@/lib/gameModes";
 import { EASE_OUT } from "@/lib/motion";
 import { sounds } from "@/lib/sounds";
@@ -51,6 +52,7 @@ export function GameScreen({ mode, onReplay, onChangeMode }: GameScreenProps) {
     totalPawsPlaced,
     elapsedSeconds,
     runStatus,
+    abandonRun,
   } = useGameRun(mode, { paused: runPaused });
   const reduceMotion = useReducedMotion();
 
@@ -92,7 +94,10 @@ export function GameScreen({ mode, onReplay, onChangeMode }: GameScreenProps) {
         levelsCompleted={levelsCompleted}
         totalPawsPlaced={totalPawsPlaced}
         elapsedSeconds={elapsedSeconds}
-        onReplay={onReplay}
+        onReplay={() => {
+          track("run_replayed", { mode, levels_completed: levelsCompleted });
+          onReplay();
+        }}
         onChangeMode={onChangeMode}
       />
     );
@@ -164,11 +169,23 @@ export function GameScreen({ mode, onReplay, onChangeMode }: GameScreenProps) {
             runEnded={runStatus === "gameOver"}
             status={status}
             help={help}
-            onHelpChange={setHelp}
+            onHelpChange={(enabled) => {
+              track("marking_help_toggled", { enabled, mode });
+              setHelp(enabled);
+            }}
             onNewLevel={newLevel}
-            onReplayRun={onReplay}
-            onChangeMode={onChangeMode}
-            onShowRecap={() => setRecapConfirmed(true)}
+            onReplayRun={() => {
+              abandonRun("restart");
+              onReplay();
+            }}
+            onChangeMode={() => {
+              if (isRunActive) abandonRun("home");
+              onChangeMode();
+            }}
+            onShowRecap={() => {
+              track("run_recap_viewed", { mode, levels_completed: levelsCompleted });
+              setRecapConfirmed(true);
+            }}
             onRunPauseChange={setRunPaused}
           />
         </m.div>
