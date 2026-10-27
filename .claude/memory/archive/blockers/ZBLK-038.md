@@ -2,14 +2,18 @@
 id: ZBLK-038
 type: blocker
 date: 2026-07-25
+summary: "Zoom parasite à la fermeture d'un modal"
 tags: [android-chrome, zoom, focus, base-ui, dialog, misdiagnosis, pawzzle]
+status: résolu
 ---
 
 # ZBLK-038 — Zoom parasite à la fermeture d'un modal
 
-| Friction                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | Cause réelle                                                                                                                                                                                                                                              | Solution                                                                                              | Statut |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------ |
-| L'app apparaissait zoomée après la fermeture de RulesDialog/SettingsDialog (jamais WelcomeDialog), quel que soit le mode de fermeture (croix, clic dehors, retour Android). Hypothèse initiale erronée : restauration de scroll/zoom via `history.back()` du feature de fermeture au retour ([BDR-048](../../decisions/BDR-048.md)) — écartée quand Baptiste a confirmé que le bug touchait TOUTES les fermetures, pas seulement le retour, et épargnait WelcomeDialog qui utilise le même mécanisme d'historique. | Base UI ramène le focus sur le bouton déclencheur à la fermeture — WelcomeDialog n'a pas de déclencheur, Rules/Settings en ont un. Un focus programmatique après interaction tactile déclenche un zoom natif d'Android Chrome (bug connu, voir GLRN-249). | `finalFocus` désactivé uniquement pour une fermeture tactile ([BDR-049](../../decisions/BDR-049.md)). | résolu |
+**Friction** : L'app apparaissait zoomée après la fermeture de RulesDialog/SettingsDialog (jamais WelcomeDialog), quel que soit le mode de fermeture (croix, clic dehors, retour Android). Hypothèse initiale erronée : restauration de scroll/zoom via `history.back()` du feature de fermeture au retour ([BDR-048](../../decisions/BDR-048.md)) — écartée quand Baptiste a confirmé que le bug touchait TOUTES les fermetures, pas seulement le retour, et épargnait WelcomeDialog qui utilise le même mécanisme d'historique.
+
+**Cause réelle** : Base UI ramène le focus sur le bouton déclencheur à la fermeture — WelcomeDialog n'a pas de déclencheur, Rules/Settings en ont un. Un focus programmatique après interaction tactile déclenche un zoom natif d'Android Chrome (bug connu, voir GLRN-249).
+
+**Solution** : `finalFocus` désactivé uniquement pour une fermeture tactile ([BDR-049](../../decisions/BDR-049.md)).
 
 ## Références
 

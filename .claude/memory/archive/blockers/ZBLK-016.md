@@ -2,23 +2,18 @@
 id: ZBLK-016
 type: blocker
 date: 2026-07-23
-tags:
-  [
-    web-audio,
-    ambient,
-    fade,
-    requestanimationframe,
-    play-promise,
-    debugging,
-    agent-browser,
-  ]
+summary: "Piste suivante silencieuse après transition naturelle (fade-in jamais audible)"
+tags: [web-audio, ambient, fade, requestanimationframe, play-promise, debugging, agent-browser]
+status: résolu
 ---
 
 # ZBLK-016 — Piste suivante silencieuse après transition naturelle (fade-in jamais audible)
 
-| Friction                                                                                                                                                                 | Cause réelle                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | Solution                                                                                                                                                                                  | Statut |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| Après la fin naturelle d'une piste d'ambiance, la piste suivante démarre bien (le temps affiché avance) mais reste totalement silencieuse — le volume ne remonte jamais. | `fadeVolumeTo()` était appelé juste après `ambient.play()` dans `loadAmbientTrack`, sans attendre sa résolution : la boucle `requestAnimationFrame` du fondu est bien planifiée mais son callback ne se déclenche jamais tant que la lecture n'a pas réellement démarré. Un `setTimeout(fn, 0)` pour découpler du call stack synchrone de l'événement `ended` a été testé et n'a pas suffi. Diagnostiqué en direct via `agent-browser` (exposition temporaire de l'`<audio>` sur `window`, `eval --stdin` en boucle pour sonder volume/currentTime, `console.log` temporaires dans `fadeVolumeTo`/`loadAmbientTrack`/l'event `ended`) plutôt que deviné depuis le code. | Attendre la résolution de la promesse `.play()` avant de lancer le fondu : `ambient.play().then(() => fadeVolumeTo(...))` au lieu d'un appel synchrone juste après `void ambient.play()`. | résolu |
+**Friction** : Après la fin naturelle d'une piste d'ambiance, la piste suivante démarre bien (le temps affiché avance) mais reste totalement silencieuse — le volume ne remonte jamais.
+
+**Cause réelle** : `fadeVolumeTo()` était appelé juste après `ambient.play()` dans `loadAmbientTrack`, sans attendre sa résolution : la boucle `requestAnimationFrame` du fondu est bien planifiée mais son callback ne se déclenche jamais tant que la lecture n'a pas réellement démarré. Un `setTimeout(fn, 0)` pour découpler du call stack synchrone de l'événement `ended` a été testé et n'a pas suffi. Diagnostiqué en direct via `agent-browser` (exposition temporaire de l'`<audio>` sur `window`, `eval --stdin` en boucle pour sonder volume/currentTime, `console.log` temporaires dans `fadeVolumeTo`/`loadAmbientTrack`/l'event `ended`) plutôt que deviné depuis le code.
+
+**Solution** : Attendre la résolution de la promesse `.play()` avant de lancer le fondu : `ambient.play().then(() => fadeVolumeTo(...))` au lieu d'un appel synchrone juste après `void ambient.play()`.
 
 ## Références
 
