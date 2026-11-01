@@ -30,6 +30,18 @@ interface GameActionsProps {
   onRunPauseChange: (open: boolean) => void;
 }
 
+// La rangée perd 56 px quand le bouton d'installation s'affiche : "Nouvelle
+// partie" (160 px) débordait alors de l'écran en dessous de ~415 px de large.
+// Container query sur le wrapper `@container` plus bas : le libellé court ne
+// dépend que de la place réelle, pas de la présence du bouton d'installation.
+const NewGameLabel = () => (
+  <>
+    <PawPrint className="size-5 @max-[110px]:hidden" />
+    <span className="@max-[159px]:hidden">Nouvelle partie</span>
+    <span className="hidden @max-[159px]:inline">Rejouer</span>
+  </>
+);
+
 export function GameActions({
   isRunActive,
   runEnded,
@@ -72,8 +84,7 @@ export function GameActions({
       <ConfirmRunAction
         trigger={
           <Button className="h-12 w-full text-base">
-            <PawPrint className="size-5" />
-            Nouvelle partie
+            <NewGameLabel />
           </Button>
         }
         title="Recommencer la run ?"
@@ -119,8 +130,7 @@ export function GameActions({
           onNewLevel();
         }}
       >
-        <PawPrint className="size-5" />
-        Nouvelle partie
+        <NewGameLabel />
       </Button>
     );
   }
@@ -159,7 +169,7 @@ export function GameActions({
       <AnimatePresence mode="wait" initial={false}>
         <m.div
           key={primaryKey}
-          className="flex-1"
+          className="@container min-w-0 flex-1"
           initial={
             reduceMotion ? { opacity: 0 } : { opacity: 0, y: 10, scale: 0.94 }
           }
